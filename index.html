@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Fabricio Porto - Violinista</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -16,6 +16,11 @@
     <!-- Performance optimizations -->
     <meta name="theme-color" content="#000000">
     <meta name="description" content="Fabricio Porto - Violinista clássico profissional. Casamentos, eventos, apresentações. Contato: fabricioportoviolinista@gmail.com">
+    
+    <!-- Mobile optimizations -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
 </head>
 <body>
     <!-- Background elements -->
@@ -85,7 +90,7 @@
             <div class="ai-quick-questions">
                 <button class="quick-btn" data-question="precos">💰 Preços</button>
                 <button class="quick-btn" data-question="repertorio">🎵 Repertório</button>
-                <button class="quick-btn" data-question="casamento">💑 Casamentos</button>
+                <button class="quick-btn" data-question="casamento">💍 Casamentos</button>
                 <button class="quick-btn" data-question="disponibilidade">📅 Disponibilidade</button>
             </div>
             <div class="ai-input">
@@ -108,26 +113,27 @@
             </p>
             <div class="cta-buttons">
                 <a href="#performances" class="btn btn-primary">
-                    <i class="fas fa-music"></i> Apresentações
+                    <i class="fas fa-music"></i> 
+                    <span>Apresentações</span>
                 </a>
                 <a href="#contact" class="btn btn-secondary">
-                    <i class="fas fa-envelope"></i> Entre em Contato
+                    <i class="fas fa-envelope"></i> 
+                    <span>Entre em Contato</span>
                 </a>
             </div>
         </div>
         
-<!-- Enhanced FP Logo with Glow Effects -->
-<div class="fp-musical-note">
-    <div class="fp-logo-container">
-        <img src="FP.png" alt="FP Logo Musical" class="fp-logo" loading="lazy" onerror="this.style.display='none'">
-        <div class="glow-effect"></div>
-        <div class="pulse-ring"></div>
-        <div class="pulse-ring"></div>
-<div class="pulse-ring small1"></div>
-<div class="pulse-ring small2"></div>
-
-    </div>
-</div>
+        <!-- Enhanced FP Logo with Glow Effects -->
+        <div class="fp-musical-note">
+            <div class="fp-logo-container">
+                <img src="FP.png" alt="FP Logo Musical" class="fp-logo" loading="lazy" onerror="this.style.display='none'">
+                <div class="glow-effect"></div>
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring small1"></div>
+                <div class="pulse-ring small2"></div>
+            </div>
+        </div>
     </section>
 
     <!-- About Section -->
@@ -284,11 +290,13 @@
                 <div class="contact-buttons">
                     <a href="https://api.whatsapp.com/send?phone=5519999011288&text=Olá%20Fabricio,%20gostaria%20de%20saber%20mais%20sobre%20seus%20serviços%20musicais." 
                        class="contact-btn whatsapp-btn" target="_blank" rel="noopener">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
+                        <i class="fab fa-whatsapp"></i> 
+                        <span>WhatsApp</span>
                     </a>
                     <a href="mailto:fabricioportoviolinista@gmail.com?subject=Contato%20-%20Serviços%20Musicais&body=Olá%20Fabricio,%0D%0A%0D%0AGostaria%20de%20saber%20mais%20sobre%20seus%20serviços%20musicais.%0D%0A%0D%0AObrigado!" 
                        class="contact-btn email-btn">
-                        <i class="fas fa-envelope"></i> E-mail
+                        <i class="fas fa-envelope"></i> 
+                        <span>E-mail</span>
                     </a>
                 </div>
             </div>
@@ -297,14 +305,15 @@
 
     <footer>
         <p>&copy; 2025 Fabricio Porto - Violinista. Todos os direitos reservados.</p>
-        <p>Criando momentos únicos através da música clássica.      </p> 
+        <p>Criando momentos únicos através da música clássica.</p> 
     </footer>
-    <footer style="text-align: center; padding: 15px; font-size: 14px; background-color: #000000;">
-  Site desenvolvido por 
-  <a href="https://www.linkedin.com/in/renan-de-oliveira-farias-66a9b412b/" target="_blank" style="color: #5505eb; text-decoration: none;">
-    Nan Dev
-  </a>
-</footer>
+    
+    <footer class="developer-footer">
+        Site desenvolvido por 
+        <a href="https://www.linkedin.com/in/renan-de-oliveira-farias-66a9b412b/" target="_blank">
+            Nan Dev
+        </a>
+    </footer>
 
     <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
         <i class="fas fa-chevron-up"></i>
