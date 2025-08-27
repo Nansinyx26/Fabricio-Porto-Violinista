@@ -6,29 +6,35 @@
     <title>Fabricio Porto - Violinista</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preload" href="FP.png" as="image">
+    
+    <!-- Performance optimizations -->
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Fabricio Porto - Violinista clássico profissional. Casamentos, eventos, apresentações. Contato: fabricioportoviolinista@gmail.com">
 </head>
 <body>
     <!-- Background elements -->
     <div class="bg-pattern"></div>
     <div class="wood-texture"></div>
 
-    <!-- Enhanced Floating musical notes -->
+    <!-- Enhanced musical notes with more quantity -->
     <div class="musical-note note-1">♪</div>
     <div class="musical-note note-2">♫</div>
     <div class="musical-note note-3">♪</div>
     <div class="musical-note note-4">♬</div>
-    <div class="musical-note note-5">♫</div>
-    <div class="musical-note note-6">♪</div>
-    <div class="musical-note note-7">♩</div>
-    <div class="musical-note note-8">♪</div>
-    <div class="musical-note note-9">♫</div>
-    <div class="musical-note note-10">♪</div>
+    <div class="musical-note note-5">♪</div>
+    <div class="musical-note note-6">♫</div>
+    <div class="musical-note note-7">♪</div>
+    <div class="musical-note note-8">♬</div>
+    <div class="musical-note note-9">♪</div>
+    <div class="musical-note note-10">♫</div>
+    <div class="musical-note note-11">♪</div>
+    <div class="musical-note note-12">♬</div>
 
     <!-- Navigation -->
     <nav id="navbar">
@@ -49,6 +55,48 @@
         </div>
     </nav>
 
+    <!-- AI Assistant Chat Widget -->
+    <div id="aiAssistant" class="ai-assistant">
+        <div class="ai-toggle" id="aiToggle">
+            <i class="fas fa-robot"></i>
+            <span class="ai-badge" id="aiBadge">1</span>
+        </div>
+        <div class="ai-chat" id="aiChat">
+            <div class="ai-header">
+                <div class="ai-avatar">
+                    <i class="fas fa-violin"></i>
+                </div>
+                <div class="ai-title">
+                    <h4>Assistente Virtual</h4>
+                    <p>Como posso ajudar?</p>
+                </div>
+                <button class="ai-close" id="aiClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ai-messages" id="aiMessages">
+                <div class="ai-message bot-message">
+                    <div class="message-content">
+                        Olá! Sou o assistente virtual do Fabricio Porto. Posso ajudar com informações sobre apresentações, repertório, preços e disponibilidade. Como posso ajudar você hoje?
+                    </div>
+                    <div class="message-time">Agora</div>
+                </div>
+            </div>
+            <div class="ai-quick-questions">
+                <button class="quick-btn" data-question="precos">💰 Preços</button>
+                <button class="quick-btn" data-question="repertorio">🎵 Repertório</button>
+                <button class="quick-btn" data-question="casamento">💑 Casamentos</button>
+                <button class="quick-btn" data-question="disponibilidade">📅 Disponibilidade</button>
+            </div>
+            <div class="ai-input">
+                <input type="text" id="aiInput" placeholder="Digite sua pergunta...">
+                <button id="aiSend">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
@@ -60,7 +108,7 @@
             </p>
             <div class="cta-buttons">
                 <a href="#performances" class="btn btn-primary">
-                    <i class=""></i> Apresentações
+                    <i class="fas fa-music"></i> Apresentações
                 </a>
                 <a href="#contact" class="btn btn-secondary">
                     <i class="fas fa-envelope"></i> Entre em Contato
@@ -68,10 +116,18 @@
             </div>
         </div>
         
-        <!-- Logo JP Musical Note -->
-        <div class="jp-musical-note">
-            <img src="FP.png" alt="JP Logo" class="jp-logo">
-        </div>
+<!-- Enhanced FP Logo with Glow Effects -->
+<div class="fp-musical-note">
+    <div class="fp-logo-container">
+        <img src="FP.png" alt="FP Logo Musical" class="fp-logo" loading="lazy" onerror="this.style.display='none'">
+        <div class="glow-effect"></div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+<div class="pulse-ring small1"></div>
+<div class="pulse-ring small2"></div>
+
+    </div>
+</div>
     </section>
 
     <!-- About Section -->
@@ -80,20 +136,23 @@
         <div class="about-content">
             <div class="about-text">
                 <p>
-                    Com mais de 15 anos de dedicação ao violino, Fabricio Porto é reconhecido por sua 
-                    técnica refinada e interpretação emotiva que cativa audiências em todo o país. 
-                    Formado pelo Conservatório Nacional de Música, ele combina formação clássica 
-                    rigorosa com uma sensibilidade artística única.
+                    Um artista desde os 15 anos de idade, tocando violino em eventos como casamentos, 
+                    festas de debutantes, jantares de gala, recepções, aniversários e funerais religiosos. 
+                    Fabricio Porto combina técnica refinada com interpretação emotiva que cativa audiências.
                 </p>
                 <p>
-                    Suas performances são marcadas pela precisão técnica e pela capacidade de 
-                    transmitir as emoções mais profundas através do instrumento. Fabricio acredita 
-                    que a música é uma linguagem universal que transcende barreiras e conecta 
-                    corações.
+                    Formado em Música pela UNIMEP - Universidade Metodista de Piracicaba em 2015, 
+                    tem experiência na Orquestra Sinfônica de Santa Bárbara D'Oeste, Orquestra 
+                    Educacional de Piracicaba e Orquestra Infanto-Juvenil da Escola de Música 
+                    de Piracicaba Ernst Malhe (2012-2016).
                 </p>
                 <p>
-                    Além de performer, Fabricio também se dedica ao ensino, compartilhando sua 
-                    paixão pela música com uma nova geração de violinistas.
+                    Professor de Música particular com ênfase no violino para qualquer idade, 
+                    ministrou aulas para o Instituto de Música de Sumaré/SP (IMS) e garantiu 
+                    o 2° lugar no Processo Seletivo como professor de música na rede pública 
+                    municipal de Águas de São Pedro (2020). Desenvolveu projetos de Eletivas 
+                    de Música para o Programa de Ensino Integral do Estado de São Paulo (2021-2024) 
+                    e atualmente leciona Arte Educação como concursado pela Prefeitura de Americana/SP.
                 </p>
             </div>
             <div class="about-image">
@@ -114,11 +173,13 @@
                 </div>
                 <h3>Clássico Romântico</h3>
                 <ul>
-                  >
+                    <li>Bach - Ave Maria</li>
+                    <li>Schubert - Ave Maria</li>
+                    <li>Pachelbel - Canon</li>
+                    <li>Vivaldi - As Quatro Estações</li>
+                    <li>Mozart - Sonatas</li>
                 </ul>
             </div>
-            
-            
             
             <div class="repertoire-card">
                 <div class="card-icon">
@@ -126,7 +187,11 @@
                 </div>
                 <h3>Contemporâneo</h3>
                 <ul>
-                  
+                    <li>Ludovico Einaudi</li>
+                    <li>Max Richter</li>
+                    <li>Ólafur Arnalds</li>
+                    <li>Música Popular Brasileira</li>
+                    <li>Arranjos Modernos</li>
                 </ul>
             </div>
             
@@ -136,7 +201,11 @@
                 </div>
                 <h3>Popular & Cinema</h3>
                 <ul>
-                   
+                    <li>Trilhas Sonoras</li>
+                    <li>Disney Clássicos</li>
+                    <li>Música Popular</li>
+                    <li>Temas de Filmes</li>
+                    <li>Repertório Personalizado</li>
                 </ul>
             </div>
         </div>
@@ -153,9 +222,6 @@
                     </div>
                     <h3>Casamentos</h3>
                     <p>Cerimônias inesquecíveis com música que eterniza o momento mais especial do casal.</p>
-                    <div class="performance-details">
-                        <span><i class="bi bi-arrow-through-heart-fill"></i> Cerimônia </span>
-                    </div>
                 </div>
                 
                 <div class="performance-card">
@@ -164,9 +230,6 @@
                     </div>
                     <h3>Festa de Debutantes</h3>
                     <p>Celebrações elegantes que marcam a transição para a vida adulta com sofisticação musical.</p>
-                    <div class="performance-details">
-                        <span><i class="fas fa-music"></i> Repertório clássico e moderno</span>
-                    </div>
                 </div>
                 
                 <div class="performance-card">
@@ -175,9 +238,6 @@
                     </div>
                     <h3>Aniversários</h3>
                     <p>Comemorações especiais com música personalizada para tornar cada momento único e memorável.</p>
-                    <div class="performance-details">
-                        <span><i class="fas fa-palette"></i> Repertório personalizado</span>
-                    </div>
                 </div>
 
                 <div class="performance-card">
@@ -186,53 +246,22 @@
                     </div>
                     <h3>Recepções</h3>
                     <p>Eventos corporativos e sociais com música ambiente sofisticada que impressiona convidados.</p>
-                    <div class="performance-details">
-                        <span><i class="fas fa-building"></i> Corporativo e social</span>
-                    </div>
                 </div>
 
                 <div class="performance-card">
                     <div class="performance-icon">
                         <i class="fas fa-heart"></i>
                     </div>
-                    <h3>Jantares Românticos</h3>
-                    <p>Atmosfera íntima e romântica com melodias que despertam as emoções mais profundas.</p>
-                    <div class="performance-details">
-                        <span><i class="fas fa-candle-holder"></i> Ambiente intimista</span>
-                    </div>
-                </div>
-
-                <div class="performance-card">
-                    <div class="performance-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h3>Eventos Gala</h3>
-                    <p>Ocasiões de grande prestígio com performances que elevam o nível de qualquer celebração.</p>
-                    <div class="performance-details">
-                        <span><i class="fas fa-gem"></i> Alta sociedade</span>
-                    </div>
-                </div>
-
-                <div class="performance-card">
-                    <div class="performance-icon">
-                        <i class="fas fa-dove"></i>
-                    </div>
-                    <h3>Batizados e Crismas</h3>
-                    <p>Cerimônias religiosas com música sacra e contemporânea que toca o coração dos fiéis.</p>
-                    <div class="performance-details">
-                        <span><i class="fas fa-church"></i> Música sacra</span>
-                    </div>
+                    <h3>Jantares de Gala</h3>
+                    <p>Atmosfera elegante e sofisticada com melodias que elevam o nível de qualquer evento.</p>
                 </div>
 
                 <div class="performance-card">
                     <div class="performance-icon">
                         <i class="fas fa-cross"></i>
                     </div>
-                    <h3>Funerais</h3>
+                    <h3>Funerais Religiosos</h3>
                     <p>Homenagens respeitosas com música que consola e honra a memória de entes queridos.</p>
-                    <div class="performance-details">
-                        <span><i class="fas fa-cross"></i> Música consoladora</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -242,7 +271,6 @@
     <section id="contact" class="section-observer">
         <h2 class="section-title">Contato</h2>
         <div class="contact-content">
-            <!-- Contact Card -->
             <div class="contact-card">
                 <div class="photo-frame">
                     <div class="photo-inner">
@@ -254,8 +282,8 @@
                 <h1 class="artist-name">Fabricio Porto</h1>
                 <p class="artist-title">Violinista Clássico</p>
                 <div class="contact-buttons">
-                    <a href="https://api.whatsapp.com/send?phone=5519999011288&text=." 
-                       class="contact-btn whatsapp-btn" target="_blank">
+                    <a href="https://api.whatsapp.com/send?phone=5519999011288&text=Olá%20Fabricio,%20gostaria%20de%20saber%20mais%20sobre%20seus%20serviços%20musicais." 
+                       class="contact-btn whatsapp-btn" target="_blank" rel="noopener">
                         <i class="fab fa-whatsapp"></i> WhatsApp
                     </a>
                     <a href="mailto:fabricioportoviolinista@gmail.com?subject=Contato%20-%20Serviços%20Musicais&body=Olá%20Fabricio,%0D%0A%0D%0AGostaria%20de%20saber%20mais%20sobre%20seus%20serviços%20musicais.%0D%0A%0D%0AObrigado!" 
@@ -269,10 +297,16 @@
 
     <footer>
         <p>&copy; 2025 Fabricio Porto - Violinista. Todos os direitos reservados.</p>
-        <p>Criando momentos únicos através da música clássica.</p>
+        <p>Criando momentos únicos através da música clássica.      </p> 
     </footer>
+    <footer style="text-align: center; padding: 15px; font-size: 14px; background-color: #000000;">
+  Site desenvolvido por 
+  <a href="https://www.linkedin.com/in/renan-de-oliveira-farias-66a9b412b/" target="_blank" style="color: #5505eb; text-decoration: none;">
+    Nan Dev
+  </a>
+</footer>
 
-    <button class="back-to-top" id="backToTop">
+    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
         <i class="fas fa-chevron-up"></i>
     </button>
 
