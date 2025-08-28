@@ -1,9 +1,6 @@
 // Performance optimizations
 let ticking = false;
 let isScrolling = false;
-let isMobile = window.innerWidth <= 768;
-let touchStartX = 0;
-let touchStartY = 0;
 
 // Debounce function for performance
 function debounce(func, wait) {
@@ -32,10 +29,41 @@ function throttle(func, limit) {
     }
 }
 
-// Detect mobile device changes
-function updateDeviceType() {
-    isMobile = window.innerWidth <= 768;
-}
+// AI Assistant Knowledge Base
+const aiKnowledgeBase = {
+    precos: {
+        question: "Quais são os preços dos serviços?",
+        answer: "Os valores variam de acordo com o tipo de evento e duração. Para casamentos: R$ 300-500 (cerimônia), R$ 400-700 (cerimônia + coquetel). Para outros eventos, entre R$ 250-600. Entre em contato para um orçamento personalizado!"
+    },
+    repertorio: {
+        question: "Qual é o repertório disponível?",
+        answer: "Tenho um repertório diversificado incluindo: Clássico (Bach, Mozart, Vivaldi), Contemporâneo (Einaudi, Max Richter), Popular e Cinema (Disney, trilhas sonoras), e MPB. Posso também preparar músicas específicas mediante solicitação!"
+    },
+    casamento: {
+        question: "Como funciona a apresentação em casamentos?",
+        answer: "Posso tocar na entrada da noiva, durante a cerimônia e no coquetel. Repertório inclui Ave Maria, Canon de Pachelbel, músicas românticas personalizadas. Tenho equipamento próprio e experiência em diversos locais."
+    },
+    disponibilidade: {
+        question: "Como verificar disponibilidade?",
+        answer: "Para verificar disponibilidade para sua data, entre em contato via WhatsApp ou email. É recomendável agendar com antecedência, especialmente para sábados e datas comemorativas."
+    },
+    duracao: {
+        question: "Qual a duração das apresentações?",
+        answer: "A duração varia: Cerimônias (30-45 min), Coquetéis (1-2 horas), Eventos corporativos (1-3 horas). Posso adaptar conforme suas necessidades específicas."
+    },
+    equipamento: {
+        question: "Precisa de equipamento especial?",
+        answer: "Tenho violino acústico e elétrico. Para eventos maiores, possuo sistema de som próprio. Para locais muito grandes, pode ser necessário equipamento adicional (incluso no orçamento)."
+    },
+    locais: {
+        question: "Atende em quais locais?",
+        answer: "Atendo em toda região de Campinas, Piracicaba, São Paulo e cidades próximas. Para locais mais distantes, incluo taxa de deslocamento no orçamento."
+    },
+    formacao: {
+        question: "Qual sua formação musical?",
+        answer: "Formado em Música pela UNIMEP (2015), com experiência em orquestras sinfônicas e como professor. Toco desde os 15 anos e tenho vasta experiência em eventos."
+    }
+};
 
 // =========================
 // DOM Content Loaded
@@ -50,11 +78,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up intersection observers
     setupIntersectionObservers();
     
-    // Setup touch gestures for mobile
-    setupTouchGestures();
-    
-    // Setup device orientation handling
-    setupOrientationHandling();
+    // Initialize AI Assistant
+    initializeAIAssistant();
 });
 
 // =========================
@@ -73,12 +98,6 @@ function initializeComponents() {
     // Initialize contact buttons
     initializeContactButtons();
     
-    // Initialize AI Assistant
-    initializeAIAssistant();
-    
-    // Setup accessibility enhancements
-    setupAccessibility();
-    
     // Add loading class removal
     setTimeout(() => {
         document.body.classList.add('loaded');
@@ -93,504 +112,29 @@ function preloadImages() {
     images.forEach(src => {
         const img = new Image();
         img.src = src;
-        img.onerror = function() {
-            console.warn(`Failed to load image: ${src}`);
-        };
     });
 }
 
 // =========================
-// AI Assistant - Mobile Optimized - FIXED
-// =========================
-function initializeAIAssistant() {
-    const aiToggle = document.getElementById('aiToggle');
-    const aiChat = document.getElementById('aiChat');
-    const aiClose = document.getElementById('aiClose');
-    const aiInput = document.getElementById('aiInput');
-    const aiSend = document.getElementById('aiSend');
-    const aiMessages = document.getElementById('aiMessages');
-    const aiBadge = document.getElementById('aiBadge');
-    const quickBtns = document.querySelectorAll('.quick-btn');
-
-    if (!aiToggle || !aiChat) return;
-
-    // AI Responses
-    const aiResponses = {
-        precos: "Os preços variam conforme o tipo de evento e duração. Para casamentos: R$ 800-1200, Festas de debutante: R$ 600-900, Aniversários: R$ 400-700. Entre em contato para um orçamento personalizado!",
-        repertorio: "Meu repertório inclui música clássica (Bach, Mozart, Vivaldi), contemporânea (Einaudi, Max Richter), popular brasileira e trilhas sonoras. Posso personalizar a seleção musical para seu evento especial!",
-        casamento: "Para casamentos, toco na cerimônia religiosa, civil ou entrada dos noivos. Repertório inclui Canon de Pachelbel, Ave Maria, e músicas especiais do casal. Atendo toda região de Americana/SP e arredores.",
-        disponibilidade: "Para verificar disponibilidade, preciso saber a data, horário e local do evento. Atendo finais de semana e alguns dias úteis. Entre em contato via WhatsApp para confirmar sua data!",
-        default: "Olá! Posso ajudar com informações sobre apresentações, repertório, preços e disponibilidade. Fabricio Porto é violinista profissional há mais de 10 anos, atendendo eventos em toda região. Como posso ajudar você?"
-    };
-
-    let chatOpen = false;
-    let messageCount = 1;
-    let isTyping = false;
-    let keyboardHeight = 0;
-    let originalViewportHeight = window.innerHeight;
-
-    // CORREÇÃO: Detectar altura do teclado virtual
-    function detectKeyboardHeight() {
-        const currentHeight = window.innerHeight;
-        const heightDiff = originalViewportHeight - currentHeight;
-        
-        if (heightDiff > 150) { // Teclado provavelmente aberto
-            keyboardHeight = heightDiff;
-            adjustChatForKeyboard(true);
-        } else { // Teclado fechado
-            keyboardHeight = 0;
-            adjustChatForKeyboard(false);
-        }
-    }
-
-    // CORREÇÃO: Ajustar chat para o teclado
-    function adjustChatForKeyboard(keyboardOpen) {
-        if (!isMobile || !chatOpen) return;
-        
-        const chat = document.getElementById('aiChat');
-        if (!chat) return;
-
-        if (keyboardOpen) {
-            // Redimensionar chat quando teclado está aberto
-            const availableHeight = window.innerHeight - 100; // 100px de margem
-            chat.style.height = `${Math.min(availableHeight, 400)}px`;
-            chat.style.bottom = '70px';
-            chat.style.maxHeight = `${availableHeight}px`;
-            
-            // Scroll para o input
-            setTimeout(() => {
-                const input = document.getElementById('aiInput');
-                if (input) {
-                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 300);
-        } else {
-            // Restaurar tamanho original
-            chat.style.height = '';
-            chat.style.bottom = '70px';
-            chat.style.maxHeight = '';
-        }
-    }
-
-    // CORREÇÃO: Gerenciar scroll do body de forma mais inteligente
-    function toggleBodyScroll(disable) {
-        if (isMobile) {
-            if (disable) {
-                // Salvar posição de scroll atual
-                const scrollY = window.scrollY;
-                document.body.style.position = 'fixed';
-                document.body.style.top = `-${scrollY}px`;
-                document.body.style.width = '100%';
-                document.body.style.overflow = 'hidden';
-            } else {
-                // Restaurar posição de scroll
-                const scrollY = document.body.style.top;
-                document.body.style.position = '';
-                document.body.style.top = '';
-                document.body.style.width = '';
-                document.body.style.overflow = '';
-                if (scrollY) {
-                    window.scrollTo(0, parseInt(scrollY || '0') * -1);
-                }
-            }
-        }
-    }
-
-    // CORREÇÃO: Listeners para mudanças de viewport (teclado)
-    if (isMobile) {
-        // Detectar mudanças na altura da viewport
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                if (chatOpen) {
-                    detectKeyboardHeight();
-                }
-            }, 100);
-        });
-
-        // Listeners para eventos do teclado virtual
-        window.addEventListener('visualViewport' in window ? 'scroll' : 'resize', () => {
-            if (chatOpen) {
-                requestAnimationFrame(() => {
-                    detectKeyboardHeight();
-                });
-            }
-        });
-    }
-
-    // Toggle chat with improved mobile handling
-    aiToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        chatOpen = !chatOpen;
-        
-        if (chatOpen) {
-            originalViewportHeight = window.innerHeight;
-            aiChat.classList.add('active');
-            aiBadge.style.display = 'none';
-            toggleBodyScroll(true);
-            
-            // CORREÇÃO: Não focar automaticamente no input em mobile
-            if (!isMobile) {
-                setTimeout(() => aiInput.focus(), 300);
-            }
-        } else {
-            aiChat.classList.remove('active');
-            toggleBodyScroll(false);
-            keyboardHeight = 0;
-        }
-    });
-
-    // Close chat
-    aiClose.addEventListener('click', function(e) {
-        e.preventDefault();
-        aiChat.classList.remove('active');
-        chatOpen = false;
-        toggleBodyScroll(false);
-        keyboardHeight = 0;
-    });
-
-    // Quick buttons with better mobile interaction
-    quickBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (isTyping) return;
-            
-            const question = this.dataset.question;
-            const questionText = this.textContent;
-            
-            // Add user message
-            addMessage(questionText, 'user');
-            
-            // Show typing indicator and add response
-            showTypingIndicator();
-            setTimeout(() => {
-                hideTypingIndicator();
-                const response = aiResponses[question] || aiResponses.default;
-                addMessage(response, 'bot');
-            }, 1000 + Math.random() * 1000);
-        });
-    });
-
-    // CORREÇÃO: Send message com melhor handling mobile
-    function sendMessage() {
-        const message = aiInput.value.trim();
-        if (!message || isTyping) return;
-
-        // Add user message
-        addMessage(message, 'user');
-        
-        // Clear input
-        aiInput.value = '';
-        
-        // CORREÇÃO: Blur input em mobile para fechar teclado
-        if (isMobile) {
-            aiInput.blur();
-            // Aguardar um pouco para o teclado fechar
-            setTimeout(() => {
-                adjustChatForKeyboard(false);
-            }, 300);
-        }
-        
-        // Show typing and generate response
-        showTypingIndicator();
-        setTimeout(() => {
-            hideTypingIndicator();
-            const response = generateResponse(message);
-            addMessage(response, 'bot');
-        }, 1200 + Math.random() * 800);
-    }
-
-    // Send button with touch optimization
-    if (aiSend) {
-        aiSend.addEventListener('click', function(e) {
-            e.preventDefault();
-            sendMessage();
-        });
-        
-        // CORREÇÃO: Adicionar touchend para mobile
-        aiSend.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            sendMessage();
-        });
-    }
-
-    // CORREÇÃO: Input handling melhorado para mobile
-    if (aiInput) {
-        // Enter key handling
-        aiInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        // CORREÇÃO: Focus/blur handlers para mobile
-        aiInput.addEventListener('focus', function(e) {
-            if (isMobile && chatOpen) {
-                // Aguardar abertura do teclado
-                setTimeout(() => {
-                    detectKeyboardHeight();
-                }, 300);
-            }
-        });
-
-        aiInput.addEventListener('blur', function(e) {
-            if (isMobile && chatOpen) {
-                // Aguardar fechamento do teclado
-                setTimeout(() => {
-                    adjustChatForKeyboard(false);
-                }, 300);
-            }
-        });
-
-        // CORREÇÃO: Prevenir zoom no iOS
-        aiInput.addEventListener('touchstart', function(e) {
-            if (isMobile) {
-                this.style.fontSize = '16px'; // Previne zoom no iOS
-            }
-        });
-
-        // CORREÇÃO: Input responsivo para mudanças de viewport
-        aiInput.addEventListener('input', function() {
-            // Auto-resize se necessário
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-        });
-    }
-
-    // Typing indicator functions
-    function showTypingIndicator() {
-        if (isTyping) return;
-        isTyping = true;
-        
-        const typingDiv = document.createElement('div');
-        typingDiv.className = 'ai-message bot-message typing-indicator';
-        typingDiv.id = 'typing-indicator';
-        typingDiv.innerHTML = `
-            <div class="message-content">
-                <div class="typing-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        `;
-        
-        aiMessages.appendChild(typingDiv);
-        scrollToBottom();
-        
-        // Add typing animation if not already present
-        if (!document.getElementById('typing-style')) {
-            const typingStyle = document.createElement('style');
-            typingStyle.id = 'typing-style';
-            typingStyle.textContent = `
-                .typing-dots {
-                    display: flex;
-                    gap: 4px;
-                    padding: 8px 0;
-                }
-                
-                .typing-dots span {
-                    width: 8px;
-                    height: 8px;
-                    border-radius: 50%;
-                    background: #d4af37;
-                    animation: typing 1.4s infinite;
-                }
-                
-                .typing-dots span:nth-child(2) {
-                    animation-delay: 0.2s;
-                }
-                
-                .typing-dots span:nth-child(3) {
-                    animation-delay: 0.4s;
-                }
-                
-                @keyframes typing {
-                    0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
-                    30% { opacity: 1; transform: scale(1); }
-                }
-            `;
-            document.head.appendChild(typingStyle);
-        }
-    }
-    
-    function hideTypingIndicator() {
-        const indicator = document.getElementById('typing-indicator');
-        if (indicator) {
-            indicator.remove();
-        }
-        isTyping = false;
-    }
-
-    // Add message with improved mobile handling
-    function addMessage(content, sender) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `ai-message ${sender}-message`;
-        
-        const now = new Date();
-        const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
-                       now.getMinutes().toString().padStart(2, '0');
-        
-        messageDiv.innerHTML = `
-            <div class="message-content">${escapeHtml(content)}</div>
-            <div class="message-time">${timeStr}</div>
-        `;
-        
-        aiMessages.appendChild(messageDiv);
-        scrollToBottom();
-        
-        // Update message count
-        if (sender === 'bot') {
-            messageCount++;
-            if (!chatOpen) {
-                aiBadge.textContent = messageCount;
-                aiBadge.style.display = 'flex';
-            }
-        }
-    }
-
-    // Escape HTML to prevent XSS
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    // CORREÇÃO: Smooth scroll melhorado para mobile
-    function scrollToBottom() {
-        if (aiMessages) {
-            requestAnimationFrame(() => {
-                // Scroll mais suave em mobile
-                aiMessages.scrollTo({
-                    top: aiMessages.scrollHeight,
-                    behavior: isMobile ? 'auto' : 'smooth'
-                });
-            });
-        }
-    }
-
-    // Enhanced response generation
-    function generateResponse(message) {
-        const lowerMessage = message.toLowerCase();
-        
-        const keywords = {
-            precos: ['preço', 'valor', 'custo', 'quanto', 'custa', 'cobrar'],
-            repertorio: ['música', 'repertório', 'tocar', 'canção', 'song'],
-            casamento: ['casamento', 'cerimônia', 'noivo', 'noiva', 'wedding'],
-            disponibilidade: ['disponível', 'data', 'quando', 'dia', 'horário']
-        };
-
-        for (const [key, words] of Object.entries(keywords)) {
-            if (words.some(word => lowerMessage.includes(word))) {
-                return aiResponses[key];
-            }
-        }
-
-        const greetings = ['olá', 'oi', 'bom dia', 'boa tarde', 'boa noite'];
-        if (greetings.some(greeting => lowerMessage.includes(greeting))) {
-            return "Olá! Bem-vindo! Sou o assistente do Fabricio Porto. Estou aqui para ajudar com informações sobre apresentações musicais. O que gostaria de saber?";
-        }
-        
-        const thanks = ['obrigado', 'obrigada', 'valeu', 'thanks'];
-        if (thanks.some(thank => lowerMessage.includes(thank))) {
-            return "De nada! Fico feliz em ajudar. Se tiver mais dúvidas sobre os serviços do Fabricio Porto, é só perguntar!";
-        }
-        
-        return aiResponses.default;
-    }
-
-    // CORREÇÃO: Close chat quando clicando fora (melhorado para mobile)
-    document.addEventListener('touchstart', function(e) {
-        if (chatOpen && !aiToggle.contains(e.target) && !aiChat.contains(e.target)) {
-            // Verificar se não é um toque no teclado virtual
-            const touchY = e.touches[0].clientY;
-            if (touchY < window.innerHeight - keyboardHeight) {
-                aiChat.classList.remove('active');
-                chatOpen = false;
-                toggleBodyScroll(false);
-                keyboardHeight = 0;
-            }
-        }
-    });
-
-    document.addEventListener('click', function(e) {
-        if (chatOpen && !aiToggle.contains(e.target) && !aiChat.contains(e.target)) {
-            aiChat.classList.remove('active');
-            chatOpen = false;
-            toggleBodyScroll(false);
-            keyboardHeight = 0;
-        }
-    });
-
-    // Handle escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && chatOpen) {
-            aiChat.classList.remove('active');
-            chatOpen = false;
-            toggleBodyScroll(false);
-            keyboardHeight = 0;
-        }
-    });
-
-    // Welcome message with mobile consideration
-    setTimeout(() => {
-        if (!chatOpen) {
-            messageCount++;
-            aiBadge.textContent = messageCount;
-            aiBadge.style.display = 'flex';
-            addMessage("👋 Olá! Precisa de informações sobre apresentações musicais? Clique aqui para conversar!", 'bot');
-        }
-    }, 3000);
-
-    // CORREÇÃO: Handle orientation change melhorado
-    window.addEventListener('orientationchange', function() {
-        setTimeout(() => {
-            originalViewportHeight = window.innerHeight;
-            updateDeviceType();
-            
-            if (chatOpen && isMobile) {
-                adjustChatForKeyboard(false);
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 500);
-            }
-        }, 500);
-    });
-}
-
-// =========================
-// Typing Effect - Mobile Optimized
+// Enhanced Typing Effect
 // =========================
 function initializeTypingEffect() {
     const typingTexts = [
         "Violinista Clássico",
         "Artista Apaixonado", 
         "Professor Dedicado",
-        "Intérprete Sensível"
+        "Intérprete Sensível",
+        "Músico Profissional"
     ];
 
     let textIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
-    let isVisible = true;
     const typingElement = document.getElementById('typingText');
 
     if (!typingElement) return;
 
-    // Pause typing when page is not visible for performance
-    document.addEventListener('visibilitychange', function() {
-        isVisible = !document.hidden;
-    });
-
     function typeWriter() {
-        if (!isVisible) {
-            setTimeout(typeWriter, 100);
-            return;
-        }
-
         const currentText = typingTexts[textIndex];
 
         if (isDeleting) {
@@ -602,7 +146,7 @@ function initializeTypingEffect() {
         }
 
         if (!isDeleting && charIndex === currentText.length) {
-            setTimeout(() => isDeleting = true, 1500);
+            setTimeout(() => isDeleting = true, 2000);
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
             textIndex = (textIndex + 1) % typingTexts.length;
@@ -616,7 +160,7 @@ function initializeTypingEffect() {
 }
 
 // =========================
-// Navigation - Mobile Optimized
+// Navigation - Enhanced
 // =========================
 function initializeNavigation() {
     const hamburger = document.getElementById('hamburger');
@@ -624,14 +168,14 @@ function initializeNavigation() {
     
     if (!hamburger || !navLinks) return;
 
-    // Toggle mobile menu with improved accessibility
+    // Toggle mobile menu
     hamburger.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         toggleMobileMenu();
     });
 
-    // Touch-friendly navigation links
+    // Smooth scroll navigation
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
@@ -639,30 +183,24 @@ function initializeNavigation() {
             const target = document.querySelector(targetId);
             
             if (target) {
-                const navHeight = document.getElementById('navbar').offsetHeight;
-                const offsetTop = target.offsetTop - navHeight - 10;
-                
+                const offsetTop = target.offsetTop - 80;
                 window.scrollTo({
-                    top: Math.max(0, offsetTop),
+                    top: offsetTop,
                     behavior: 'smooth'
                 });
             }
 
+            // Close mobile menu
             closeMobileMenu();
         });
     });
 
-    // Improved outside click handling for mobile
-    document.addEventListener('touchstart', handleOutsideClick, { passive: true });
-    document.addEventListener('click', handleOutsideClick);
-    
-    function handleOutsideClick(e) {
-        if (navLinks.classList.contains('active') && 
-            !hamburger.contains(e.target) && 
-            !navLinks.contains(e.target)) {
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
             closeMobileMenu();
         }
-    }
+    });
 
     // Close menu with Escape key
     document.addEventListener('keydown', (e) => {
@@ -670,23 +208,6 @@ function initializeNavigation() {
             closeMobileMenu();
         }
     });
-
-    // Handle swipe gestures to close menu
-    let touchStartY = 0;
-    navLinks.addEventListener('touchstart', function(e) {
-        touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    navLinks.addEventListener('touchmove', function(e) {
-        if (this.classList.contains('active')) {
-            const touchY = e.touches[0].clientY;
-            const diff = touchStartY - touchY;
-            
-            if (diff > 100) { // Swipe up to close
-                closeMobileMenu();
-            }
-        }
-    }, { passive: true });
 }
 
 function toggleMobileMenu() {
@@ -695,26 +216,15 @@ function toggleMobileMenu() {
     
     if (!hamburger || !navLinks) return;
     
-    const isActive = navLinks.classList.contains('active');
-    
     hamburger.classList.toggle('active');
     navLinks.classList.toggle('active');
     
-    // Manage body scroll and focus
-    if (!isActive) {
+    // Prevent body scroll when menu is open
+    if (navLinks.classList.contains('active')) {
         document.body.style.overflow = 'hidden';
-        // Focus first link for accessibility
-        const firstLink = navLinks.querySelector('a');
-        if (firstLink) {
-            setTimeout(() => firstLink.focus(), 300);
-        }
     } else {
         document.body.style.overflow = '';
     }
-    
-    // Update ARIA attributes for accessibility
-    hamburger.setAttribute('aria-expanded', !isActive);
-    navLinks.setAttribute('aria-hidden', isActive);
 }
 
 function closeMobileMenu() {
@@ -726,86 +236,216 @@ function closeMobileMenu() {
     hamburger.classList.remove('active');
     navLinks.classList.remove('active');
     document.body.style.overflow = '';
-    
-    // Update ARIA attributes
-    hamburger.setAttribute('aria-expanded', 'false');
-    navLinks.setAttribute('aria-hidden', 'true');
 }
 
 // =========================
-// Scroll Handlers - Mobile Optimized
+// AI Assistant Implementation
+// =========================
+function initializeAIAssistant() {
+    const aiToggle = document.getElementById('aiToggle');
+    const aiChat = document.getElementById('aiChat');
+    const aiClose = document.getElementById('aiClose');
+    const aiInput = document.getElementById('aiInput');
+    const aiSend = document.getElementById('aiSend');
+    const aiMessages = document.getElementById('aiMessages');
+    const quickBtns = document.querySelectorAll('.quick-btn');
+    const aiBadge = document.getElementById('aiBadge');
+    
+    let chatOpen = false;
+    
+    // Toggle chat
+    aiToggle.addEventListener('click', () => {
+        chatOpen = !chatOpen;
+        aiChat.classList.toggle('active', chatOpen);
+        if (chatOpen) {
+            aiBadge.style.display = 'none';
+            aiInput.focus();
+        }
+    });
+    
+    // Close chat
+    aiClose.addEventListener('click', () => {
+        chatOpen = false;
+        aiChat.classList.remove('active');
+    });
+    
+    // Send message
+    function sendMessage() {
+        const message = aiInput.value.trim();
+        if (!message) return;
+        
+        addUserMessage(message);
+        aiInput.value = '';
+        
+        // Simulate AI response
+        setTimeout(() => {
+            const response = generateAIResponse(message);
+            addBotMessage(response);
+        }, 800);
+    }
+    
+    aiSend.addEventListener('click', sendMessage);
+    aiInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+    
+    // Quick questions
+    quickBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const question = btn.dataset.question;
+            const knowledge = aiKnowledgeBase[question];
+            if (knowledge) {
+                addUserMessage(knowledge.question);
+                setTimeout(() => {
+                    addBotMessage(knowledge.answer);
+                }, 500);
+            }
+        });
+    });
+    
+    function addUserMessage(message) {
+        const messageDiv = createMessageElement(message, 'user-message');
+        aiMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+    
+    function addBotMessage(message) {
+        const messageDiv = createMessageElement(message, 'bot-message');
+        aiMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+    
+    function createMessageElement(content, className) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `ai-message ${className}`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.textContent = content;
+        
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'message-time';
+        timeDiv.textContent = new Date().toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        messageDiv.appendChild(contentDiv);
+        messageDiv.appendChild(timeDiv);
+        
+        return messageDiv;
+    }
+    
+    function scrollToBottom() {
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+    
+    function generateAIResponse(userMessage) {
+        const message = userMessage.toLowerCase();
+        
+        // Check for keywords and provide appropriate responses
+        if (message.includes('preço') || message.includes('valor') || message.includes('custo')) {
+            return aiKnowledgeBase.precos.answer;
+        }
+        
+        if (message.includes('repertório') || message.includes('música') || message.includes('tocar')) {
+            return aiKnowledgeBase.repertorio.answer;
+        }
+        
+        if (message.includes('casamento') || message.includes('noiva')) {
+            return aiKnowledgeBase.casamento.answer;
+        }
+        
+        if (message.includes('disponível') || message.includes('data') || message.includes('agenda')) {
+            return aiKnowledgeBase.disponibilidade.answer;
+        }
+        
+        if (message.includes('duração') || message.includes('tempo') || message.includes('quanto tempo')) {
+            return aiKnowledgeBase.duracao.answer;
+        }
+        
+        if (message.includes('equipamento') || message.includes('som') || message.includes('amplificação')) {
+            return aiKnowledgeBase.equipamento.answer;
+        }
+        
+        if (message.includes('local') || message.includes('região') || message.includes('atende')) {
+            return aiKnowledgeBase.locais.answer;
+        }
+        
+        if (message.includes('formação') || message.includes('experiência') || message.includes('curso')) {
+            return aiKnowledgeBase.formacao.answer;
+        }
+        
+        if (message.includes('olá') || message.includes('oi') || message.includes('bom dia') || message.includes('boa tarde')) {
+            return "Olá! Seja bem-vindo(a)! Sou o assistente do Fabricio Porto. Posso ajudar com informações sobre apresentações, repertório, preços e disponibilidade. Como posso ajudar você?";
+        }
+        
+        if (message.includes('obrigad') || message.includes('valeu')) {
+            return "Por nada! Foi um prazer ajudar. Se tiver mais dúvidas ou quiser agendar uma apresentação, fique à vontade para entrar em contato diretamente com o Fabricio pelo WhatsApp ou email!";
+        }
+        
+        // Default response
+        return "Entendo sua pergunta! Para informações mais específicas, recomendo entrar em contato diretamente com o Fabricio Porto via WhatsApp (19) 99901-1288 ou email fabricioportoviolinista@gmail.com. Posso ajudar com dúvidas sobre repertório, preços, disponibilidade e tipos de apresentação.";
+    }
+}
+
+// =========================
+// Enhanced Scroll Handlers
 // =========================
 function initializeScrollHandlers() {
     const navbar = document.getElementById('navbar');
     const backToTop = document.getElementById('backToTop');
-    let lastScrollY = window.pageYOffset;
-    let scrollDirection = 'up';
 
-    // Optimized scroll handler with direction detection
+    // Throttled scroll handler
     const handleScroll = throttle(function() {
         const scrolled = window.pageYOffset;
-        scrollDirection = scrolled > lastScrollY ? 'down' : 'up';
-        lastScrollY = scrolled;
 
-        // Update navbar with hide/show on mobile
+        // Update navbar
         if (navbar) {
             if (scrolled > 100) {
                 navbar.classList.add('scrolled');
-                
-                // Hide navbar when scrolling down on mobile for more space
-                if (isMobile && scrollDirection === 'down' && scrolled > 200) {
-                    navbar.style.transform = 'translateY(-100%)';
-                } else {
-                    navbar.style.transform = 'translateY(0)';
-                }
             } else {
                 navbar.classList.remove('scrolled');
-                navbar.style.transform = 'translateY(0)';
             }
         }
 
         // Update back to top button
         if (backToTop) {
-            if (scrolled > 300) {
+            if (scrolled > 500) {
                 backToTop.classList.add('visible');
             } else {
                 backToTop.classList.remove('visible');
             }
         }
 
-        // Simplified parallax for performance
-        if (!isMobile) {
-            updateParallax(scrolled);
-        }
+        // Enhanced parallax effect
+        updateParallax(scrolled);
         
     }, 16); // ~60fps
 
-    // Back to top with smooth animation
+    // Back to top functionality
     if (backToTop) {
         backToTop.addEventListener('click', function(e) {
             e.preventDefault();
-            
-            const scrollToTop = () => {
-                const scrolled = window.pageYOffset;
-                if (scrolled > 0) {
-                    window.scrollTo(0, scrolled - scrolled / 8);
-                    requestAnimationFrame(scrollToTop);
-                }
-            };
-            
-            scrollToTop();
+            window.scrollTo({ 
+                top: 0, 
+                behavior: 'smooth' 
+            });
         });
     }
 
-    // Add scroll event listener with passive flag
+    // Add scroll event listener with passive flag for performance
     window.addEventListener('scroll', handleScroll, { passive: true });
 }
 
-// Optimized parallax effect
+// Enhanced parallax effect
 function updateParallax(scrolled) {
     const fpNote = document.querySelector('.fp-musical-note');
     
-    if (fpNote && window.innerWidth > 768) {
+    // Only apply parallax on larger screens for performance
+    if (window.innerWidth > 768 && fpNote) {
         const parallaxSpeed = 0.03;
         const yPos = scrolled * parallaxSpeed;
         fpNote.style.transform = `translateY(calc(-50% + ${yPos}px))`;
@@ -813,22 +453,30 @@ function updateParallax(scrolled) {
 }
 
 // =========================
-// Intersection Observer - Optimized
+// Enhanced Intersection Observer
 // =========================
 function setupIntersectionObservers() {
-    // Enhanced section observer
+    // Section observer with better performance
     const sectionObserver = new IntersectionObserver(
         (entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    // Add stagger effect for child elements
+                    const cards = entry.target.querySelectorAll('.repertoire-card, .performance-card');
+                    cards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    });
                     sectionObserver.unobserve(entry.target);
                 }
             });
         },
         {
-            threshold: isMobile ? 0.05 : 0.1,
-            rootMargin: isMobile ? '0px 0px -30px 0px' : '0px 0px -50px 0px'
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         }
     );
 
@@ -837,15 +485,16 @@ function setupIntersectionObservers() {
         sectionObserver.observe(section);
     });
 
-    // Staggered card animations
+    // Card observer for individual animations
     const cardObserver = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
-                    const delay = isMobile ? index * 50 : index * 100;
+                    const delay = index * 150;
                     setTimeout(() => {
                         entry.target.style.opacity = '1';
                         entry.target.style.transform = 'translateY(0)';
+                        entry.target.style.filter = 'blur(0)';
                     }, delay);
                     cardObserver.unobserve(entry.target);
                 }
@@ -853,7 +502,7 @@ function setupIntersectionObservers() {
         },
         {
             threshold: 0.1,
-            rootMargin: '0px 0px -20px 0px'
+            rootMargin: '0px 0px -30px 0px'
         }
     );
 
@@ -861,94 +510,47 @@ function setupIntersectionObservers() {
     const cardElements = document.querySelectorAll('.repertoire-card, .performance-card');
     cardElements.forEach(card => {
         card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        card.style.transform = 'translateY(30px)';
+        card.style.filter = 'blur(5px)';
+        card.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
         cardObserver.observe(card);
-    });
-
-    // Image lazy loading observer
-    const imageObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    if (img.dataset.src) {
-                        img.src = img.dataset.src;
-                        img.removeAttribute('data-src');
-                    }
-                    imageObserver.unobserve(img);
-                }
-            });
-        }
-    );
-
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        imageObserver.observe(img);
     });
 }
 
 // =========================
-// Contact Buttons - Mobile Optimized
+// Enhanced Contact Buttons
 // =========================
 function initializeContactButtons() {
+    // Enhanced ripple effect for contact buttons
     document.querySelectorAll('.contact-btn, .btn').forEach(button => {
-        // Enhanced touch feedback
-        button.addEventListener('touchstart', function(e) {
-            this.style.transform = 'scale(0.95)';
-        }, { passive: true });
-
-        button.addEventListener('touchend', function(e) {
-            this.style.transform = '';
-        }, { passive: true });
-
-        // Ripple effect
         button.addEventListener('click', function(e) {
             createRippleEffect(this, e);
         });
 
-        // Loading state for external links
-        if (button.hasAttribute('target') || button.href) {
-            button.addEventListener('click', function(e) {
-                const isExternal = this.hasAttribute('target') || 
-                                 this.href.startsWith('http') || 
-                                 this.href.startsWith('mailto') || 
-                                 this.href.startsWith('tel');
+        // Add loading state for external links
+        if (button.hasAttribute('target')) {
+            button.addEventListener('click', function() {
+                const originalText = this.innerHTML;
+                const loadingHTML = '<i class="fas fa-spinner fa-spin"></i> Abrindo...';
+                this.innerHTML = loadingHTML;
+                this.style.pointerEvents = 'none';
                 
-                if (isExternal) {
-                    const originalContent = this.innerHTML;
-                    const icon = this.querySelector('i');
-                    
-                    if (icon) {
-                        icon.className = 'fas fa-spinner fa-spin';
-                    }
-                    
-                    this.style.pointerEvents = 'none';
-                    
-                    setTimeout(() => {
-                        this.innerHTML = originalContent;
-                        this.style.pointerEvents = '';
-                    }, 1500);
-                }
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.pointerEvents = '';
+                }, 1500);
             });
         }
     });
 }
 
-// Enhanced ripple effect
+// Enhanced ripple effect function
 function createRippleEffect(button, event) {
     const ripple = document.createElement('span');
     const rect = button.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height);
-    
-    let x, y;
-    if (event.type === 'touchstart' || event.type === 'touchend') {
-        const touch = event.touches[0] || event.changedTouches[0];
-        x = touch.clientX - rect.left - size / 2;
-        y = touch.clientY - rect.top - size / 2;
-    } else {
-        x = event.clientX - rect.left - size / 2;
-        y = event.clientY - rect.top - size / 2;
-    }
+    const x = event.clientX - rect.left - size / 2;
+    const y = event.clientY - rect.top - size / 2;
     
     ripple.style.cssText = `
         position: absolute;
@@ -957,9 +559,9 @@ function createRippleEffect(button, event) {
         left: ${x}px;
         top: ${y}px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.4);
         transform: scale(0);
-        animation: ripple 0.6s linear;
+        animation: ripple 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         pointer-events: none;
         z-index: 1;
     `;
@@ -970,267 +572,152 @@ function createRippleEffect(button, event) {
         if (ripple.parentNode) {
             ripple.remove();
         }
-    }, 600);
+    }, 800);
 }
 
-// =========================
-// Touch Gestures - Mobile
-// =========================
-function setupTouchGestures() {
-    if (!isMobile) return;
-
-    let isScrolling = false;
-    
-    // Prevent pull-to-refresh on some mobile browsers
-    document.addEventListener('touchstart', function(e) {
-        if (e.touches.length === 1) {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
+// Add enhanced ripple animation CSS
+const rippleStyle = document.createElement('style');
+rippleStyle.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
         }
-    }, { passive: true });
-
-    document.addEventListener('touchmove', function(e) {
-        if (!isScrolling && e.touches.length === 1) {
-            const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
-            const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
-            
-            if (deltaX > deltaY) {
-                // Horizontal swipe detected
-                isScrolling = true;
-            }
-        }
-    }, { passive: true });
-
-    document.addEventListener('touchend', function(e) {
-        isScrolling = false;
-    }, { passive: true });
-
-    // Swipe gestures for navigation
-    let swipeStartX = 0;
-    let swipeStartY = 0;
-    
-    document.addEventListener('touchstart', function(e) {
-        swipeStartX = e.touches[0].clientX;
-        swipeStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    document.addEventListener('touchend', function(e) {
-        const swipeEndX = e.changedTouches[0].clientX;
-        const swipeEndY = e.changedTouches[0].clientY;
-        
-        const diffX = swipeStartX - swipeEndX;
-        const diffY = swipeStartY - swipeEndY;
-        
-        const threshold = 100;
-        
-        if (Math.abs(diffX) > Math.abs(diffY)) {
-            if (Math.abs(diffX) > threshold) {
-                // Horizontal swipe
-                if (diffX > 0) {
-                    // Swipe left - could trigger next section
-                    console.log('Swipe left detected');
-                } else {
-                    // Swipe right - could trigger previous section
-                    console.log('Swipe right detected');
-                }
-            }
-        } else if (Math.abs(diffY) > threshold) {
-            // Vertical swipe
-            const navLinks = document.getElementById('navLinks');
-            if (diffY > 0 && navLinks && navLinks.classList.contains('active')) {
-                // Swipe up - close mobile menu
-                closeMobileMenu();
-            }
-        }
-    }, { passive: true });
-}
-
-// =========================
-// Device Orientation Handling
-// =========================
-function setupOrientationHandling() {
-    let orientationTimeout;
-
-    function handleOrientationChange() {
-        clearTimeout(orientationTimeout);
-        
-        orientationTimeout = setTimeout(() => {
-            updateDeviceType();
-            
-            // Close mobile menu on orientation change
-            closeMobileMenu();
-            
-            // Adjust AI chat position
-            const aiChat = document.getElementById('aiChat');
-            if (aiChat && aiChat.classList.contains('active')) {
-                // Briefly hide and show to recalculate position
-                aiChat.style.display = 'none';
-                requestAnimationFrame(() => {
-                    aiChat.style.display = 'flex';
-                });
-            }
-            
-            // Recalculate viewport height for mobile
-            if (isMobile) {
-                document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-            }
-            
-        }, 300);
-    }
-
-    window.addEventListener('orientationchange', handleOrientationChange);
-    window.addEventListener('resize', debounce(handleOrientationChange, 250));
-    
-    // Initial viewport height calculation
-    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-}
-
-// =========================
-// Accessibility Enhancements
-// =========================
-function setupAccessibility() {
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        const activeElement = document.activeElement;
-        
-        // Space or Enter to activate buttons
-        if (e.key === ' ' || e.key === 'Enter') {
-            if (activeElement.classList.contains('contact-btn') || 
-                activeElement.classList.contains('btn') ||
-                activeElement.classList.contains('quick-btn')) {
-                e.preventDefault();
-                activeElement.click();
-            }
-        }
-        
-        // Tab navigation improvements
-        if (e.key === 'Tab') {
-            // Ensure visible focus indicators
-            document.body.classList.add('keyboard-navigation');
-        }
-    });
-    
-    // Remove keyboard navigation class on mouse use
-    document.addEventListener('mousedown', function() {
-        document.body.classList.remove('keyboard-navigation');
-    });
-    
-    // Focus management for mobile menu
-    const navLinks = document.getElementById('navLinks');
-    if (navLinks) {
-        navLinks.addEventListener('transitionend', function() {
-            if (this.classList.contains('active')) {
-                const firstLink = this.querySelector('a');
-                if (firstLink && !isMobile) firstLink.focus();
-            }
-        });
     }
     
-    // ARIA live region for dynamic content announcements
-    const liveRegion = document.createElement('div');
-    liveRegion.setAttribute('aria-live', 'polite');
-    liveRegion.setAttribute('aria-atomic', 'true');
-    liveRegion.style.cssText = 'position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;';
-    document.body.appendChild(liveRegion);
-    
-    // Function to announce messages to screen readers
-    window.announceToScreenReader = function(message) {
-        liveRegion.textContent = message;
-        setTimeout(() => liveRegion.textContent = '', 1000);
-    };
-}
+    .contact-btn,
+    .btn {
+        position: relative;
+        overflow: hidden;
+    }
+`;
+document.head.appendChild(rippleStyle);
 
 // =========================
 // Performance Monitoring
 // =========================
-function initializePerformanceMonitoring() {
+function measurePerformance() {
     if ('performance' in window) {
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                const perfData = performance.getEntriesByType('navigation')[0];
-                if (perfData) {
-                    console.log('Page Load Time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
-                }
-                
-                // Monitor memory usage on mobile
-                if (isMobile && 'memory' in performance) {
-                    console.log('Memory Usage:', performance.memory.usedJSHeapSize / 1048576, 'MB');
-                }
-            }, 1000);
+            const perfData = performance.getEntriesByType('navigation')[0];
+            console.log('Page Load Time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
         });
-    }
-    
-    // Monitor long tasks that could impact performance
-    if ('PerformanceObserver' in window) {
-        try {
-            const observer = new PerformanceObserver((list) => {
-                for (const entry of list.getEntries()) {
-                    if (entry.duration > 50) {
-                        console.warn('Long task detected:', entry.duration, 'ms');
-                    }
-                }
-            });
-            observer.observe({entryTypes: ['longtask']});
-        } catch (e) {
-            // PerformanceObserver not supported
-        }
     }
 }
 
 // =========================
-// Error Handling & Fallbacks
+// Enhanced Error Handling
 // =========================
 function setupErrorHandling() {
     window.addEventListener('error', function(e) {
         console.error('JavaScript Error:', e.error);
-        
-        // Graceful degradation
+        // Graceful degradation - ensure basic functionality works
         if (e.error && e.error.message) {
-            // Hide problematic animations on error
-            const animations = document.querySelectorAll('.musical-note, .pulse-ring');
-            animations.forEach(el => el.style.display = 'none');
+            // Log error but don't break the site
+            console.warn('Non-critical error caught, continuing...');
         }
     });
     
     // Handle unhandled promise rejections
     window.addEventListener('unhandledrejection', function(e) {
         console.error('Unhandled Promise Rejection:', e.reason);
-        e.preventDefault();
+        e.preventDefault(); // Prevent the default browser behavior
     });
-    
-    // Fallback for critical functionality
-    setTimeout(() => {
-        // Ensure navigation works even if JavaScript fails
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        
-        if (hamburger && navLinks && !hamburger.onclick) {
-            // Fallback click handler
-            hamburger.onclick = function() {
-                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-            };
-        }
-    }, 2000);
 }
 
 // =========================
-// Image Lazy Loading Fallback
+// Enhanced Accessibility
 // =========================
-function setupImageHandling() {
-    // Enhanced image loading with error handling
-    const images = document.querySelectorAll('img');
-    images.forEach(img => {
-        img.addEventListener('error', function() {
-            this.style.display = 'none';
-            console.warn('Failed to load image:', this.src);
-        });
+function enhanceAccessibility() {
+    // Keyboard navigation support
+    document.addEventListener('keydown', function(e) {
+        // Space or Enter to activate buttons
+        if (e.key === ' ' || e.key === 'Enter') {
+            const activeElement = document.activeElement;
+            if (activeElement.classList.contains('contact-btn') || 
+                activeElement.classList.contains('btn') ||
+                activeElement.classList.contains('ai-toggle')) {
+                e.preventDefault();
+                activeElement.click();
+            }
+        }
         
-        img.addEventListener('load', function() {
-            this.style.opacity = '1';
-        });
+        // Escape to close AI chat
+        if (e.key === 'Escape') {
+            const aiChat = document.getElementById('aiChat');
+            if (aiChat && aiChat.classList.contains('active')) {
+                aiChat.classList.remove('active');
+            }
+        }
     });
+
+    // Focus management for mobile menu
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks) {
+        navLinks.addEventListener('transitionend', function() {
+            if (this.classList.contains('active')) {
+                const firstLink = this.querySelector('a');
+                if (firstLink) firstLink.focus();
+            }
+        });
+    }
     
-    // Intersection Observer for lazy loading (if supported)
+    // ARIA labels and announcements
+    const aiToggle = document.getElementById('aiToggle');
+    if (aiToggle) {
+        aiToggle.setAttribute('aria-label', 'Abrir assistente virtual');
+        aiToggle.setAttribute('role', 'button');
+    }
+}
+
+// =========================
+// Enhanced Resize Handler
+// =========================
+const handleResize = debounce(function() {
+    // Close mobile menu on resize to desktop
+    if (window.innerWidth > 768) {
+        closeMobileMenu();
+        
+        // Close AI chat on mobile to desktop transition
+        const aiChat = document.getElementById('aiChat');
+        if (aiChat && window.innerWidth > 1024) {
+            aiChat.classList.remove('active');
+        }
+    }
+    
+    // Reset parallax transforms on mobile
+    if (window.innerWidth <= 768) {
+        const fpNote = document.querySelector('.fp-musical-note');
+        if (fpNote) {
+            fpNote.style.transform = '';
+        }
+    }
+    
+    // Adjust AI chat position
+    const aiAssistant = document.getElementById('aiAssistant');
+    if (aiAssistant && window.innerWidth <= 768) {
+        const aiChatElement = document.getElementById('aiChat');
+        if (aiChatElement) {
+            aiChatElement.style.width = `calc(100vw - 2rem)`;
+        }
+    }
+}, 250);
+
+window.addEventListener('resize', handleResize);
+
+// =========================
+// Initialize everything when DOM is ready
+// =========================
+document.addEventListener('DOMContentLoaded', function() {
+    setupErrorHandling();
+    enhanceAccessibility();
+    measurePerformance();
+});
+
+// =========================
+// Enhanced Lazy loading for images
+// =========================
+function setupLazyLoading() {
     if ('IntersectionObserver' in window) {
         const imageObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1239,96 +726,43 @@ function setupImageHandling() {
                     if (img.dataset.src) {
                         img.src = img.dataset.src;
                         img.removeAttribute('data-src');
+                        img.classList.add('loaded');
                     }
                     imageObserver.unobserve(img);
                 }
             });
+        }, {
+            threshold: 0.1,
+            rootMargin: '50px 0px'
         });
 
         document.querySelectorAll('img[data-src]').forEach(img => {
             imageObserver.observe(img);
         });
-    } else {
-        // Fallback for browsers without Intersection Observer
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-        });
     }
 }
 
 // =========================
-// Resize Handler - Enhanced
-// =========================
-const handleResize = debounce(function() {
-    const oldIsMobile = isMobile;
-    updateDeviceType();
-    
-    // Close mobile menu on resize to desktop
-    if (window.innerWidth > 768) {
-        closeMobileMenu();
-    }
-    
-    // Reset styles when switching between mobile/desktop
-    if (oldIsMobile !== isMobile) {
-        const navbar = document.getElementById('navbar');
-        if (navbar) {
-            navbar.style.transform = '';
-        }
-        
-        // Reset parallax on mobile
-        const fpNote = document.querySelector('.fp-musical-note');
-        if (fpNote && isMobile) {
-            fpNote.style.transform = '';
-        }
-        
-        // Adjust AI chat if open
-        const aiChat = document.getElementById('aiChat');
-        if (aiChat && aiChat.classList.contains('active')) {
-            // Recalculate position
-            setTimeout(() => {
-                aiChat.style.display = 'none';
-                requestAnimationFrame(() => {
-                    aiChat.style.display = 'flex';
-                });
-            }, 100);
-        }
-    }
-    
-    // Update viewport height for mobile browsers
-    if (isMobile) {
-        document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-    }
-}, 250);
-
-window.addEventListener('resize', handleResize);
-
-// =========================
-// Page Visibility Optimization
+// Enhanced Page Visibility API
 // =========================
 function handleVisibilityChange() {
     if (document.hidden) {
-        // Pause expensive operations when page is not visible
-        document.body.classList.add('page-hidden');
+        // Pause animations when page is not visible
+        document.body.style.animationPlayState = 'paused';
         
-        // Pause CSS animations
-        const style = document.createElement('style');
-        style.id = 'pause-animations';
-        style.textContent = `
-            *, *::before, *::after {
-                animation-play-state: paused !important;
-                transition-duration: 0s !important;
-            }
-        `;
-        document.head.appendChild(style);
+        // Pause AI chat auto-responses
+        const aiChat = document.getElementById('aiChat');
+        if (aiChat) {
+            aiChat.setAttribute('data-paused', 'true');
+        }
     } else {
-        // Resume operations when page becomes visible
-        document.body.classList.remove('page-hidden');
+        // Resume animations when page is visible
+        document.body.style.animationPlayState = 'running';
         
-        // Resume animations
-        const pauseStyle = document.getElementById('pause-animations');
-        if (pauseStyle) {
-            pauseStyle.remove();
+        // Resume AI chat
+        const aiChat = document.getElementById('aiChat');
+        if (aiChat) {
+            aiChat.removeAttribute('data-paused');
         }
     }
 }
@@ -1336,278 +770,14 @@ function handleVisibilityChange() {
 document.addEventListener('visibilitychange', handleVisibilityChange);
 
 // =========================
-// Smooth Scroll Polyfill for older browsers
-// =========================
-function setupSmoothScrollPolyfill() {
-    // Check if smooth scroll is supported
-    if (!('scrollBehavior' in document.documentElement.style)) {
-        // Add polyfill for smooth scroll
-        const smoothScrollTo = (element, to, duration) => {
-            const start = element.scrollTop;
-            const change = to - start;
-            const startDate = +new Date();
-            
-            const easeInOutQuart = (t, b, c, d) => {
-                t /= d/2;
-                if (t < 1) return c/2*t*t*t*t + b;
-                t -= 2;
-                return -c/2 * (t*t*t*t - 2) + b;
-            };
-            
-            const animateScroll = () => {
-                const currentDate = +new Date();
-                const currentTime = currentDate - startDate;
-                element.scrollTop = parseInt(easeInOutQuart(currentTime, start, change, duration));
-                if (currentTime < duration) {
-                    requestAnimationFrame(animateScroll);
-                } else {
-                    element.scrollTop = to;
-                }
-            };
-            
-            animateScroll();
-        };
-        
-        // Override scroll behavior
-        window.scrollTo = function(options) {
-            if (typeof options === 'object' && options.behavior === 'smooth') {
-                smoothScrollTo(document.documentElement, options.top || 0, 600);
-            } else {
-                window.scroll.apply(window, arguments);
-            }
-        };
-    }
-}
-
-// =========================
-// Memory Management
-// =========================
-function setupMemoryManagement() {
-    let observers = [];
-    let timeouts = [];
-    let intervals = [];
-    
-    // Track observers for cleanup
-    const originalObserve = IntersectionObserver.prototype.observe;
-    IntersectionObserver.prototype.observe = function(...args) {
-        observers.push(this);
-        return originalObserve.apply(this, args);
-    };
-    
-    // Track timeouts
-    const originalSetTimeout = window.setTimeout;
-    window.setTimeout = function(...args) {
-        const id = originalSetTimeout.apply(window, args);
-        timeouts.push(id);
-        return id;
-    };
-    
-    // Track intervals
-    const originalSetInterval = window.setInterval;
-    window.setInterval = function(...args) {
-        const id = originalSetInterval.apply(window, args);
-        intervals.push(id);
-        return id;
-    };
-    
-    // Cleanup on page unload
-    window.addEventListener('beforeunload', function() {
-        // Disconnect observers
-        observers.forEach(observer => {
-            try { observer.disconnect(); } catch(e) {}
-        });
-        
-        // Clear timeouts
-        timeouts.forEach(id => clearTimeout(id));
-        
-        // Clear intervals
-        intervals.forEach(id => clearInterval(id));
-        
-        // Reset body overflow
-        document.body.style.overflow = '';
-        
-        // Clear any remaining event listeners
-        observers = [];
-        timeouts = [];
-        intervals = [];
-    });
-}
-
-// =========================
-// Network Status Handling
-// =========================
-function setupNetworkHandling() {
-    if ('onLine' in navigator) {
-        function handleOnlineStatus() {
-            if (!navigator.onLine) {
-                // Show offline message
-                const offlineMsg = document.createElement('div');
-                offlineMsg.id = 'offline-message';
-                offlineMsg.innerHTML = `
-                    <div style="
-                        position: fixed;
-                        top: 80px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        background: rgba(255, 193, 7, 0.9);
-                        color: #000;
-                        padding: 10px 20px;
-                        border-radius: 5px;
-                        z-index: 10000;
-                        font-size: 14px;
-                        backdrop-filter: blur(10px);
-                    ">
-                        📶 Você está offline. Algumas funcionalidades podem não funcionar.
-                    </div>
-                `;
-                document.body.appendChild(offlineMsg);
-                
-                setTimeout(() => {
-                    if (offlineMsg.parentNode) {
-                        offlineMsg.remove();
-                    }
-                }, 5000);
-            } else {
-                // Remove offline message
-                const offlineMsg = document.getElementById('offline-message');
-                if (offlineMsg) {
-                    offlineMsg.remove();
-                }
-            }
-        }
-        
-        window.addEventListener('online', handleOnlineStatus);
-        window.addEventListener('offline', handleOnlineStatus);
-    }
-}
-
-// =========================
-// Advanced Mobile Optimizations
-// =========================
-function setupAdvancedMobileOptimizations() {
-    if (!isMobile) return;
-    
-    // Prevent bounce effect on iOS
-    document.addEventListener('touchstart', function(e) {
-        if (e.touches.length === 1) {
-            const target = e.target;
-            const scrollableParent = findScrollableParent(target);
-            
-            if (!scrollableParent || scrollableParent === document.body) {
-                // Prevent overscroll
-                if (window.scrollY <= 0) {
-                    e.preventDefault();
-                }
-            }
-        }
-    }, { passive: false });
-    
-    function findScrollableParent(node) {
-        if (node === null) return null;
-        
-        const overflowY = window.getComputedStyle(node).overflowY;
-        const isScrollable = overflowY === 'scroll' || overflowY === 'auto';
-        
-        if (isScrollable && node.scrollHeight > node.clientHeight) {
-            return node;
-        }
-        
-        return findScrollableParent(node.parentNode);
-    }
-    
-    // Optimize touch events
-    let passiveSupported = false;
-    try {
-        const options = {
-            get passive() {
-                passiveSupported = true;
-                return false;
-            }
-        };
-        window.addEventListener('test', null, options);
-        window.removeEventListener('test', null, options);
-    } catch(err) {
-        passiveSupported = false;
-    }
-    
-    // Add touch-action CSS for better performance
-    const touchStyle = document.createElement('style');
-    touchStyle.textContent = `
-        .ai-chat, .nav-links {
-            touch-action: pan-y;
-        }
-        .ai-toggle, .contact-btn, .btn {
-            touch-action: manipulation;
-        }
-    `;
-    document.head.appendChild(touchStyle);
-    
-    // Optimize for high DPI displays
-    if (window.devicePixelRatio > 1) {
-        document.body.classList.add('high-dpi');
-    }
-}
-
-// =========================
-// Initialize All Features
-// =========================
-document.addEventListener('DOMContentLoaded', function() {
-    // Core initialization
-    try {
-        setupErrorHandling();
-        setupMemoryManagement();
-        initializePerformanceMonitoring();
-        
-        // UI initialization
-        setupSmoothScrollPolyfill();
-        setupImageHandling();
-        setupNetworkHandling();
-        setupAdvancedMobileOptimizations();
-        
-        console.log('Website initialized successfully');
-    } catch (error) {
-        console.error('Initialization error:', error);
-        // Ensure basic functionality works even if advanced features fail
-        setupBasicFallbacks();
-    }
-});
-
-// =========================
-// Basic Fallbacks
-// =========================
-function setupBasicFallbacks() {
-    // Ensure navigation works
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function() {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-    }
-    
-    // Ensure smooth scrolling works
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
-}
-
-// =========================
-// Service Worker Registration (Optional)
+// Service Worker Registration (optional)
 // =========================
 function registerServiceWorker() {
-    if ('serviceWorker' in navigator && 'caches' in window) {
+    if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js')
                 .then(registration => {
-                    console.log('SW registered: ', registration.scope);
+                    console.log('SW registered: ', registration);
                 })
                 .catch(registrationError => {
                     console.log('SW registration failed: ', registrationError);
@@ -1616,17 +786,526 @@ function registerServiceWorker() {
     }
 }
 
-// Uncomment to enable service worker
-// registerServiceWorker();
+// Initialize additional features
+document.addEventListener('DOMContentLoaded', function() {
+    setupLazyLoading();
+    // registerServiceWorker(); // Uncomment if you add a service worker
+});
 
 // =========================
-// Export functions for testing (if needed)
+// Enhanced Memory Management
 // =========================
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        debounce,
-        throttle,
-        toggleMobileMenu,
-        closeMobileMenu
-    };
+window.addEventListener('beforeunload', function() {
+    // Clean up any intervals or timeouts
+    // Remove event listeners if needed
+    document.body.style.overflow = '';
+    
+    // Clear AI chat if needed
+    const aiMessages = document.getElementById('aiMessages');
+    if (aiMessages) {
+        // Clear messages to prevent memory leaks
+        while (aiMessages.firstChild) {
+            aiMessages.removeChild(aiMessages.firstChild);
+        }
+    }
+});
+
+// =========================
+// Enhanced Touch Gesture Support
+// =========================
+function setupTouchGestures() {
+    let touchStartY = 0;
+    let touchEndY = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', function(e) {
+        touchStartY = e.changedTouches[0].screenY;
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+        touchEndY = e.changedTouches[0].screenY;
+        touchEndX = e.changedTouches[0].screenX;
+        handleGesture();
+    }, { passive: true });
+
+    function handleGesture() {
+        const threshold = 50;
+        const diffY = touchStartY - touchEndY;
+        const diffX = touchStartX - touchEndX;
+
+        // Swipe up to close mobile menu
+        if (diffY > threshold && Math.abs(diffX) < threshold) {
+            const navLinks = document.getElementById('navLinks');
+            if (navLinks && navLinks.classList.contains('active')) {
+                closeMobileMenu();
+            }
+            
+            // Also close AI chat
+            const aiChat = document.getElementById('aiChat');
+            if (aiChat && aiChat.classList.contains('active')) {
+                aiChat.classList.remove('active');
+            }
+        }
+        
+        // Swipe right to open AI chat (on mobile)
+        if (diffX < -threshold && Math.abs(diffY) < threshold && window.innerWidth <= 768) {
+            const aiChat = document.getElementById('aiChat');
+            const aiToggle = document.getElementById('aiToggle');
+            if (aiChat && aiToggle && !aiChat.classList.contains('active')) {
+                aiToggle.click();
+            }
+        }
+    }
 }
+
+// =========================
+// Enhanced AI Chat Features
+// =========================
+function enhanceAIChat() {
+    // Add typing indicator
+    function showTypingIndicator() {
+        const aiMessages = document.getElementById('aiMessages');
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'ai-message bot-message typing-indicator';
+        typingDiv.innerHTML = `
+            <div class="message-content">
+                <div class="typing-dots">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        `;
+        
+        aiMessages.appendChild(typingDiv);
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+        
+        return typingDiv;
+    }
+    
+    // Add typing animation CSS
+    const typingStyle = document.createElement('style');
+    typingStyle.textContent = `
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            padding: 8px 0;
+        }
+        
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: typingDots 1.5s ease-in-out infinite;
+        }
+        
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingDots {
+            0%, 60%, 100% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+            30% {
+                opacity: 1;
+                transform: translateY(-10px);
+            }
+        }
+    `;
+    document.head.appendChild(typingStyle);
+}
+
+// Initialize enhanced features
+document.addEventListener('DOMContentLoaded', function() {
+    setupTouchGestures();
+    enhanceAIChat();
+});
+
+// =========================
+// Analytics and User Behavior Tracking (Privacy-Compliant)
+// =========================
+function trackUserInteraction(action, element) {
+    // Simple privacy-compliant analytics
+    if (typeof gtag !== 'undefined') {
+        gtag('event', action, {
+            event_category: 'User Interaction',
+            event_label: element
+        });
+    }
+    
+    // Or use localStorage for basic session tracking (no personal data)
+    try {
+        const interactions = JSON.parse(localStorage.getItem('user_interactions') || '[]');
+        interactions.push({
+            action: action,
+            element: element,
+            timestamp: Date.now()
+        });
+        
+        // Keep only last 50 interactions to prevent storage bloat
+        if (interactions.length > 50) {
+            interactions.splice(0, interactions.length - 50);
+        }
+        
+        localStorage.setItem('user_interactions', JSON.stringify(interactions));
+    } catch (e) {
+        console.warn('Could not track interaction:', e);
+    }
+}
+
+// Track important interactions
+document.addEventListener('DOMContentLoaded', function() {
+    // Track navigation clicks
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            trackUserInteraction('navigation_click', link.textContent);
+        });
+    });
+    
+    // Track contact button clicks
+    document.querySelectorAll('.contact-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            trackUserInteraction('contact_click', btn.textContent);
+        });
+    });
+    
+    // Track AI assistant usage
+    const aiToggle = document.getElementById('aiToggle');
+    if (aiToggle) {
+        aiToggle.addEventListener('click', () => {
+            trackUserInteraction('ai_chat_open', 'assistant');
+        });
+    }
+});
+
+// =========================
+// Enhanced Musical Notes Animation Control
+// =========================
+function initializeMusicalNotesControl() {
+    const notes = document.querySelectorAll('.musical-note');
+    
+    // Add hover effects to notes
+    notes.forEach(note => {
+        note.addEventListener('mouseenter', function() {
+            this.style.transform += ' scale(1.2)';
+            this.style.textShadow = '0 0 20px rgba(255, 215, 0, 1)';
+        });
+        
+        note.addEventListener('mouseleave', function() {
+            this.style.transform = this.style.transform.replace(' scale(1.2)', '');
+            this.style.textShadow = '0 0 12px rgba(255, 215, 0, 0.6)';
+        });
+    });
+    
+    // Reduce notes on low-performance devices
+    if (navigator.hardwareConcurrency <= 4 || window.innerWidth <= 480) {
+        notes.forEach((note, index) => {
+            if (index > 5) {
+                note.style.display = 'none';
+            }
+        });
+    }
+}
+
+// =========================
+// Enhanced Logo Glow Effects
+// =========================
+function initializeEnhancedLogoEffects() {
+    const fpLogo = document.querySelector('.fp-logo');
+    const glowEffect = document.querySelector('.glow-effect');
+    const pulseRing = document.querySelector('.pulse-ring');
+    
+    if (!fpLogo) return;
+    
+    // Interactive glow on hover
+    fpLogo.addEventListener('mouseenter', function() {
+        this.style.filter = 'drop-shadow(0 0 30px rgba(255, 215, 0, 0.9))';
+        if (glowEffect) {
+            glowEffect.style.opacity = '0.8';
+            glowEffect.style.transform = 'translate(-50%, -50%) scale(1.3)';
+        }
+        if (pulseRing) {
+            pulseRing.style.animationDuration = '1.5s';
+        }
+    });
+    
+    fpLogo.addEventListener('mouseleave', function() {
+        this.style.filter = 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))';
+        if (glowEffect) {
+            glowEffect.style.opacity = '';
+            glowEffect.style.transform = '';
+        }
+        if (pulseRing) {
+            pulseRing.style.animationDuration = '3s';
+        }
+    });
+    
+    // Click effect
+    fpLogo.addEventListener('click', function() {
+        this.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            this.style.transform = '';
+        }, 200);
+        
+        // Create sparkle effect
+        createSparkleEffect(this);
+    });
+}
+
+// Sparkle effect for logo interaction
+function createSparkleEffect(element) {
+    const rect = element.getBoundingClientRect();
+    const sparkles = 8;
+    
+    for (let i = 0; i < sparkles; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.style.cssText = `
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            left: ${rect.left + rect.width / 2}px;
+            top: ${rect.top + rect.height / 2}px;
+            animation: sparkleOut${i} 1s ease-out forwards;
+        `;
+        
+        // Create unique animation for each sparkle
+        const angle = (360 / sparkles) * i;
+        const distance = 50;
+        const keyframes = `
+            @keyframes sparkleOut${i} {
+                0% {
+                    opacity: 1;
+                    transform: translate(0, 0) scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(${Math.cos(angle * Math.PI / 180) * distance}px, ${Math.sin(angle * Math.PI / 180) * distance}px) scale(0);
+                }
+            }
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = keyframes;
+        document.head.appendChild(style);
+        
+        document.body.appendChild(sparkle);
+        
+        setTimeout(() => {
+            sparkle.remove();
+            style.remove();
+        }, 1000);
+    }
+}
+
+// =========================
+// Enhanced Theme System
+// =========================
+function initializeThemeSystem() {
+    // Detect user's system preference
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (prefersReducedMotion) {
+        document.documentElement.classList.add('reduced-motion');
+    }
+    
+    // Add high contrast mode detection
+    const prefersHighContrast = window.matchMedia('(prefers-contrast: high)').matches;
+    if (prefersHighContrast) {
+        document.documentElement.classList.add('high-contrast');
+    }
+}
+
+// =========================
+// Progressive Web App Features
+// =========================
+function initializePWAFeatures() {
+    // Add to home screen prompt
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Show custom install button
+        showInstallButton();
+    });
+    
+    function showInstallButton() {
+        const installBtn = document.createElement('button');
+        installBtn.className = 'install-btn';
+        installBtn.innerHTML = '<i class="fas fa-download"></i> Instalar App';
+        installBtn.style.cssText = `
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            transform: translateY(100px);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        `;
+        
+        document.body.appendChild(installBtn);
+        
+        setTimeout(() => {
+            installBtn.style.transform = 'translateY(0)';
+        }, 1000);
+        
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    console.log('PWA installed');
+                    trackUserInteraction('pwa_install', 'accepted');
+                }
+                
+                deferredPrompt = null;
+                installBtn.remove();
+            }
+        });
+        
+        // Auto hide after 10 seconds
+        setTimeout(() => {
+            if (installBtn.parentNode) {
+                installBtn.style.transform = 'translateY(100px)';
+                setTimeout(() => installBtn.remove(), 300);
+            }
+        }, 10000);
+    }
+}
+
+// =========================
+// Advanced Error Recovery
+// =========================
+function initializeErrorRecovery() {
+    // Network error handling
+    window.addEventListener('online', function() {
+        console.log('Connection restored');
+        showNotification('Conexão restaurada', 'success');
+    });
+    
+    window.addEventListener('offline', function() {
+        console.log('Connection lost');
+        showNotification('Sem conexão com a internet', 'warning');
+    });
+    
+    // Show notification function
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            word-wrap: break-word;
+        `;
+        
+        // Set colors based on type
+        switch(type) {
+            case 'success':
+                notification.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+                break;
+            case 'warning':
+                notification.style.background = 'linear-gradient(45deg, #ff9800, #f57c00)';
+                break;
+            case 'error':
+                notification.style.background = 'linear-gradient(45deg, #f44336, #d32f2f)';
+                break;
+            default:
+                notification.style.background = 'linear-gradient(45deg, #2196F3, #1976D2)';
+        }
+        
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Auto remove
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 5000);
+    }
+}
+
+// =========================
+// Initialize All Enhanced Features
+// =========================
+document.addEventListener('DOMContentLoaded', function() {
+    initializeMusicalNotesControl();
+    initializeEnhancedLogoEffects();
+    initializeThemeSystem();
+    initializePWAFeatures();
+    initializeErrorRecovery();
+});
+
+// =========================
+// Cleanup and Optimization
+// =========================
+// Optimize animations based on device capabilities
+function optimizeForDevice() {
+    const isLowEndDevice = navigator.hardwareConcurrency <= 4 || 
+                           window.deviceMemory <= 4 || 
+                           window.innerWidth <= 480;
+    
+    if (isLowEndDevice) {
+        document.documentElement.classList.add('low-end-device');
+        
+        // Reduce animation complexity
+        const style = document.createElement('style');
+        style.textContent = `
+            .low-end-device .musical-note:nth-child(n+7) {
+                display: none;
+            }
+            .low-end-device .glow-effect,
+            .low-end-device .pulse-ring {
+                display: none;
+            }
+            .low-end-device * {
+                animation-duration: 0.3s !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Call optimization on load
+window.addEventListener('load', optimizeForDevice);
+
+console.log('🎻 Fabricio Porto Website Enhanced - Loaded Successfully!');
