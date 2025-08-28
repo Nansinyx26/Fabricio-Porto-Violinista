@@ -1,7 +1,7 @@
 /* =========================
    RESET E CONFIGURAÇÕES BASE
    ========================= */
-   
+
 * {
     margin: 0;
     padding: 0;
@@ -23,14 +23,18 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+
 /* CORREÇÃO: Suporte para viewport height em mobile */
+
 :root {
     --vh: 1vh;
 }
 
+
 /* CORREÇÃO: Prevenção de zoom no iOS */
+
 input[type="text"],
-input[type="email"], 
+input[type="email"],
 input[type="tel"],
 textarea {
     font-size: 16px !important;
@@ -38,19 +42,18 @@ textarea {
     border-radius: 0;
 }
 
+
 /* =========================
    ELEMENTOS DE FUNDO
    ========================= */
-   
+
 .bg-pattern {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 184, 76, 0.1) 0%, transparent 50%);
+    background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 184, 76, 0.1) 0%, transparent 50%);
     z-index: -2;
     pointer-events: none;
 }
@@ -61,22 +64,16 @@ textarea {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 2px,
-            rgba(139, 69, 19, 0.02) 2px,
-            rgba(139, 69, 19, 0.02) 4px
-        );
+    background: repeating-linear-gradient( 90deg, transparent, transparent 2px, rgba(139, 69, 19, 0.02) 2px, rgba(139, 69, 19, 0.02) 4px);
     z-index: -1;
     pointer-events: none;
 }
 
+
 /* =========================
    NOTAS MUSICAIS FLUTUANTES
    ========================= */
-   
+
 .musical-note {
     position: fixed;
     font-size: 20px;
@@ -86,19 +83,77 @@ textarea {
     animation: float 15s infinite ease-in-out;
 }
 
-.note-1 { top: 10%; left: 10%; animation-delay: 0s; }
-.note-2 { top: 20%; left: 80%; animation-delay: 2s; }
-.note-3 { top: 40%; left: 15%; animation-delay: 4s; }
-.note-4 { top: 60%; left: 75%; animation-delay: 1s; }
-.note-5 { top: 80%; left: 25%; animation-delay: 3s; }
-.note-6 { top: 15%; left: 60%; animation-delay: 5s; }
-.note-7 { top: 35%; left: 90%; animation-delay: 1.5s; }
-.note-8 { top: 55%; left: 5%; animation-delay: 3.5s; }
-.note-9 { top: 75%; left: 85%; animation-delay: 0.5s; }
-.note-10 { top: 25%; left: 40%; animation-delay: 4.5s; }
-.note-11 { top: 45%; left: 70%; animation-delay: 2.5s; }
-.note-12 { top: 65%; left: 30%; animation-delay: 6s; }
+.note-1 {
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
 
+.note-2 {
+    top: 20%;
+    left: 80%;
+    animation-delay: 2s;
+}
+
+.note-3 {
+    top: 40%;
+    left: 15%;
+    animation-delay: 4s;
+}
+
+.note-4 {
+    top: 60%;
+    left: 75%;
+    animation-delay: 1s;
+}
+
+.note-5 {
+    top: 80%;
+    left: 25%;
+    animation-delay: 3s;
+}
+
+.note-6 {
+    top: 15%;
+    left: 60%;
+    animation-delay: 5s;
+}
+
+.note-7 {
+    top: 35%;
+    left: 90%;
+    animation-delay: 1.5s;
+}
+
+.note-8 {
+    top: 55%;
+    left: 5%;
+    animation-delay: 3.5s;
+}
+
+.note-9 {
+    top: 75%;
+    left: 85%;
+    animation-delay: 0.5s;
+}
+
+.note-10 {
+    top: 25%;
+    left: 40%;
+    animation-delay: 4.5s;
+}
+
+.note-11 {
+    top: 45%;
+    left: 70%;
+    animation-delay: 2.5s;
+}
+
+.note-12 {
+    top: 65%;
+    left: 30%;
+    animation-delay: 6s;
+}
 
 @keyframes float {
     0% {
@@ -106,22 +161,23 @@ textarea {
         opacity: 0.2;
     }
     25% {
-        transform: translate(-20px, -40px) rotate(90deg);
+        transform: translate(-2vw, -10vh) rotate(90deg);
         opacity: 0.6;
     }
     50% {
-        transform: translate(20px, -80px) rotate(180deg);
+        transform: translate(2vw, -20vh) rotate(180deg);
         opacity: 0.8;
     }
     75% {
-        transform: translate(-15px, -120px) rotate(270deg);
+        transform: translate(-1.5vw, -30vh) rotate(270deg);
         opacity: 0.5;
     }
     100% {
-        transform: translate(0, -160px) rotate(360deg);
+        transform: translate(0, -40vh) rotate(360deg);
         opacity: 0;
     }
 }
+
 
 /* Ocultar notas musicais em telas pequenas para melhor performance 
 @media (max-width: 480px) {
@@ -130,10 +186,11 @@ textarea {
     }
 }*/
 
+
 /* =========================
    NAVEGAÇÃO
    ========================= */
-   
+
 #navbar {
     position: fixed;
     top: 0;
@@ -202,7 +259,9 @@ textarea {
     color: #d4af37;
 }
 
+
 /* Hamburger Menu */
+
 .hamburger {
     display: none;
     flex-direction: column;
@@ -232,10 +291,11 @@ textarea {
     transform: rotate(45deg) translate(-5px, -6px);
 }
 
+
 /* =========================
    ASSISTENTE IA - OTIMIZADO E CORRIGIDO
    ========================= */
-   
+
 .ai-assistant {
     position: fixed;
     bottom: 20px;
@@ -296,11 +356,18 @@ textarea {
 }
 
 @keyframes pulse-badge {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
 }
 
+
 /* CORREÇÃO PRINCIPAL: Container do chat otimizado */
+
 .ai-chat {
     position: absolute;
     bottom: 70px;
@@ -380,7 +447,9 @@ textarea {
     font-size: 11px;
 }
 
+
 /* CORREÇÃO: Botão fechar otimizado */
+
 .ai-close {
     margin-left: auto;
     background: none;
@@ -415,7 +484,9 @@ textarea {
     transform: rotate(90deg) scale(0.95);
 }
 
+
 /* CORREÇÃO: Área de mensagens otimizada */
+
 .ai-messages {
     flex: 1;
     padding: 15px;
@@ -432,8 +503,14 @@ textarea {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .message-content {
@@ -505,7 +582,9 @@ textarea {
     transform: translateY(-1px);
 }
 
+
 /* CORREÇÃO CRÍTICA: Área de input otimizada */
+
 .ai-input {
     padding: 15px;
     display: flex;
@@ -524,7 +603,8 @@ textarea {
     border-radius: 25px;
     padding: 10px 14px;
     color: #fff;
-    font-size: 16px !important; /* Previne zoom no iOS */
+    font-size: 16px !important;
+    /* Previne zoom no iOS */
     outline: none;
     transition: all 0.3s ease;
     min-width: 0;
@@ -583,7 +663,9 @@ textarea {
     transform: none;
 }
 
+
 /* CORREÇÃO: Scrollbar customizada */
+
 .ai-messages::-webkit-scrollbar {
     width: 4px;
 }
@@ -601,10 +683,11 @@ textarea {
     background: rgba(212, 175, 55, 0.5);
 }
 
+
 /* =========================
    SEÇÃO HERO - MOBILE OPTIMIZED
    ========================= */
-   
+
 .hero {
     min-height: 100vh;
     display: flex;
@@ -704,10 +787,11 @@ textarea {
     background: rgba(212, 175, 55, 0.1);
 }
 
+
 /* =========================
    LOGO FP - RESPONSIVO
    ========================= */
-   
+
 .fp-musical-note {
     position: absolute;
     right: 5%;
@@ -725,7 +809,9 @@ textarea {
     justify-content: center;
 }
 
+
 /* Logo */
+
 .fp-logo {
     width: 80%;
     height: 80%;
@@ -734,7 +820,9 @@ textarea {
     z-index: 2;
 }
 
+
 /* Ondas sonoras */
+
 .pulse-ring {
     position: absolute;
     top: 50%;
@@ -746,11 +834,19 @@ textarea {
     transform: translate(-50%, -50%) scale(0.5);
     opacity: 0;
     animation: soundwave 2.5s infinite;
+    z-index: 2;
 }
 
+
 /* Cada anel inicia um pouco depois do outro */
-.pulse-ring:nth-child(2) { animation-delay: 0.8s; }
-.pulse-ring:nth-child(3) { animation-delay: 1.6s; }
+
+.pulse-ring:nth-child(2) {
+    animation-delay: 0.8s;
+}
+
+.pulse-ring:nth-child(3) {
+    animation-delay: 1.6s;
+}
 
 @keyframes soundwave {
     0% {
@@ -768,12 +864,10 @@ textarea {
 }
 
 
-
-
 /* =========================
    SEÇÕES GERAIS
    ========================= */
-   
+
 section {
     padding: 4rem 2rem;
     max-width: 1200px;
@@ -808,10 +902,11 @@ section.visible {
     border-radius: 2px;
 }
 
+
 /* =========================
    SEÇÃO SOBRE
    ========================= */
-   
+
 .about-content {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -853,14 +948,19 @@ section.visible {
 }
 
 @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
+
 
 /* =========================
    SEÇÃO REPERTÓRIO
    ========================= */
-   
+
 .repertoire-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -927,10 +1027,11 @@ section.visible {
     color: #d4af37;
 }
 
+
 /* =========================
    SEÇÃO APRESENTAÇÕES
    ========================= */
-   
+
 .performance-types {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -983,10 +1084,11 @@ section.visible {
     font-size: clamp(0.85rem, 2.3vw, 0.95rem);
 }
 
+
 /* =========================
    SEÇÃO CONTATO
    ========================= */
-   
+
 .contact-content {
     display: flex;
     justify-content: center;
@@ -1102,10 +1204,11 @@ section.visible {
     transform: translateY(-1px);
 }
 
+
 /* =========================
    FOOTER
    ========================= */
-   
+
 footer {
     background: rgba(26, 26, 26, 0.9);
     color: rgba(255, 255, 255, 0.7);
@@ -1135,10 +1238,11 @@ footer p {
     color: #d4af37;
 }
 
+
 /* =========================
    BOTÃO VOLTAR AO TOPO
    ========================= */
-   
+
 .back-to-top {
     position: fixed;
     bottom: 100px;
@@ -1174,32 +1278,34 @@ footer p {
     transform: translateY(-1px);
 }
 
+
 /* =========================
    MOBILE RESPONSIVO - OTIMIZAÇÕES
    ========================= */
 
+
 /* Tablets */
+
 @media (max-width: 1024px) {
     .hero {
         padding: 0 1.5rem;
     }
-    
     .nav-container {
         padding: 1rem 1.5rem;
     }
-    
     section {
         padding: 3rem 1.5rem;
     }
 }
 
+
 /* Mobile Large */
+
 @media (max-width: 768px) {
     /* CORREÇÃO: Menu hambúrguer para mobile */
     .hamburger {
         display: flex;
     }
-
     .nav-links {
         position: fixed;
         top: 80px;
@@ -1216,22 +1322,18 @@ footer p {
         transition: transform 0.3s ease;
         gap: 1rem;
     }
-
     .nav-links.active {
         transform: translateX(0);
     }
-
     .nav-links li {
         margin: 0.5rem 0;
     }
-
     .nav-links a {
         font-size: 1.1rem;
         padding: 1rem 0;
         display: block;
         text-align: center;
     }
-    
     .hero {
         flex-direction: column;
         text-align: center;
@@ -1239,56 +1341,46 @@ footer p {
         min-height: 100vh;
         justify-content: center;
     }
-    
     .hero-content {
         order: 2;
         max-width: 100%;
     }
-    
     .fp-musical-note {
         position: static;
         transform: none;
         margin-bottom: 2rem;
         order: 1;
     }
-    
     .fp-logo-container {
         width: min(250px, 60vw);
         height: min(250px, 60vw);
         margin: 0 auto;
     }
-    
     .about-content {
         grid-template-columns: 1fr;
         text-align: center;
         gap: 2rem;
     }
-    
     .about-image {
         order: -1;
     }
-    
     .repertoire-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
-    
     .performance-types {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
-    
     .cta-buttons {
         justify-content: center;
         gap: 0.8rem;
     }
-    
     /* CORREÇÃO MOBILE: Chat AI otimizado */
     .ai-assistant {
         bottom: 15px;
         right: 15px;
     }
-    
     .ai-chat {
         right: -15px;
         width: calc(100vw - 30px);
@@ -1296,49 +1388,43 @@ footer p {
         height: min(450px, calc(100vh - 120px));
         max-height: 70vh;
     }
-
     /* CORREÇÃO: Adaptação para teclado virtual */
     .ai-chat.keyboard-open {
         bottom: 20px;
         max-height: calc(100vh - 40px);
         height: auto;
     }
-
     .ai-messages {
         max-height: calc(70vh - 180px);
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
     }
-    
     .contact-card {
         margin: 0 1rem;
     }
 }
 
+
 /* Mobile Small */
+
 @media (max-width: 480px) {
     .nav-container {
         padding: 1rem;
     }
-    
     .logo {
         font-size: 1.3rem;
     }
-    
     .hero {
         padding: 1rem;
         gap: 1.5rem;
     }
-    
     .section-title {
         margin-bottom: 2rem;
     }
-    
     .contact-card {
         padding: 2rem 1.5rem;
         margin: 0 0.5rem;
     }
-    
     /* CORREÇÃO MOBILE: Chat AI para telas pequenas */
     .ai-chat {
         width: calc(100vw - 20px);
@@ -1346,112 +1432,93 @@ footer p {
         height: min(400px, calc(100vh - 100px));
         max-height: 75vh;
     }
-
     .ai-messages {
         max-height: calc(75vh - 160px);
         padding: 12px;
     }
-
     .message-content {
         font-size: 13px;
         padding: 10px 14px;
         max-width: 90%;
     }
-
     .ai-input {
         padding: 12px;
     }
-
     .ai-input input {
         padding: 10px 14px;
         font-size: 16px !important;
     }
-
     .ai-header {
         padding: 12px 15px;
     }
-    
     .ai-quick-questions {
         padding: 10px 12px;
         gap: 5px;
     }
-    
     .quick-btn {
         font-size: 10px;
         padding: 5px 8px;
         min-height: 28px;
     }
-    
     .btn {
         padding: 0.8rem 1.5rem;
         font-size: 0.9rem;
     }
-    
     .contact-btn {
         padding: 0.9rem 1.8rem;
     }
-    
     section {
         padding: 2.5rem 1rem;
     }
-    
     .repertoire-card,
     .performance-card {
         padding: 1.5rem 1rem;
     }
-    
     .back-to-top {
         width: 45px;
         height: 45px;
         bottom: 85px;
         right: 15px;
     }
-    
     /* Ajuste para evitar sobreposição com o chat AI */
     .ai-assistant {
         bottom: 10px;
         right: 10px;
     }
-    
     .ai-toggle {
         width: 55px;
         height: 55px;
     }
-    
     .ai-toggle i {
         font-size: 22px;
     }
 }
 
+
 /* Mobile Extra Small */
+
 @media (max-width: 360px) {
     .hero {
         min-height: 90vh;
     }
-    
     .fp-logo-container {
         width: min(200px, 55vw);
         height: min(200px, 55vw);
     }
-    
     .contact-card {
         padding: 1.5rem 1rem;
     }
-    
     .contact-buttons {
         gap: 0.8rem;
     }
-    
     .ai-chat {
         width: calc(100vw - 15px);
         right: -7px;
     }
-    
     .cta-buttons {
         flex-direction: column;
         align-items: center;
     }
-    
     .btn {
         width: 100%;
         max-width: 250px;
@@ -1459,17 +1526,19 @@ footer p {
     }
 }
 
+
 /* =========================
    CORREÇÕES ESPECÍFICAS iOS
    ========================= */
 
+
 /* Correção para viewport units no iOS */
+
 @supports (-webkit-touch-callout: none) {
     .ai-chat {
         height: calc(var(--vh, 1vh) * 45);
         max-height: calc(var(--vh, 1vh) * 70);
     }
-    
     @media (max-width: 768px) {
         .ai-messages {
             max-height: calc(var(--vh, 1vh) * 35);
@@ -1477,7 +1546,9 @@ footer p {
     }
 }
 
+
 /* CORREÇÃO: Prevenção de bounce scroll no iOS */
+
 body.ai-chat-open {
     position: fixed;
     width: 100%;
@@ -1485,7 +1556,9 @@ body.ai-chat-open {
     overflow: hidden;
 }
 
+
 /* CORREÇÃO: Overlay para prevenir cliques acidentais em mobile */
+
 .ai-chat-overlay {
     position: fixed;
     top: 0;
@@ -1503,16 +1576,19 @@ body.ai-chat-open {
 }
 
 @media (max-width: 768px) {
-    .ai-chat.active + .ai-chat-overlay {
+    .ai-chat.active+.ai-chat-overlay {
         display: block;
     }
 }
+
 
 /* =========================
    ANIMAÇÕES E PERFORMANCE
    ========================= */
 
+
 /* Otimizações de GPU para animações suaves */
+
 .ai-chat,
 .ai-toggle,
 .ai-close,
@@ -1534,22 +1610,32 @@ body.ai-chat-open {
     contain: layout style;
 }
 
+
 /* Loading state para mensagens */
+
 .ai-message.sending .message-content {
     opacity: 0.7;
     animation: pulse 1s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 0.9; }
+    0%,
+    100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 0.9;
+    }
 }
+
 
 /* =========================
    ACESSIBILIDADE E FALLBACKS
    ========================= */
 
+
 /* Estados de focus melhorados */
+
 .keyboard-navigation .ai-toggle:focus,
 .keyboard-navigation .ai-close:focus,
 .keyboard-navigation .ai-input button:focus,
@@ -1562,7 +1648,9 @@ body.ai-chat-open {
     box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
 }
 
+
 /* Suporte para motion reduce */
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -1571,14 +1659,12 @@ body.ai-chat-open {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-    
     .musical-note,
     .violin-illustration,
     .pulse-ring,
     .glow-effect {
         animation: none;
     }
-    
     .ai-chat,
     .ai-toggle,
     .message-content,
@@ -1588,23 +1674,22 @@ body.ai-chat-open {
     }
 }
 
+
 /* High contrast mode support */
+
 @media (prefers-contrast: high) {
     .ai-chat {
         border: 2px solid #d4af37;
         background: #000;
     }
-    
     .ai-input input {
         background: #000;
         border: 2px solid #d4af37;
         color: #fff;
     }
-    
     .message-content {
         border: 1px solid #d4af37;
     }
-    
     .repertoire-card,
     .performance-card,
     .contact-card {
@@ -1612,18 +1697,21 @@ body.ai-chat-open {
     }
 }
 
+
 /* Fallback para backdrop-filter */
+
 @supports not (backdrop-filter: blur(10px)) {
     .ai-chat {
         background: rgba(26, 26, 26, 0.95);
     }
-    
     #navbar {
         background: rgba(26, 26, 26, 0.95);
     }
 }
 
+
 /* Scrollbar customizada */
+
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -1641,24 +1729,34 @@ body.ai-chat-open {
     background: linear-gradient(135deg, #ffb84c, #d4af37);
 }
 
+
 /* Estados de loading */
+
 .loaded {
     animation: fadeInPage 0.5s ease-in;
 }
 
 @keyframes fadeInPage {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
+
 /* Corrige nav e hero aparecendo depois com delay */
+
 #navbar,
 #home {
     opacity: 1 !important;
     transform: none !important;
 }
 
+
 /* Focus styles para navegação por teclado */
+
 .btn:focus,
 .contact-btn:focus,
 .quick-btn:focus,
@@ -1669,14 +1767,15 @@ body.ai-chat-open {
     outline-offset: 2px;
 }
 
+
 /* Touch-friendly improvements */
+
 @media (hover: none) and (pointer: coarse) {
     .repertoire-card:hover,
     .performance-card:hover,
     .contact-card:hover {
         transform: none;
     }
-    
     .btn:hover,
     .contact-btn:hover {
         transform: none;
@@ -1684,13 +1783,14 @@ body.ai-chat-open {
     }
 }
 
+
 /* Modo paisagem mobile */
+
 @media (max-width: 768px) and (orientation: landscape) {
     .ai-chat {
         max-height: 85vh;
         height: auto;
     }
-
     .ai-messages {
         max-height: calc(85vh - 160px);
     }
