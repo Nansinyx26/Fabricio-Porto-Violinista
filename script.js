@@ -100,7 +100,7 @@ function preloadImages() {
 }
 
 // =========================
-// AI Assistant - Mobile Optimized
+// AI Assistant - Mobile Optimized - FIXED
 // =========================
 function initializeAIAssistant() {
     const aiToggle = document.getElementById('aiToggle');
@@ -126,12 +126,97 @@ function initializeAIAssistant() {
     let chatOpen = false;
     let messageCount = 1;
     let isTyping = false;
+    let keyboardHeight = 0;
+    let originalViewportHeight = window.innerHeight;
 
-    // Prevent body scroll when chat is open on mobile
+    // CORREÇÃO: Detectar altura do teclado virtual
+    function detectKeyboardHeight() {
+        const currentHeight = window.innerHeight;
+        const heightDiff = originalViewportHeight - currentHeight;
+        
+        if (heightDiff > 150) { // Teclado provavelmente aberto
+            keyboardHeight = heightDiff;
+            adjustChatForKeyboard(true);
+        } else { // Teclado fechado
+            keyboardHeight = 0;
+            adjustChatForKeyboard(false);
+        }
+    }
+
+    // CORREÇÃO: Ajustar chat para o teclado
+    function adjustChatForKeyboard(keyboardOpen) {
+        if (!isMobile || !chatOpen) return;
+        
+        const chat = document.getElementById('aiChat');
+        if (!chat) return;
+
+        if (keyboardOpen) {
+            // Redimensionar chat quando teclado está aberto
+            const availableHeight = window.innerHeight - 100; // 100px de margem
+            chat.style.height = `${Math.min(availableHeight, 400)}px`;
+            chat.style.bottom = '70px';
+            chat.style.maxHeight = `${availableHeight}px`;
+            
+            // Scroll para o input
+            setTimeout(() => {
+                const input = document.getElementById('aiInput');
+                if (input) {
+                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 300);
+        } else {
+            // Restaurar tamanho original
+            chat.style.height = '';
+            chat.style.bottom = '70px';
+            chat.style.maxHeight = '';
+        }
+    }
+
+    // CORREÇÃO: Gerenciar scroll do body de forma mais inteligente
     function toggleBodyScroll(disable) {
         if (isMobile) {
-            document.body.style.overflow = disable ? 'hidden' : '';
+            if (disable) {
+                // Salvar posição de scroll atual
+                const scrollY = window.scrollY;
+                document.body.style.position = 'fixed';
+                document.body.style.top = `-${scrollY}px`;
+                document.body.style.width = '100%';
+                document.body.style.overflow = 'hidden';
+            } else {
+                // Restaurar posição de scroll
+                const scrollY = document.body.style.top;
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.width = '';
+                document.body.style.overflow = '';
+                if (scrollY) {
+                    window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                }
+            }
         }
+    }
+
+    // CORREÇÃO: Listeners para mudanças de viewport (teclado)
+    if (isMobile) {
+        // Detectar mudanças na altura da viewport
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (chatOpen) {
+                    detectKeyboardHeight();
+                }
+            }, 100);
+        });
+
+        // Listeners para eventos do teclado virtual
+        window.addEventListener('visualViewport' in window ? 'scroll' : 'resize', () => {
+            if (chatOpen) {
+                requestAnimationFrame(() => {
+                    detectKeyboardHeight();
+                });
+            }
+        });
     }
 
     // Toggle chat with improved mobile handling
@@ -141,17 +226,19 @@ function initializeAIAssistant() {
         chatOpen = !chatOpen;
         
         if (chatOpen) {
+            originalViewportHeight = window.innerHeight;
             aiChat.classList.add('active');
             aiBadge.style.display = 'none';
             toggleBodyScroll(true);
             
-            // Focus input on desktop, but not on mobile to prevent keyboard issues
+            // CORREÇÃO: Não focar automaticamente no input em mobile
             if (!isMobile) {
                 setTimeout(() => aiInput.focus(), 300);
             }
         } else {
             aiChat.classList.remove('active');
             toggleBodyScroll(false);
+            keyboardHeight = 0;
         }
     });
 
@@ -161,6 +248,7 @@ function initializeAIAssistant() {
         aiChat.classList.remove('active');
         chatOpen = false;
         toggleBodyScroll(false);
+        keyboardHeight = 0;
     });
 
     // Quick buttons with better mobile interaction
@@ -181,11 +269,11 @@ function initializeAIAssistant() {
                 hideTypingIndicator();
                 const response = aiResponses[question] || aiResponses.default;
                 addMessage(response, 'bot');
-            }, 1000 + Math.random() * 1000); // Random delay for more natural feeling
+            }, 1000 + Math.random() * 1000);
         });
     });
 
-    // Send message with improved mobile handling
+    // CORREÇÃO: Send message com melhor handling mobile
     function sendMessage() {
         const message = aiInput.value.trim();
         if (!message || isTyping) return;
@@ -195,6 +283,15 @@ function initializeAIAssistant() {
         
         // Clear input
         aiInput.value = '';
+        
+        // CORREÇÃO: Blur input em mobile para fechar teclado
+        if (isMobile) {
+            aiInput.blur();
+            // Aguardar um pouco para o teclado fechar
+            setTimeout(() => {
+                adjustChatForKeyboard(false);
+            }, 300);
+        }
         
         // Show typing and generate response
         showTypingIndicator();
@@ -211,26 +308,55 @@ function initializeAIAssistant() {
             e.preventDefault();
             sendMessage();
         });
+        
+        // CORREÇÃO: Adicionar touchend para mobile
+        aiSend.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            sendMessage();
+        });
     }
 
-    // Enter key handling with mobile considerations
+    // CORREÇÃO: Input handling melhorado para mobile
     if (aiInput) {
+        // Enter key handling
         aiInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 sendMessage();
-                
-                // Blur input on mobile to hide keyboard
-                if (isMobile) {
-                    this.blur();
-                }
             }
         });
 
-        // Prevent zoom on iOS double-tap
-        aiInput.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            this.focus();
+        // CORREÇÃO: Focus/blur handlers para mobile
+        aiInput.addEventListener('focus', function(e) {
+            if (isMobile && chatOpen) {
+                // Aguardar abertura do teclado
+                setTimeout(() => {
+                    detectKeyboardHeight();
+                }, 300);
+            }
+        });
+
+        aiInput.addEventListener('blur', function(e) {
+            if (isMobile && chatOpen) {
+                // Aguardar fechamento do teclado
+                setTimeout(() => {
+                    adjustChatForKeyboard(false);
+                }, 300);
+            }
+        });
+
+        // CORREÇÃO: Prevenir zoom no iOS
+        aiInput.addEventListener('touchstart', function(e) {
+            if (isMobile) {
+                this.style.fontSize = '16px'; // Previne zoom no iOS
+            }
+        });
+
+        // CORREÇÃO: Input responsivo para mudanças de viewport
+        aiInput.addEventListener('input', function() {
+            // Auto-resize se necessário
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
         });
     }
 
@@ -333,11 +459,15 @@ function initializeAIAssistant() {
         return div.innerHTML;
     }
 
-    // Smooth scroll to bottom with mobile optimization
+    // CORREÇÃO: Smooth scroll melhorado para mobile
     function scrollToBottom() {
         if (aiMessages) {
             requestAnimationFrame(() => {
-                aiMessages.scrollTop = aiMessages.scrollHeight;
+                // Scroll mais suave em mobile
+                aiMessages.scrollTo({
+                    top: aiMessages.scrollHeight,
+                    behavior: isMobile ? 'auto' : 'smooth'
+                });
             });
         }
     }
@@ -372,12 +502,26 @@ function initializeAIAssistant() {
         return aiResponses.default;
     }
 
-    // Close chat when clicking outside (mobile-friendly)
+    // CORREÇÃO: Close chat quando clicando fora (melhorado para mobile)
+    document.addEventListener('touchstart', function(e) {
+        if (chatOpen && !aiToggle.contains(e.target) && !aiChat.contains(e.target)) {
+            // Verificar se não é um toque no teclado virtual
+            const touchY = e.touches[0].clientY;
+            if (touchY < window.innerHeight - keyboardHeight) {
+                aiChat.classList.remove('active');
+                chatOpen = false;
+                toggleBodyScroll(false);
+                keyboardHeight = 0;
+            }
+        }
+    });
+
     document.addEventListener('click', function(e) {
         if (chatOpen && !aiToggle.contains(e.target) && !aiChat.contains(e.target)) {
             aiChat.classList.remove('active');
             chatOpen = false;
             toggleBodyScroll(false);
+            keyboardHeight = 0;
         }
     });
 
@@ -387,6 +531,7 @@ function initializeAIAssistant() {
             aiChat.classList.remove('active');
             chatOpen = false;
             toggleBodyScroll(false);
+            keyboardHeight = 0;
         }
     });
 
@@ -400,13 +545,19 @@ function initializeAIAssistant() {
         }
     }, 3000);
 
-    // Handle orientation change for mobile
+    // CORREÇÃO: Handle orientation change melhorado
     window.addEventListener('orientationchange', function() {
-        if (chatOpen && isMobile) {
-            setTimeout(() => {
-                scrollToBottom();
-            }, 500);
-        }
+        setTimeout(() => {
+            originalViewportHeight = window.innerHeight;
+            updateDeviceType();
+            
+            if (chatOpen && isMobile) {
+                adjustChatForKeyboard(false);
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 500);
+            }
+        }, 500);
     });
 }
 
