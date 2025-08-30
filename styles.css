@@ -179,14 +179,6 @@ textarea {
 }
 
 
-/* Ocultar notas musicais em telas pequenas para melhor performance 
-@media (max-width: 480px) {
-    .musical-note {
-        display: none;
-    }
-}*/
-
-
 /* =========================
    NAVEGAÇÃO
    ========================= */
@@ -383,7 +375,6 @@ textarea {
     flex-direction: column;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    /* CORREÇÃO: Prevenção de fechamento acidental */
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -604,7 +595,6 @@ textarea {
     padding: 10px 14px;
     color: #fff;
     font-size: 16px !important;
-    /* Previne zoom no iOS */
     outline: none;
     transition: all 0.3s ease;
     min-width: 0;
@@ -904,7 +894,7 @@ section.visible {
 
 
 /* =========================
-   SEÇÃO SOBRE
+   SEÇÃO SOBRE - ATUALIZADA COM FOTO
    ========================= */
 
 .about-content {
@@ -930,30 +920,51 @@ section.visible {
     align-items: center;
 }
 
-.violin-illustration {
-    width: clamp(150px, 20vw, 200px);
-    height: clamp(150px, 20vw, 200px);
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(255, 184, 76, 0.1));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid rgba(212, 175, 55, 0.3);
-    animation: rotate 20s linear infinite;
+.about-photo {
+    position: relative;
+    width: clamp(200px, 25vw, 300px);
+    height: clamp(250px, 30vw, 350px);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 3px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
 }
 
-.violin-illustration i {
-    font-size: clamp(2.5rem, 8vw, 4rem);
-    color: #d4af37;
+.about-photo:hover {
+    transform: translateY(-10px);
+    border-color: #d4af37;
+    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
 }
 
-@keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.artist-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.about-photo:hover .artist-photo {
+    transform: scale(1.05);
+}
+
+
+/* Fallback caso a imagem não carregue */
+
+.artist-photo[src=""],
+.artist-photo:not([src]) {
+    display: none;
+}
+
+.about-photo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(212, 175, 55, 0.1) 50%, transparent 70%);
+    pointer-events: none;
 }
 
 
@@ -1086,7 +1097,7 @@ section.visible {
 
 
 /* =========================
-   SEÇÃO CONTATO
+   SEÇÃO CONTATO - ATUALIZADA COM FOTO
    ========================= */
 
 .contact-content {
@@ -1114,6 +1125,7 @@ section.visible {
     background: linear-gradient(135deg, #d4af37, #ffb84c);
     padding: 4px;
     position: relative;
+    overflow: hidden;
 }
 
 .photo-inner {
@@ -1125,7 +1137,23 @@ section.visible {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    position: relative;
 }
+
+.contact-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.contact-photo:hover {
+    transform: scale(1.1);
+}
+
+
+/* Fallback para quando a foto não carregar */
 
 .photo-placeholder {
     width: 100%;
@@ -1134,11 +1162,19 @@ section.visible {
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(255, 184, 76, 0.1));
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
 
 .photo-placeholder i {
     font-size: clamp(2rem, 6vw, 3rem);
     color: #d4af37;
+}
+
+.contact-photo+.photo-placeholder {
+    display: none;
 }
 
 .artist-name {
@@ -1364,6 +1400,9 @@ footer p {
     .about-image {
         order: -1;
     }
+    .about-photo {
+        margin: 0 auto;
+    }
     .repertoire-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -1388,7 +1427,6 @@ footer p {
         height: min(450px, calc(100vh - 120px));
         max-height: 70vh;
     }
-    /* CORREÇÃO: Adaptação para teclado virtual */
     .ai-chat.keyboard-open {
         bottom: 20px;
         max-height: calc(100vh - 40px);
@@ -1424,6 +1462,10 @@ footer p {
     .contact-card {
         padding: 2rem 1.5rem;
         margin: 0 0.5rem;
+    }
+    .about-photo {
+        width: clamp(180px, 50vw, 250px);
+        height: clamp(220px, 60vw, 300px);
     }
     /* CORREÇÃO MOBILE: Chat AI para telas pequenas */
     .ai-chat {
@@ -1480,7 +1522,6 @@ footer p {
         bottom: 85px;
         right: 15px;
     }
-    /* Ajuste para evitar sobreposição com o chat AI */
     .ai-assistant {
         bottom: 10px;
         right: 10px;
@@ -1523,6 +1564,10 @@ footer p {
         width: 100%;
         max-width: 250px;
         justify-content: center;
+    }
+    .about-photo {
+        width: clamp(160px, 45vw, 220px);
+        height: clamp(200px, 55vw, 270px);
     }
 }
 
@@ -1655,9 +1700,9 @@ body.ai-chat-open {
     *,
     *::before,
     *::after {
-        animation-duration: 12s !important;
+        animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
-        transition-duration: 11s !important;
+        transition-duration: 0.01ms !important;
     }
     .musical-note,
     .violin-illustration,
