@@ -267,6 +267,24 @@
         </div>
     </section>
 
+  <style>
+        .telegram-btn {
+            background-color: #0088cc !important;
+            color: white !important;
+            border: 2px solid #0088cc !important;
+        }
+        
+        .telegram-btn:hover {
+            background-color: #006699 !important;
+            border-color: #006699 !important;
+            color: white !important;
+        }
+        
+        .telegram-btn i {
+            color: white !important;
+        }
+    </style>
+
     <!-- Contato Section -->
     <section id="contact" class="section-observer">
         <h2 class="section-title">Contato</h2>
@@ -275,16 +293,23 @@
                 <div class="photo-frame">
                     <div class="photo-inner">
                         <img src="fabricio1.jpg" alt="Fabricio Porto - Violinista" class="contact-photo" loading="lazy">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
                     </div>
                 </div>
                 <h1 class="artist-name">Fabricio Porto</h1>
                 <p class="artist-title">Violinista Clássico</p>
                 <div class="contact-buttons">
-                    <a href="https://api.whatsapp.com/send?phone=5519999011288&text=Olá%20Fabricio,%20gostaria%20de%20saber%20mais%20sobre%20seus%20serviços%20musicais." class="contact-btn whatsapp-btn" target="_blank" rel="noopener">
+                    <a href="https://api.whatsapp.com/send?phone=5519999011288&text=Olá%20Fabricio,%20gostaria%20de%20saber%20mais%20sobre%20seus%20serviços%20musicais." class="contact-btn whatsapp-btn" target="_blank" rel="noopener" aria-label="Contato via WhatsApp">
                         <i class="fab fa-whatsapp"></i>
                         <span>WhatsApp</span>
                     </a>
-                    <a href="mailto:fabricioportoviolinista@gmail.com?subject=Contato%20-%20Serviços%20Musicais&body=Olá%20Fabricio,%0D%0A%0D%0AGostaria%20de%20saber%20mais%20sobre%20seus%20serviços%20musicais.%0D%0A%0D%0AObrigado!" class="contact-btn email-btn">
+                    <a href="http://t.me/Fabricioportoviolinista" class="contact-btn telegram-btn" target="_blank" rel="noopener" aria-label="Contato via Telegram">
+                        <i class="fab fa-telegram-plane"></i>
+                        <span>Telegram</span>
+                    </a>
+                    <a href="mailto:fabricioportoviolinista@gmail.com?subject=Contato%20-%20Serviços%20Musicais&body=Olá%20Fabricio,%0D%0A%0D%0AGostaria%20de%20saber%20mais%20sobre%20seus%20serviços%20musicais.%0D%0A%0D%0AObrigado!" class="contact-btn email-btn" aria-label="Contato via E-mail">
                         <i class="fas fa-envelope"></i>
                         <span>E-mail</span>
                     </a>
@@ -313,3 +338,4 @@
 </body>
 
 </html>
+
