@@ -1,0 +1,40 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://seudominio.com.br/sitemap.xml
+
+# Specific rules for different crawlers
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: facebookexternalhit
+Allow: /
+
+# Block access to admin areas and sensitive files
+Disallow: /admin/
+Disallow: /*.log
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /.git/
+Disallow: /node_modules/
+
+# Allow access to CSS and JS for better rendering
+Allow: /styles.css
+Allow: /script.js
+Allow: /main.js
+Allow: *.css
+Allow: *.js
+
+# Allow access to images
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.png
+Allow: *.gif
+Allow: *.webp
+Allow: *.svg
