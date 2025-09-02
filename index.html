@@ -24,18 +24,12 @@
 </script>
 
 <head>
-  <meta name="google-site-verification" content="brrt3C16o43r2EuTCBEH9ooelqGvyu0L2-S3w_Yt8t0" />
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
+ <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
-  gtag('config', 'G-XXXXXXXXXX');
+  gtag('config', 'G-SEU_ID_REAL'); <!-- Substitua pelo ID real do GA4 -->
 </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     
     <!-- SEO Meta Tags Otimizadas -->
     <title>Fabricio Porto - Violinista | Casamentos, Eventos e Apresentações</title>
@@ -70,91 +64,70 @@
     
     <!-- Structured Data (Schema.org) -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MusicGroup",
-        "name": "Fabricio Porto - Violinista",
-        "alternateName": "Fabricio Porto",
-        "description": "Violinista clássico profissional especializado em casamentos, debutantes, jantares de gala e eventos corporativos",
-        "url": "https://seudominio.com.br",
-        "image": "https://seudominio.com.br/fabricio-violinista.jpg",
-        "logo": "https://seudominio.com.br/FP.png",
-        "sameAs": [
-            "https://instagram.com/fabricioportoviolinista",
-            "https://youtube.com/@fabricioportoviolinista"
-        ],
-        "founder": {
-            "@type": "Person",
-            "name": "Fabricio Porto",
-            "jobTitle": "Violinista Profissional",
-            "alumniOf": {
-                "@type": "EducationalOrganization",
-                "name": "UNIMEP - Universidade Metodista de Piracicaba"
-            },
-            "performerIn": [
-                "Orquestra Sinfônica de Santa Bárbara D'Oeste",
-                "Orquestra Educacional de Piracicaba",
-                "Orquestra Infanto-Juvenil da Escola de Música de Piracicaba Ernst Malhe"
-            ]
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Fabricio Porto",
+  "jobTitle": "Violinista",
+  "description": "Violinista clássico profissional especializado em casamentos e eventos",
+  "url": "https://nansinyx26.github.io/Fabricio-Porto-Violinista/",
+  "email": "fabricioportoviolinista@gmail.com",
+  "telephone": "+5519999011288",
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "SP",
+    "addressCountry": "BR"
+  },
+  "sameAs": [
+    "https://instagram.com/fabricioportoviolinista",
+    "https://youtube.com/@fabricioportoviolinista"
+  ]
+}
+</script>
+
+<!-- 3. CORRIGIR MusicGroup Schema (linha ~88) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    "name": "Fabricio Porto - Violinista",
+    "alternateName": "Fabricio Porto",
+    "description": "Violinista  profissional especializado em casamentos, debutantes, jantares de gala e eventos corporativos",
+    "url": "https://nansinyx26.github.io/Fabricio-Porto-Violinista/",
+    "image": "https://nansinyx26.github.io/Fabricio-Porto-Violinista/fabricio1.jpg",
+    "logo": "https://nansinyx26.github.io/Fabricio-Porto-Violinista/FP.png",
+    "sameAs": [
+        "https://instagram.com/fabricioportoviolinista",
+        "https://youtube.com/@fabricioportoviolinista"
+    ],
+    "founder": {
+        "@type": "Person",
+        "name": "Fabricio Porto",
+        "jobTitle": "Violinista Profissional",
+        "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "UNIMEP - Universidade Metodista de Piracicaba"
         },
-        "address": {
-            "@type": "PostalAddress",
-            "addressRegion": "SP",
-            "addressCountry": "BR"
-        },
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+55-19-99901-1288",
-            "contactType": "customer service",
-            "email": "fabricioportoviolinista@gmail.com",
-            "availableLanguage": "Portuguese"
-        },
-        "serviceArea": {
-            "@type": "Place",
-            "name": "São Paulo, Brasil"
-        },
-        "priceRange": "$$",
-        "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "Serviços Musicais",
-            "itemListElement": [
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Apresentação em Casamentos",
-                        "description": "Música ao vivo para cerimônias de casamento e coquetéis"
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Festa de Debutantes",
-                        "description": "Apresentações musicais para celebrações de 15 anos"
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Eventos Corporativos",
-                        "description": "Música ambiente para jantares de gala e recepções"
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Aulas de Violino",
-                        "description": "Aulas particulares de violino para qualquer idade"
-                    }
-                }
-            ]
-        }
+        "performerIn": [
+            "Orquestra Sinfônica de Santa Bárbara D'Oeste",
+            "Orquestra Educacional de Piracicaba",
+            "Orquestra Infanto-Juvenil da Escola de Música de Piracicaba Ernst Malhe"
+        ]
+    },
+    "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "SP",
+        "addressCountry": "BR"
+    },
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+55-19-99901-1288",
+        "contactType": "customer service",
+        "email": "fabricioportoviolinista@gmail.com",
+        "availableLanguage": "Portuguese"
     }
-    </script>
-    
+}
+</script> 
     <!-- Favicon e Icons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -640,74 +613,46 @@
     <script src="main.js"></script>
 
     <!-- Additional SEO and Analytics Scripts -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "Fabricio Porto - Violinista",
-        "alternateName": "Fabricio Porto Violinista",
-        "description": "Violinista clássico profissional especializado em casamentos, debutantes, jantares de gala e eventos corporativos em São Paulo",
-        "url": "https://seudominio.com.br",
-        "telephone": "+55-19-99901-1288",
-        "email": "fabricioportoviolinista@gmail.com",
-        "address": {
-            "@type": "PostalAddress",
-            "addressRegion": "SP",
-            "addressCountry": "BR"
-        },
-        "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": -23.550520,
-            "longitude": -46.633308
-        },
-        "sameAs": [
-            "https://instagram.com/fabricioportoviolinista",
-            "https://youtube.com/@fabricioportoviolinista",
-            "http://t.me/Fabricioportoviolinista"
-        ],
-        "openingHours": "Mo-Su 08:00-20:00",
-        "priceRange": "R$250-R$700",
-        "paymentAccepted": "Cash, Credit Card, Bank Transfer",
-        "areaServed": [
-            "São Paulo",
-            "Piracicaba", 
-            "Campinas",
-            "Sorocaba",
-            "Santos",
-            "São José dos Campos"
-        ],
-        "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "Serviços de Violinista",
-            "itemListElement": [
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Violinista para Casamentos",
-                        "description": "Apresentação musical para cerimônias de casamento, entrada da noiva e coquetel"
-                    },
-                    "priceRange": "R$300-R$700"
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Violinista para Debutantes",
-                        "description": "Música ao vivo para festas de 15 anos e celebrações especiais"
-                    },
-                    "priceRange": "R$350-R$600"
-                }
-            ]
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "5.0",
-            "reviewCount": "47"
-        }
-    }
-    </script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Fabricio Porto - Violinista",
+    "alternateName": "Fabricio Porto Violinista",
+    "description": "Violinista  profissional especializado em casamentos, debutantes, jantares de gala e eventos corporativos em São Paulo",
+    "url": "https://nansinyx26.github.io/Fabricio-Porto-Violinista/",
+    "telephone": "+55-19-99901-1288",
+    "email": "fabricioportoviolinista@gmail.com",
+    "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "SP",
+        "addressCountry": "BR"
+    },
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -23.550520,
+        "longitude": -46.633308
+    },
+    "sameAs": [
+        "https://instagram.com/fabricioportoviolinista",
+        "https://youtube.com/@fabricioportoviolinista",
+        "http://t.me/Fabricioportoviolinista"
+    ],
+    "openingHours": "Mo-Su 08:00-20:00",
+    "priceRange": "R$250-R$700",
+    "paymentAccepted": "Cash, Credit Card, Bank Transfer",
+    "areaServed": [
+        "São Paulo",
+        "Piracicaba", 
+        "Campinas",
+        "Sorocaba",
+        "Santos",
+        "São José dos Campos"
+         "Santa Bárbara D'Oeste"
+    ]
+}
+</script>
 </body>
 
 </html>
-
