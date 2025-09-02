@@ -29,16 +29,8 @@ const partnersData = [
         description: "Produtora experiente na organização de eventos musicais, casamentos e apresentações corporativas de alto nível.",
         link: "https://example.com/ana-costa",
         active: true
-    },
-    {
-        id: 4,
-        name: "Ana Costa",
-        role: "Produtora Musical",
-        photo: "ana-costa.jpg",
-        description: "Produtora experiente na organização de eventos musicais, casamentos e apresentações corporativas de alto nível.",
-        link: "https://example.com/ana-costa",
-        active: true
     }
+   
     
 ];
 
