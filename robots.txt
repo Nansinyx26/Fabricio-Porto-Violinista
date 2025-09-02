@@ -1,10 +1,9 @@
 User-agent: *
 Allow: /
 
-# Sitemap location
-Sitemap: https://seudominio.com.br/sitemap.xml
+# Sitemap location - CORRIGIR ESTA LINHA
+Sitemap: https://nansinyx26.github.io/Fabricio-Porto-Violinista/sitemap.xml
 
-# Specific rules for different crawlers
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 1
@@ -16,22 +15,11 @@ Crawl-delay: 1
 User-agent: facebookexternalhit
 Allow: /
 
-# Block access to admin areas and sensitive files
-Disallow: /admin/
-Disallow: /*.log
-Disallow: /private/
-Disallow: /tmp/
-Disallow: /.git/
-Disallow: /node_modules/
-
-# Allow access to CSS and JS for better rendering
 Allow: /styles.css
 Allow: /script.js
 Allow: /main.js
 Allow: *.css
 Allow: *.js
-
-# Allow access to images
 Allow: *.jpg
 Allow: *.jpeg
 Allow: *.png
