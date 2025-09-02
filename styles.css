@@ -1840,3 +1840,485 @@ body.ai-chat-open {
         max-height: calc(85vh - 160px);
     }
 }
+/* =========================
+   SEÇÃO REDES SOCIAIS
+   ========================= */
+
+.social-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.social-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(255, 184, 76, 0.1));
+    transition: width 0.3s ease;
+    z-index: 1;
+}
+
+.social-link:hover::before,
+.social-link:focus::before {
+    width: 100%;
+}
+
+.social-link:hover,
+.social-link:focus {
+    transform: translateY(-5px);
+    border-color: #d4af37;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+}
+
+.social-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.social-icon i {
+    font-size: 24px;
+    transition: all 0.3s ease;
+}
+
+.social-info {
+    flex: 1;
+    text-align: left;
+    position: relative;
+    z-index: 2;
+}
+
+.social-name {
+    display: block;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-weight: 600;
+    color: #d4af37;
+    margin-bottom: 0.3rem;
+}
+
+.social-desc {
+    display: block;
+    font-size: clamp(0.85rem, 2.3vw, 0.95rem);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+}
+
+/* Cores específicas das redes sociais */
+.social-link.instagram .social-icon {
+    background: linear-gradient(135deg, #833AB4, #C13584, #E1306C, #FD1D1D, #F77737);
+}
+
+.social-link.youtube .social-icon {
+    background: linear-gradient(135deg, #FF0000, #CC0000);
+}
+
+.social-link.instagram .social-icon i {
+    color: white;
+}
+
+.social-link.youtube .social-icon i {
+    color: white;
+}
+
+/* Efeitos hover nas cores */
+.social-link.instagram:hover .social-icon,
+.social-link.instagram:focus .social-icon {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(225, 48, 108, 0.3);
+}
+
+.social-link.youtube:hover .social-icon,
+.social-link.youtube:focus .social-icon {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+/* =========================
+   SEÇÃO PARCEIROS
+   ========================= */
+
+.partners-content {
+    text-align: center;
+}
+
+.partners-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.partner-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.partner-card.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.partner-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(255, 184, 76, 0.05));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.partner-card:hover::before,
+.partner-card:focus-within::before {
+    opacity: 1;
+}
+
+.partner-card:hover,
+.partner-card:focus-within {
+    transform: translateY(-10px);
+    border-color: #d4af37;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
+}
+
+.partner-photo-container {
+    width: clamp(80px, 20vw, 100px);
+    height: clamp(80px, 20vw, 100px);
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, #d4af37, #ffb84c);
+    padding: 3px;
+    position: relative;
+    z-index: 2;
+}
+
+.partner-photo-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(26, 26, 26, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.partner-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.partner-card:hover .partner-photo,
+.partner-card:focus-within .partner-photo {
+    transform: scale(1.1);
+}
+
+.partner-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(255, 184, 76, 0.1));
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.partner-photo-placeholder i {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    color: #d4af37;
+}
+
+.partner-photo + .partner-photo-placeholder {
+    display: none;
+}
+
+.partner-name {
+    color: #d4af37;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.partner-role {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: clamp(0.85rem, 2.3vw, 0.95rem);
+    margin-bottom: 1rem;
+    font-style: italic;
+    position: relative;
+    z-index: 2;
+}
+
+.partner-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.partner-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #d4af37, #ffb84c);
+    color: #1a1a1a;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.partner-link:hover,
+.partner-link:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    color: #1a1a1a;
+    text-decoration: none;
+}
+
+.partner-link:active {
+    transform: translateY(0);
+}
+
+.partner-link i {
+    font-size: 0.85em;
+    transition: transform 0.3s ease;
+}
+
+.partner-link:hover i,
+.partner-link:focus i {
+    transform: translateX(3px);
+}
+
+/* Estados de carregamento e vazio */
+.partners-loading {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(212, 175, 55, 0.3);
+    border-top: 3px solid #d4af37;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.partners-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+}
+
+/* =========================
+   RESPONSIVIDADE MOBILE
+   ========================= */
+
+@media (max-width: 768px) {
+    .social-links {
+        gap: 1rem;
+    }
+    
+    .social-link {
+        padding: 1.2rem;
+        gap: 1rem;
+        flex-direction: row;
+        text-align: left;
+    }
+    
+    .social-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .social-icon i {
+        font-size: 20px;
+    }
+    
+    .partners-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .partner-card {
+        padding: 1.5rem;
+        margin: 0 0.5rem;
+    }
+    
+    .partner-photo-container {
+        width: clamp(70px, 18vw, 90px);
+        height: clamp(70px, 18vw, 90px);
+    }
+}
+
+@media (max-width: 480px) {
+    .social-link {
+        padding: 1rem;
+        gap: 0.8rem;
+        border-radius: 12px;
+    }
+    
+    .social-icon {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .social-icon i {
+        font-size: 18px;
+    }
+    
+    .partner-card {
+        padding: 1.2rem;
+        margin: 0;
+    }
+    
+    .partner-description {
+        -webkit-line-clamp: 4;
+    }
+}
+
+/* =========================
+   ACESSIBILIDADE E ESTADOS DE FOCO
+   ========================= */
+
+.social-link:focus,
+.partner-link:focus {
+    outline: 2px solid #d4af37;
+    outline-offset: 2px;
+}
+
+/* Melhorias para navegação por teclado */
+.keyboard-navigation .social-link:focus,
+.keyboard-navigation .partner-link:focus {
+    outline: 3px solid #d4af37;
+    outline-offset: 3px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .social-link,
+    .partner-card {
+        border: 2px solid #d4af37;
+    }
+    
+    .social-link:hover,
+    .social-link:focus,
+    .partner-card:hover,
+    .partner-card:focus-within {
+        border-color: #ffb84c;
+        background: rgba(212, 175, 55, 0.1);
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .social-link,
+    .partner-card,
+    .partner-photo,
+    .partner-link i,
+    .loading-spinner {
+        animation: none;
+        transition: none;
+    }
+    
+    .social-link:hover,
+    .social-link:focus,
+    .partner-card:hover,
+    .partner-card:focus-within {
+        transform: none;
+    }
+}
