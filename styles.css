@@ -215,21 +215,36 @@ textarea {
     color: #d4af37;
     text-decoration: none;
     white-space: nowrap;
+    transition: color 0.3s ease;
 }
 
+.logo:hover {
+    color: #ffb84c;
+}
 .nav-links {
     display: flex;
     list-style: none;
     gap: 2rem;
 }
 
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    justify-content: center; /* Centraliza os itens na horizontal */
+    align-items: center;     /* Centraliza verticalmente (se tiver altura definida) */
+}
 .nav-links a {
-    color: #fff;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    position: relative;
-    padding: 0.5rem 0;
-    white-space: nowrap;
+    color: #ffffff !important;   /* preto fixo */
+    text-decoration: none !important; /* remove o sublinhado */
+}
+
+.nav-links a:visited {
+    color: #ffb84c !important;   /* mantém preto mesmo após visitar */
+}
+
+.nav-links a:hover {
+    color: #ffb84c !important;   /* tom mais escuro no hover (ou outro de sua escolha) */
 }
 
 .nav-links a::after {
