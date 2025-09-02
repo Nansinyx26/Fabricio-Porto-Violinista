@@ -151,7 +151,7 @@ function initializeComponents() {
 // =========================
 function initializeTypingEffect() {
     const typingTexts = [
-        "Violinista Clássico",
+        "Violinista ",
         "Artista Apaixonado",
         "Professor Dedicado",
         "Músico Profissional"
@@ -442,8 +442,8 @@ function initializeAIAssistant() {
             return "Por nada! Foi um prazer ajudar. Se tiver mais dúvidas ou quiser agendar uma apresentação, entre em contato diretamente com o Fabricio!";
         }
 
-        // Resposta padrão
-        return "Entendo sua pergunta! Para informações mais específicas, recomendo entrar em contato diretamente com o Fabricio Porto via WhatsApp (19) 99901-1288 ou email fabricioportoviolinista@gmail.com.";
+        // Resposta padrão atualizada
+       return `Entendo sua pergunta! Para informações mais específicas, recomendo entrar em contato diretamente com o Fabricio Porto via WhatsApp (19) 99901-1288, email fabricioportoviolinista@gmail.com ou visite nosso site: https://nansinyx26.github.io/Fabricio-Porto-Violinista/`;
     }
 }
 
@@ -734,3 +734,20 @@ function setupFallbacks() {
     // Log de inicialização
     console.log('🎻 Fabricio Porto Website - Carregado com sucesso!');
 })();
+
+// Tracking de cliques no website
+document.addEventListener('DOMContentLoaded', function() {
+    const websiteLinks = document.querySelectorAll('a[href*="nansinyx26.github.io"]');
+    
+    websiteLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Envia evento para o GA4
+            gtag('event', 'click_link', {
+                'event_category': 'Engajamento',
+                'event_label': this.href
+            });
+
+            console.log('Click no link do website:', this.href);
+        });
+    });
+});
