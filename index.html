@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Fabricio Porto - Violinista</title>
+    <title>Fabricio - Violinista</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -18,7 +18,7 @@
 
     <!-- Performance optimizations -->
     <meta name="theme-color" content="#000000">
-    <meta name="description" content="Fabricio Porto - Violinista clássico profissional. Casamentos, eventos, apresentações. Contato: fabricioportoviolinista@gmail.com">
+    <meta name="description" content="Fabricio - Violinista clássico profissional. Casamentos, eventos, apresentações. Contato: fabricioportoviolinista@gmail.com">
 
     <!-- Mobile optimizations -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -48,12 +48,14 @@
     <!-- Navigation -->
     <nav id="navbar">
         <div class="nav-container">
-            <div class="logo">Fabricio Porto</div>
+            <div class="logo">Fabricio - Violinista</div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Início</a></li>
                 <li><a href="#about">Sobre</a></li>
                 <li><a href="#repertoire">Repertório</a></li>
                 <li><a href="#performances">Apresentações</a></li>
+                <li><a href="#social-media">Redes Sociais</a></li>
+                <li><a href="#partners">Parceiros</a></li>
                 <li><a href="#contact">Contato</a></li>
             </ul>
             <div class="hamburger" id="hamburger">
@@ -86,7 +88,7 @@
             <div class="ai-messages" id="aiMessages">
                 <div class="ai-message bot-message">
                     <div class="message-content">
-                        Olá! Sou o assistente virtual do Fabricio Porto. Posso ajudar com informações sobre apresentações, repertório, preços e disponibilidade. Como posso ajudar você hoje?
+                        Olá! Sou o assistente virtual do Fabricio. Posso ajudar com informações sobre apresentações, repertório, preços e disponibilidade. Como posso ajudar você hoje?
                     </div>
                     <div class="message-time">Agora</div>
                 </div>
@@ -109,7 +111,7 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Fabricio Porto</h1>
+            <h1>Fabricio</h1>
             <p class="typing-text" id="typingText"></p>
             <p class="description">
                 Transformando emoções em música através das cordas do violino. Uma jornada musical que conecta tradição clássica com expressão contemporânea.
@@ -144,7 +146,7 @@
         <div class="about-content">
             <div class="about-text">
                 <p>
-                    Um artista desde os 15 anos de idade, tocando violino em eventos como casamentos, festas de debutantes, jantares de gala, recepções, aniversários e funerais religiosos. Fabricio Porto combina técnica refinada com interpretação emotiva que cativa audiências.
+                    Um artista desde os 15 anos de idade, tocando violino em eventos como casamentos, festas de debutantes, jantares de gala, recepções, aniversários e funerais religiosos. Fabricio combina técnica refinada com interpretação emotiva que cativa audiências.
                 </p>
                 <p>
                     Formado em Música pela UNIMEP - Universidade Metodista de Piracicaba em 2015, tem experiência na Orquestra Sinfônica de Santa Bárbara D'Oeste, Orquestra Educacional de Piracicaba e Orquestra Infanto-Juvenil da Escola de Música de Piracicaba Ernst Malhe
@@ -157,7 +159,7 @@
             </div>
             <div class="about-image">
                 <div class="about-photo">
-                    <img src="fabricio2.jpg" alt="Fabricio Porto tocando violino" class="artist-photo" loading="lazy">
+                    <img src="fabricio2.jpg" alt="Fabricio tocando violino" class="artist-photo" loading="lazy">
                 </div>
             </div>
         </div>
@@ -267,7 +269,66 @@
         </div>
     </section>
 
-  <style>
+    <!-- Redes Sociais Section -->
+    <section id="social-media" class="section-observer">
+        <h2 class="section-title">Redes Sociais</h2>
+        <div class="social-content">
+            <p class="social-description">
+                Acompanhe meu trabalho e fique por dentro das novidades musicais
+            </p>
+            <nav class="social-links" aria-label="Links para redes sociais">
+                <a href="https://instagram.com/fabricioportoviolinista" 
+                   class="social-link instagram" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   aria-label="Seguir no Instagram - Fabricio Porto Violinista">
+                    <div class="social-icon">
+                        <i class="fab fa-instagram" aria-hidden="true"></i>
+                    </div>
+                    <div class="social-info">
+                        <span class="social-name">Instagram</span>
+                        <span class="social-desc">Fotos e vídeos das apresentações</span>
+                    </div>
+                </a>
+                
+                <a href="https://youtube.com/@fabricioportoviolinista" 
+                   class="social-link youtube" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   aria-label="Inscrever-se no canal do YouTube - Fabricio Porto Violinista">
+                    <div class="social-icon">
+                        <i class="fab fa-youtube" aria-hidden="true"></i>
+                    </div>
+                    <div class="social-info">
+                        <span class="social-name">YouTube</span>
+                        <span class="social-desc">Repertório e performances</span>
+                    </div>
+                </a>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Parceiros Section -->
+    <section id="partners" class="section-observer">
+        <h2 class="section-title">Parceiros</h2>
+        <div class="partners-content">
+            <p class="partners-description">
+                Profissionais que colaboram para criar experiências musicais únicas
+            </p>
+            <div class="partners-grid" id="partnersGrid">
+                <!-- Os cards serão populados via JavaScript -->
+            </div>
+            <div class="partners-loading" id="partnersLoading">
+                <div class="loading-spinner"></div>
+                <p>Carregando parceiros...</p>
+            </div>
+            <div class="partners-empty" id="partnersEmpty" style="display: none;">
+                <p>Nenhum parceiro encontrado no momento.</p>
+            </div>
+        </div>
+    </section>
+
+    <style>
         .telegram-btn {
             background-color: #0088cc !important;
             color: white !important;
@@ -292,13 +353,13 @@
             <div class="contact-card">
                 <div class="photo-frame">
                     <div class="photo-inner">
-                        <img src="fabricio1.jpg" alt="Fabricio Porto - Violinista" class="contact-photo" loading="lazy">
+                        <img src="fabricio1.jpg" alt="Fabricio - Violinista" class="contact-photo" loading="lazy">
                         <div class="photo-placeholder">
                             <i class="fas fa-user"></i>
                         </div>
                     </div>
                 </div>
-                <h1 class="artist-name">Fabricio Porto</h1>
+                <h1 class="artist-name">Fabricio</h1>
                 <p class="artist-title">Violinista Clássico</p>
                 <div class="contact-buttons">
                     <a href="https://api.whatsapp.com/send?phone=5519999011288&text=Olá%20Fabricio,%20gostaria%20de%20saber%20mais%20sobre%20seus%20serviços%20musicais." class="contact-btn whatsapp-btn" target="_blank" rel="noopener" aria-label="Contato via WhatsApp">
@@ -319,7 +380,7 @@
     </section>
 
     <footer>
-        <p>&copy; 2025 Fabricio Porto - Violinista. Todos os direitos reservados.</p>
+        <p>&copy; 2025 Fabricio - Violinista. Todos os direitos reservados.</p>
         <p>Criando momentos únicos através da música clássica.</p>
     </footer>
 
@@ -335,7 +396,7 @@
     </button>
 
     <script src="script.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
-
