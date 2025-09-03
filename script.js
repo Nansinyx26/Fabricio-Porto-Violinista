@@ -443,7 +443,8 @@ function initializeAIAssistant() {
         }
 
         // Resposta padrão atualizada
-       return `Entendo sua pergunta! Para informações mais específicas, recomendo entrar em contato diretamente com o Fabricio Porto via WhatsApp (19) 99901-1288, email fabricioportoviolinista@gmail.com ou visite nosso site: https://nansinyx26.github.io/Fabricio-Porto-Violinista/`;
+       return `Entendo sua pergunta! Para informações mais específicas, como músicas ou personalização de repertório com canções específicas, recomendo entrar em contato diretamente com o Fabricio Porto pelo WhatsApp (19) 99901-1288 ou pelo e-mail fabricioportoviolinista@gmail.com
+. `;
     }
 }
 
@@ -751,3 +752,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
