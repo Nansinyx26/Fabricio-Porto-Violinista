@@ -85,7 +85,6 @@
 }
 </script>
 
-<!-- 3. CORRIGIR MusicGroup Schema (linha ~88) -->
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -134,10 +133,44 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     
-    <!-- CSS e JS -->
+    <!-- CSS Base (para desktop e estilos gerais) -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Carregamento Condicional de CSS e JS para Mobile -->
+    <script>
+        // Função para carregar assets específicos para mobile
+        function loadMobileAssets() {
+            // Define o breakpoint mobile (deve ser o mesmo usado no CSS)
+            const MOBILE_BREAKPOINT = 768; 
+            const isMobileDevice = window.innerWidth <= MOBILE_BREAKPOINT;
+
+            // Remove assets mobile existentes para evitar duplicação em resize
+            document.querySelectorAll('link[data-mobile-asset], script[data-mobile-asset]').forEach(el => el.remove());
+
+            if (isMobileDevice) {
+                // Carrega CSS específico para mobile
+                const mobileCss = document.createElement('link');
+                mobileCss.rel = 'stylesheet';
+                mobileCss.href = 'styles_mobile.css';
+                mobileCss.setAttribute('data-mobile-asset', 'true'); // Marca para fácil remoção
+                document.head.appendChild(mobileCss);
+
+                // Carrega JS específico para mobile
+                const mobileJs = document.createElement('script');
+                mobileJs.src = 'script_mobile.js';
+                mobileJs.setAttribute('data-mobile-asset', 'true'); // Marca para fácil remoção
+                // Adiciona ao body para não bloquear o render da página
+                document.body.appendChild(mobileJs); 
+            }
+        }
+
+        // Executa a função quando o DOM estiver completamente carregado
+        document.addEventListener('DOMContentLoaded', loadMobileAssets);
+        // Re-executa a função em caso de redimensionamento da janela (ex: rotação de tela em mobile)
+        window.addEventListener('resize', loadMobileAssets);
+    </script>
 
     <!-- Preload critical resources -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -166,6 +199,7 @@
     <div class="wood-texture" aria-hidden="true"></div>
 
     <!-- Enhanced musical notes with more quantity -->
+    <!-- Estas notas serão escondidas pelo styles_mobile.css em mobile -->
     <div class="musical-note note-1" aria-hidden="true">♪</div>
     <div class="musical-note note-2" aria-hidden="true">♫</div>
     <div class="musical-note note-3" aria-hidden="true">♪</div>
@@ -273,7 +307,7 @@
             <!-- Enhanced FP Logo with Glow Effects -->
             <div class="fp-musical-note" aria-hidden="true">
                 <div class="fp-logo-container">
-                    <img src="FP.png" alt="Logo FP - Fabricio Porto Violinista" class="fp-logo" loading="eager" onerror="this.style.display='none'">
+                    <img src="FP.png" alt="Logo FP - Fabricio Porto Violinista" loading="eager" onerror="this.style.display='none'">
                     <div class="glow-effect" aria-hidden="true"></div>
                     <div class="pulse-ring" aria-hidden="true"></div>
                     <div class="pulse-ring" aria-hidden="true"></div>
@@ -609,6 +643,7 @@
         }
     </style>
 
+    <!-- Scripts base (carregados sempre) -->
     <script src="script.js"></script>
     <script src="main.js"></script>
 
