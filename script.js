@@ -1,77 +1,126 @@
+// ==========================================================================
+// script.js - Lógicas JavaScript Base (para Desktop e Funções Globais)
+// ==========================================================================
+
 // =========================
-// CONFIGURAÇÕES GLOBAIS OTIMIZADAS
+// CONFIGURAÇÕES GLOBAIS
 // =========================
 
 const CONFIG = {
-    SCROLL_THROTTLE: 16, // ~60fps
-    DEBOUNCE_DELAY: 250,
-    TYPING_SPEED: {
-        TYPING: 80,
-        DELETING: 40,
-        PAUSE: 1500
+    SCROLL_THROTTLE: 16,
+    DEBOUNCE_DELAY: 200,
+    TYPING_SPEED: { // Velocidades padrão (para desktop, podem ser sobrescritas por script_mobile.js)
+        TYPING: 60,
+        DELETING: 30,
+        PAUSE: 1200
     },
-    MOBILE_BREAKPOINT: 768,
+    MOBILE_BREAKPOINT: 768, // Usado para detecção inicial, mas a lógica mobile está em script_mobile.js
     ANIMATION_DELAYS: {
-        CARD_STAGGER: 100,
-        SECTION_DELAY: 50
+        CARD_STAGGER: 80,
+        SECTION_DELAY: 30
     }
 };
 
-// Variables globais
+// Variáveis globais
 let ticking = false;
 let isScrolling = false;
-let isMobile = false;
-let isLowEndDevice = false;
+let isMobile = false; // Será definido por detectDevice()
+let isLowEndDevice = false; // Será definido por detectDevice()
 let typingTimeout = null;
+let resizeTimeout = null;
+let isTyping = false; // Estado global para o assistente AI
+
+// Cache para elementos DOM
+const domCache = {
+    navbar: null,
+    hamburger: null,
+    navLinks: null,
+    aiChat: null,
+    aiToggle: null,
+    loadingIndicator: null,
+    typingTextElement: null, // Adicionado para acesso global
+    aiMessages: null, // Adicionado para acesso global
+    aiInput: null, // Adicionado para acesso global
+};
 
 // =========================
-// DETECÇÃO DE DISPOSITIVO OTIMIZADA
+// DETECÇÃO DE DISPOSITIVO AVANÇADA
 // =========================
+
 function detectDevice() {
     isMobile = window.innerWidth <= CONFIG.MOBILE_BREAKPOINT;
-    isLowEndDevice = navigator.hardwareConcurrency <= 4 ||
+    
+    isLowEndDevice = (
+        navigator.hardwareConcurrency <= 4 ||
         (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
-        window.innerWidth <= 480;
+        window.innerWidth <= 480 ||
+        navigator.connection?.effectiveType === 'slow-2g' ||
+        navigator.connection?.effectiveType === '2g'
+    );
 
-    // Define CSS properties
-    document.documentElement.style.setProperty('--is-mobile', isMobile ? '1' : '0');
+    const html = document.documentElement;
+    html.classList.toggle('mobile-device', isMobile);
+    html.classList.toggle('low-end-device', isLowEndDevice);
+    html.style.setProperty('--is-mobile', isMobile ? '1' : '0');
 
-    if (isLowEndDevice) {
-        document.documentElement.classList.add('low-end-device');
+    if (isMobile) {
+        const vh = window.innerHeight * 0.01;
+        html.style.setProperty('--vh', `${vh}px`);
     }
 }
 
 // =========================
 // UTILITY FUNCTIONS
 // =========================
-function throttle(func, limit) {
+
+const throttle = (func, limit) => {
     let inThrottle;
-    return function() {
-        const args = arguments;
-        const context = this;
+    return function(...args) {
         if (!inThrottle) {
-            func.apply(context, args);
+            func.apply(this, args);
             inThrottle = true;
             setTimeout(() => inThrottle = false, limit);
         }
-    }
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
     };
+};
+
+const debounce = (func, wait) => {
+    return function(...args) {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => func.apply(this, args), wait);
+    };
+};
+
+const raf = callback => {
+    if (!ticking) {
+        requestAnimationFrame(() => {
+            callback();
+            ticking = false;
+        });
+        ticking = true;
+    }
+};
+
+// =========================
+// CACHE DE ELEMENTOS DOM
+// =========================
+
+function initDOMCache() {
+    domCache.navbar = document.getElementById('navbar');
+    domCache.hamburger = document.getElementById('hamburger');
+    domCache.navLinks = document.getElementById('navLinks');
+    domCache.aiChat = document.getElementById('aiChat');
+    domCache.aiToggle = document.getElementById('aiToggle');
+    domCache.loadingIndicator = document.getElementById('loading-indicator');
+    domCache.typingTextElement = document.getElementById('typingText');
+    domCache.aiMessages = document.getElementById('aiMessages');
+    domCache.aiInput = document.getElementById('aiInput');
 }
 
 // =========================
-// CONHECIMENTO DA IA - SIMPLIFICADO
+// CONHECIMENTO DA IA (EXPOSTO GLOBALMENTE)
 // =========================
+
 const aiKnowledgeBase = {
     precos: {
         question: "Quais são os preços dos serviços?",
@@ -92,63 +141,62 @@ const aiKnowledgeBase = {
 };
 
 // =========================
-// INICIALIZAÇÃO PRINCIPAL - CORRIGIDA
+// INICIALIZAÇÃO PRINCIPAL
 // =========================
+
 document.addEventListener('DOMContentLoaded', function() {
     try {
-        // Detectar dispositivo
         detectDevice();
-
-        // Remover loading IMEDIATAMENTE
+        initDOMCache();
         hideLoadingIndicator();
-
-        // Inicializar componentes
         initializeComponents();
-
-        // Configurar observadores
         setupIntersectionObservers();
-
-        // Configurar eventos
         setupEventListeners();
-
-        console.log('✅ Website inicializado com sucesso');
+        
+        console.log('✅ Website inicializado - Mobile:', isMobile, 'Low-end:', isLowEndDevice);
     } catch (error) {
         console.error('Erro na inicialização:', error);
-        hideLoadingIndicator(); // Garante que loading seja removido mesmo com erro
+        hideLoadingIndicator();
     }
 });
 
 // =========================
-// LOADING - CORRIGIDO
+// LOADING
 // =========================
+
 function hideLoadingIndicator() {
-    const loadingIndicator = document.getElementById('loading-indicator');
-    if (loadingIndicator) {
-        loadingIndicator.classList.add('hidden');
+    const loading = domCache.loadingIndicator || document.getElementById('loading-indicator');
+    if (loading) {
+        loading.classList.add('hidden');
         setTimeout(() => {
-            if (loadingIndicator.parentNode) {
-                loadingIndicator.remove();
-            }
+            loading.remove();
         }, 300);
     }
     document.body.classList.add('loaded');
 }
 
 // =========================
-// INICIALIZAÇÃO DE COMPONENTES - SIMPLIFICADA
+// INICIALIZAÇÃO DE COMPONENTES
 // =========================
+
 function initializeComponents() {
     initializeTypingEffect();
-    initializeNavigation();
+    initializeNavigation(); // Lógica de navegação base (desktop)
     initializeScrollHandlers();
     initializeContactButtons();
-    initializeAIAssistant();
-    initializeMusicalNotes();
+    initializeAIAssistant(); // Lógica do assistente AI base (desktop)
+    
+    // Inicializar notas musicais apenas em desktop ou dispositivos de alta performance
+    // A lógica para mobile está em script_mobile.js (escondendo-as)
+    if (!isMobile || !isLowEndDevice) {
+        initializeMusicalNotes();
+    }
 }
 
 // =========================
-// EFEITO DE DIGITAÇÃO - CORRIGIDO
+// EFEITO DE DIGITAÇÃO
 // =========================
+
 function initializeTypingEffect() {
     const typingTexts = [
         "Violinista ",
@@ -159,30 +207,31 @@ function initializeTypingEffect() {
 
     let textIndex = 0;
     let charIndex = 0;
-    let isDeleting = false;
-    const typingElement = document.getElementById('typingText');
+    let isDeletingText = false; // Renomeado para evitar conflito com isTyping do AI
+    const typingElement = domCache.typingTextElement;
 
     if (!typingElement) return;
 
     function typeWriter() {
         const currentText = typingTexts[textIndex];
+        const cursor = isLowEndDevice ? '' : '|';
 
-        if (isDeleting) {
-            typingElement.textContent = currentText.substring(0, charIndex - 1) + '|';
+        if (isDeletingText) {
+            typingElement.textContent = currentText.substring(0, charIndex - 1) + cursor;
             charIndex--;
         } else {
-            typingElement.textContent = currentText.substring(0, charIndex + 1) + '|';
+            typingElement.textContent = currentText.substring(0, charIndex + 1) + cursor;
             charIndex++;
         }
 
-        if (!isDeleting && charIndex === currentText.length) {
-            typingTimeout = setTimeout(() => isDeleting = true, CONFIG.TYPING_SPEED.PAUSE);
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
+        if (!isDeletingText && charIndex === currentText.length) {
+            typingTimeout = setTimeout(() => isDeletingText = true, CONFIG.TYPING_SPEED.PAUSE);
+        } else if (isDeletingText && charIndex === 0) {
+            isDeletingText = false;
             textIndex = (textIndex + 1) % typingTexts.length;
         }
 
-        const speed = isDeleting ? CONFIG.TYPING_SPEED.DELETING : CONFIG.TYPING_SPEED.TYPING;
+        const speed = isDeletingText ? CONFIG.TYPING_SPEED.DELETING : CONFIG.TYPING_SPEED.TYPING;
         typingTimeout = setTimeout(typeWriter, speed);
     }
 
@@ -190,18 +239,21 @@ function initializeTypingEffect() {
 }
 
 // =========================
-// NAVEGAÇÃO - SIMPLIFICADA
+// NAVEGAÇÃO (Lógica para Desktop)
 // =========================
-function initializeNavigation() {
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
 
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleMobileMenu();
-        });
+function initializeNavigation() {
+    const hamburger = domCache.hamburger;
+    const navLinks = domCache.navLinks;
+
+    // Em desktop, o hamburguer deve estar escondido e o navLinks visível
+    if (!isMobile) {
+        if (hamburger) hamburger.style.display = 'none';
+        if (navLinks) navLinks.style.display = 'flex';
+    } else {
+        // Em mobile, o hamburguer é visível e o navLinks é controlado por script_mobile.js
+        if (hamburger) hamburger.style.display = 'flex';
+        if (navLinks) navLinks.style.display = ''; // Reset para ser controlado pelo CSS/JS mobile
     }
 
     // Navegação suave
@@ -212,64 +264,31 @@ function initializeNavigation() {
             const target = document.querySelector(targetId);
 
             if (target) {
-                const offsetTop = target.offsetTop - 80;
+                const offsetTop = target.offsetTop - (isMobile ? 60 : 80); // Ajuste para navbar
                 window.scrollTo({
                     top: offsetTop,
-                    behavior: 'smooth'
+                    behavior: isLowEndDevice ? 'auto' : 'smooth'
                 });
             }
-            closeMobileMenu();
+            // Em desktop, não há menu para fechar
         });
     });
-
-    // Fechar menu ao clicar fora
-    document.addEventListener('click', function(e) {
-        if (hamburger && navLinks &&
-            !hamburger.contains(e.target) &&
-            !navLinks.contains(e.target)) {
-            closeMobileMenu();
-        }
-    });
-}
-
-function toggleMobileMenu() {
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-
-    if (!hamburger || !navLinks) return;
-
-    const isActive = hamburger.classList.toggle('active');
-    navLinks.classList.toggle('active', isActive);
-
-    // Prevenir scroll
-    document.body.style.overflow = isActive ? 'hidden' : '';
-}
-
-function closeMobileMenu() {
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-
-    if (hamburger && navLinks) {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
-        document.body.style.overflow = '';
-    }
 }
 
 // =========================
-// ASSISTENTE IA - CORRIGIDO
+// ASSISTENTE IA (Lógica para Desktop)
 // =========================
+
 function initializeAIAssistant() {
-    const aiToggle = document.getElementById('aiToggle');
-    const aiChat = document.getElementById('aiChat');
+    const aiToggle = domCache.aiToggle;
+    const aiChat = domCache.aiChat;
     const aiClose = document.getElementById('aiClose');
-    const aiInput = document.getElementById('aiInput');
+    const aiInput = domCache.aiInput;
     const aiSend = document.getElementById('aiSend');
-    const aiMessages = document.getElementById('aiMessages');
+    const aiMessages = domCache.aiMessages;
     const quickBtns = document.querySelectorAll('.quick-btn');
 
-    let chatOpen = false;
-    let isTyping = false;
+    let chatOpen = false; // Estado local para desktop
 
     if (!aiToggle || !aiChat) return;
 
@@ -277,17 +296,15 @@ function initializeAIAssistant() {
     aiToggle.addEventListener('click', function() {
         chatOpen = !chatOpen;
         aiChat.classList.toggle('active', chatOpen);
+        aiChat.setAttribute('aria-hidden', !chatOpen);
 
         if (chatOpen) {
             setTimeout(() => {
                 if (aiInput) aiInput.focus();
             }, 300);
-
-            if (isMobile) {
-                document.body.classList.add('ai-chat-open');
-            }
+            document.body.style.overflow = 'hidden'; // Bloqueia scroll em desktop
         } else {
-            document.body.classList.remove('ai-chat-open');
+            document.body.style.overflow = '';
         }
     });
 
@@ -296,7 +313,8 @@ function initializeAIAssistant() {
         aiClose.addEventListener('click', function() {
             chatOpen = false;
             aiChat.classList.remove('active');
-            document.body.classList.remove('ai-chat-open');
+            aiChat.setAttribute('aria-hidden', true);
+            document.body.style.overflow = '';
         });
     }
 
@@ -319,10 +337,11 @@ function initializeAIAssistant() {
             if (knowledge && !isTyping) {
                 addUserMessage(knowledge.question);
                 showTypingIndicator();
+                
                 setTimeout(() => {
                     hideTypingIndicator();
                     addBotMessage(knowledge.answer);
-                }, 1000);
+                }, 1000); // Tempo de resposta padrão para desktop
             }
         });
     });
@@ -335,124 +354,132 @@ function initializeAIAssistant() {
         aiInput.value = '';
 
         showTypingIndicator();
+        
         setTimeout(() => {
             hideTypingIndicator();
             const response = generateAIResponse(message);
             addBotMessage(response);
-        }, 1200);
-    }
-
-    function addUserMessage(message) {
-        const messageDiv = createMessageElement(message, 'user-message');
-        aiMessages.appendChild(messageDiv);
-        scrollToBottom();
-    }
-
-    function addBotMessage(message) {
-        const messageDiv = createMessageElement(message, 'bot-message');
-        aiMessages.appendChild(messageDiv);
-        scrollToBottom();
-    }
-
-    function createMessageElement(content, className) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `ai-message ${className}`;
-
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'message-content';
-        contentDiv.textContent = content;
-
-        const timeDiv = document.createElement('div');
-        timeDiv.className = 'message-time';
-        timeDiv.textContent = new Date().toLocaleTimeString('pt-BR', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        messageDiv.appendChild(contentDiv);
-        messageDiv.appendChild(timeDiv);
-
-        return messageDiv;
-    }
-
-    function scrollToBottom() {
-        requestAnimationFrame(() => {
-            aiMessages.scrollTop = aiMessages.scrollHeight;
-        });
-    }
-
-    function showTypingIndicator() {
-        if (isTyping) return;
-        isTyping = true;
-
-        const typingDiv = document.createElement('div');
-        typingDiv.className = 'ai-message bot-message typing-indicator';
-        typingDiv.id = 'typing-indicator';
-        typingDiv.innerHTML = `
-            <div class="message-content">
-                <div class="typing-dots">
-                    <span></span><span></span><span></span>
-                </div>
-            </div>
-        `;
-
-        aiMessages.appendChild(typingDiv);
-        scrollToBottom();
-    }
-
-    function hideTypingIndicator() {
-        const typingIndicator = document.getElementById('typing-indicator');
-        if (typingIndicator) {
-            typingIndicator.remove();
-        }
-        isTyping = false;
-    }
-
-    function generateAIResponse(userMessage) {
-        const message = userMessage.toLowerCase();
-
-        // Keywords mapping
-        const keywords = {
-            'preço': 'precos',
-            'valor': 'precos',
-            'custo': 'precos',
-            'repertório': 'repertorio',
-            'música': 'repertorio',
-            'tocar': 'repertorio',
-            'casamento': 'casamento',
-            'noiva': 'casamento',
-            'disponível': 'disponibilidade',
-            'data': 'disponibilidade',
-            'agenda': 'disponibilidade'
-        };
-
-        for (const [keyword, category] of Object.entries(keywords)) {
-            if (message.includes(keyword)) {
-                return aiKnowledgeBase[category].answer;
-            }
-        }
-
-        // Saudações
-        if (/^(olá|oi|bom dia|boa tarde|boa noite)/.test(message)) {
-            return "Olá! Seja bem-vindo(a)! Sou o assistente do Fabricio Porto. Posso ajudar com informações sobre apresentações, repertório, preços e disponibilidade. Como posso ajudar você?";
-        }
-
-        // Agradecimentos
-        if (message.includes('obrigad') || message.includes('valeu')) {
-            return "Por nada! Foi um prazer ajudar. Se tiver mais dúvidas ou quiser agendar uma apresentação, entre em contato diretamente com o Fabricio!";
-        }
-
-        // Resposta padrão atualizada
-       return `Entendo sua pergunta! Para informações mais específicas, como músicas ou personalização de repertório com canções específicas, recomendo entrar em contato diretamente com o Fabricio Porto pelo WhatsApp (19) 99901-1288 ou pelo e-mail fabricioportoviolinista@gmail.com
-. `;
+        }, 1200); // Tempo de resposta padrão para desktop
     }
 }
 
+// Funções do AI Assistant (EXPOSTAS GLOBALMENTE)
+function addUserMessage(message) {
+    const messageDiv = createMessageElement(message, 'user-message');
+    domCache.aiMessages.appendChild(messageDiv);
+    scrollToBottom();
+}
+
+function addBotMessage(message) {
+    const messageDiv = createMessageElement(message, 'bot-message');
+    domCache.aiMessages.appendChild(messageDiv);
+    scrollToBottom();
+}
+
+function createMessageElement(content, className) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `ai-message ${className}`;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    contentDiv.textContent = content;
+
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'message-time';
+    timeDiv.textContent = new Date().toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    messageDiv.appendChild(contentDiv);
+    messageDiv.appendChild(timeDiv);
+
+    return messageDiv;
+}
+
+function scrollToBottom() {
+    raf(() => {
+        domCache.aiMessages.scrollTop = domCache.aiMessages.scrollHeight;
+    });
+}
+
+function showTypingIndicator() {
+    if (isTyping) return;
+    isTyping = true;
+
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'ai-message bot-message typing-indicator';
+    typingDiv.id = 'typing-indicator';
+    typingDiv.innerHTML = `
+        <div class="message-content">
+            <div class="typing-dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    `;
+
+    domCache.aiMessages.appendChild(typingDiv);
+    scrollToBottom();
+}
+
+function hideTypingIndicator() {
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+    isTyping = false;
+}
+
+function generateAIResponse(userMessage) {
+    const message = userMessage.toLowerCase();
+
+    const keywords = {
+        'preço': 'precos',
+        'valor': 'precos',
+        'custo': 'precos',
+        'repertório': 'repertorio',
+        'música': 'repertorio',
+        'tocar': 'repertorio',
+        'casamento': 'casamento',
+        'noiva': 'casamento',
+        'disponível': 'disponibilidade',
+        'data': 'disponibilidade',
+        'agenda': 'disponibilidade'
+    };
+
+    for (const [keyword, category] of Object.entries(keywords)) {
+        if (message.includes(keyword)) {
+            return aiKnowledgeBase[category].answer;
+        }
+    }
+
+    if (/^(olá|oi|bom dia|boa tarde|boa noite)/.test(message)) {
+        return "Olá! Seja bem-vindo(a)! Sou o assistente do Fabricio Porto. Posso ajudar com informações sobre apresentações, repertório, preços e disponibilidade. Como posso ajudar você?";
+    }
+
+    if (message.includes('obrigad') || message.includes('valeu')) {
+        return "Por nada! Foi um prazer ajudar. Se tiver mais dúvidas ou quiser agendar uma apresentação, entre em contato diretamente com o Fabricio!";
+    }
+
+    return `Entendo sua pergunta! Para informações mais específicas, recomendo entrar em contato diretamente com o Fabricio Porto pelo WhatsApp (19) 99901-1288 ou pelo e-mail fabricioportoviolinista@gmail.com.`;
+}
+
+// EXPOSIÇÃO DE FUNÇÕES GLOBAIS PARA script_mobile.js
+window.addUserMessage = addUserMessage;
+window.addBotMessage = addBotMessage;
+window.showTypingIndicator = showTypingIndicator;
+window.hideTypingIndicator = hideTypingIndicator;
+window.generateAIResponse = generateAIResponse;
+window.aiKnowledgeBase = aiKnowledgeBase;
+window.isTyping = isTyping; // Expor o estado de digitação
+window.CONFIG = CONFIG; // Expor CONFIG para que script_mobile.js possa ajustar velocidades
+
 // =========================
-// SCROLL HANDLERS - OTIMIZADOS
+// SCROLL HANDLERS
 // =========================
+
 function initializeScrollHandlers() {
-    const navbar = document.getElementById('navbar');
+    const navbar = domCache.navbar;
     const backToTop = document.getElementById('backToTop');
 
     const handleScroll = throttle(function() {
@@ -460,16 +487,16 @@ function initializeScrollHandlers() {
 
         // Update navbar
         if (navbar) {
-            navbar.classList.toggle('scrolled', scrolled > 100);
+            navbar.classList.toggle('scrolled', scrolled > 100); // Threshold para desktop
         }
 
         // Update back to top button
         if (backToTop) {
-            backToTop.classList.toggle('visible', scrolled > 500);
+            backToTop.classList.toggle('visible', scrolled > 500); // Threshold para desktop
         }
 
-        // Parallax apenas em desktop
-        if (!isMobile && window.innerWidth > CONFIG.MOBILE_BREAKPOINT) {
+        // Parallax apenas em desktop com performance
+        if (!isMobile && !isLowEndDevice) {
             updateParallax(scrolled);
         }
     }, CONFIG.SCROLL_THROTTLE);
@@ -480,7 +507,7 @@ function initializeScrollHandlers() {
             e.preventDefault();
             window.scrollTo({
                 top: 0,
-                behavior: 'smooth'
+                behavior: isLowEndDevice ? 'auto' : 'smooth'
             });
         });
     }
@@ -491,26 +518,31 @@ function initializeScrollHandlers() {
 function updateParallax(scrolled) {
     const fpNote = document.querySelector('.fp-musical-note');
     if (fpNote) {
-        const parallaxSpeed = 0.02;
+        const parallaxSpeed = 0.015;
         const yPos = scrolled * parallaxSpeed;
 
-        requestAnimationFrame(() => {
+        raf(() => {
             fpNote.style.transform = `translateY(calc(-50% + ${yPos}px))`;
         });
     }
 }
 
 // =========================
-// INTERSECTION OBSERVERS - CORRIGIDOS
+// INTERSECTION OBSERVERS
 // =========================
+
 function setupIntersectionObservers() {
     if (!window.IntersectionObserver) {
-        // Fallback para browsers antigos
         document.querySelectorAll('.section-observer').forEach(section => {
             section.classList.add('visible');
         });
         return;
     }
+
+    const observerOptions = {
+        threshold: 0.1, // Padrão para desktop
+        rootMargin: '0px 0px -50px 0px'
+    };
 
     const sectionObserver = new IntersectionObserver(
         (entries) => {
@@ -518,30 +550,27 @@ function setupIntersectionObservers() {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
 
-                    // Animar cards
                     const cards = entry.target.querySelectorAll('.repertoire-card, .performance-card');
+                    const delay = CONFIG.ANIMATION_DELAYS.CARD_STAGGER;
+                    
                     cards.forEach((card, index) => {
                         setTimeout(() => {
                             card.style.opacity = '1';
                             card.style.transform = 'translateY(0)';
-                        }, index * CONFIG.ANIMATION_DELAYS.CARD_STAGGER);
+                        }, index * delay);
                     });
 
                     sectionObserver.unobserve(entry.target);
                 }
             });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        }
+        }, 
+        observerOptions
     );
 
-    // Observar seções
     document.querySelectorAll('.section-observer').forEach(section => {
         sectionObserver.observe(section);
     });
 
-    // Preparar cards para animação
     setupCardAnimations();
 }
 
@@ -550,19 +579,24 @@ function setupCardAnimations() {
 
     cardElements.forEach(card => {
         card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'all 0.6s ease';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = `all 0.6s ease`;
     });
 }
 
 // =========================
-// BOTÕES DE CONTATO - CORRIGIDOS
+// BOTÕES DE CONTATO
 // =========================
+
 function initializeContactButtons() {
     document.querySelectorAll('.contact-btn, .btn').forEach(button => {
-        button.addEventListener('click', function(e) {
-            createRippleEffect(this, e);
-        });
+        // Ripple effect apenas em desktop
+        if (!isMobile) {
+            button.addEventListener('click', function(e) {
+                createRippleEffect(this, e);
+            });
+        }
+        // Feedback tátil para mobile é tratado em script_mobile.js
     });
 }
 
@@ -597,127 +631,133 @@ function createRippleEffect(button, event) {
 }
 
 // =========================
-// NOTAS MUSICAIS - OTIMIZADAS
+// NOTAS MUSICAIS
 // =========================
+
 function initializeMusicalNotes() {
     const notes = document.querySelectorAll('.musical-note');
-
+    
+    // Notas musicais são visíveis apenas em desktop ou dispositivos de alta performance
+    // e são escondidas pelo styles_mobile.css em mobile
     notes.forEach((note, index) => {
-        const delay = index * 2;
+        const delay = index * 2; // Padrão para desktop
         note.style.animationDelay = `${delay}s`;
-
-        if (isMobile) {
-            note.style.animationDuration = '25s';
-            note.style.opacity = '0.4';
-
-            // Esconder notas extras em dispositivos pequenos
-            if (isLowEndDevice && index > 3) {
-                note.style.display = 'none';
-            }
-        }
+        note.style.animationDuration = '15s';
+        note.style.opacity = '0.6';
+        note.style.display = ''; // Garante que estejam visíveis se não for mobile
     });
 }
 
 // =========================
-// EVENT LISTENERS PRINCIPAIS
+// EVENT LISTENERS
 // =========================
+
 function setupEventListeners() {
-    // Resize handler
+    // Resize handler (apenas para re-detectar dispositivo e reconfigurar)
     const handleResize = debounce(function() {
         const wasMobile = isMobile;
-        detectDevice();
+        detectDevice(); // Re-detecta se é mobile
 
-        if (wasMobile && !isMobile) {
-            closeMobileMenu();
-            closeAIChat();
+        // Se o estado mobile mudou (ex: redimensionar janela do navegador)
+        if (wasMobile !== isMobile) {
+            // Recarrega assets mobile se necessário (já feito no index.html)
+            // Re-inicializa componentes base para se adaptar ao novo estado
+            initializeNavigation(); // Reconfigura visibilidade do hamburguer/navlinks
+            initializeAIAssistant(); // Reconfigura comportamento do AI (scroll body)
+            initializeMusicalNotes(); // Reconfigura visibilidade das notas
         }
-
-        reconfigureForDevice();
     }, CONFIG.DEBOUNCE_DELAY);
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
 
     // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            closeMobileMenu();
-            closeAIChat();
+            // Fechar menu/chat em desktop
+            if (!isMobile) {
+                const aiChat = domCache.aiChat;
+                if (aiChat && aiChat.classList.contains('active')) {
+                    aiChat.classList.remove('active');
+                    aiChat.setAttribute('aria-hidden', true);
+                    document.body.style.overflow = '';
+                }
+            }
+            // Lógica para mobile está em script_mobile.js
         }
 
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
-            const aiToggle = document.getElementById('aiToggle');
+            const aiToggle = domCache.aiToggle;
             if (aiToggle) aiToggle.click();
         }
     });
 
-    // Visibility API para otimização
+    // Otimização de performance com Visibility API
     document.addEventListener('visibilitychange', function() {
         const isHidden = document.hidden;
 
         // Pausar animações quando página não está visível
-        document.querySelectorAll('.musical-note, .pulse-ring').forEach(element => {
-            element.style.animationPlayState = isHidden ? 'paused' : 'running';
-        });
-    });
-}
-
-function reconfigureForDevice() {
-    const notes = document.querySelectorAll('.musical-note');
-
-    notes.forEach((note, index) => {
-        if (isMobile) {
-            note.style.animationDuration = '25s';
-            note.style.opacity = '0.4';
-
-            if (isLowEndDevice && index > 3) {
-                note.style.display = 'none';
-            }
+        if (isHidden) {
+            document.querySelectorAll('.musical-note, .pulse-ring').forEach(element => {
+                element.style.animationPlayState = 'paused';
+            });
         } else {
-            note.style.animationDuration = '15s';
-            note.style.opacity = '0.6';
-            note.style.display = '';
+            document.querySelectorAll('.musical-note, .pulse-ring').forEach(element => {
+                element.style.animationPlayState = 'running';
+            });
         }
     });
 }
 
-function closeAIChat() {
-    const aiChat = document.getElementById('aiChat');
-    if (aiChat) {
-        aiChat.classList.remove('active');
-        document.body.classList.remove('ai-chat-open');
-    }
-}
+// =========================
+// CLEANUP
+// =========================
 
-// =========================
-// CLEANUP - IMPORTANTE
-// =========================
 window.addEventListener('beforeunload', function() {
     // Limpar timeouts
     if (typingTimeout) {
         clearTimeout(typingTimeout);
     }
+    if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+    }
 
-    // Restaurar overflow
+    // Restaurar estado do body (para desktop)
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
     document.body.style.overflow = '';
-    document.body.classList.remove('ai-chat-open');
+    document.body.classList.remove('ai-chat-open'); // Remove classe de fix iOS
 });
 
 // =========================
-// FALLBACKS E POLYFILLS
+// POLYFILLS E FALLBACKS
 // =========================
+
 function setupFallbacks() {
-    // Fallback para CSS.supports
     if (typeof CSS === 'undefined' || !CSS.supports) {
         window.CSS = {
             supports: function() { return false; }
         };
     }
 
-    // Fallback para requestAnimationFrame
     if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function(callback) {
             return setTimeout(callback, 16);
+        };
+    }
+
+    if (typeof Object.assign !== 'function') {
+        Object.assign = function(target) {
+            for (let i = 1; i < arguments.length; i++) {
+                const source = arguments[i];
+                for (let key in source) {
+                    if (source.hasOwnProperty(key)) {
+                        target[key] = source[key];
+                    }
+                }
+            }
+            return target;
         };
     }
 }
@@ -725,31 +765,39 @@ function setupFallbacks() {
 // =========================
 // INICIALIZAÇÃO FINAL SEGURA
 // =========================
+
 (function() {
-    // Setup inicial
     setupFallbacks();
+    
+    setTimeout(() => {
+        const loading = document.getElementById('loading-indicator');
+        if (loading) {
+            loading.remove();
+        }
+        document.body.classList.add('loaded');
+    }, 100);
 
-    // Garantir que o loading seja removido mesmo se houver problemas
-    setTimeout(hideLoadingIndicator, 100);
-
-    // Log de inicialização
-    console.log('🎻 Fabricio Porto Website - Carregado com sucesso!');
+    console.log('🎻 Fabricio Porto Website - Otimizado para Mobile!');
 })();
 
-// Tracking de cliques no website
+// =========================
+// TRACKING
+// =========================
+
 document.addEventListener('DOMContentLoaded', function() {
     const websiteLinks = document.querySelectorAll('a[href*="nansinyx26.github.io"]');
     
     websiteLinks.forEach(link => {
         link.addEventListener('click', function() {
-            // Envia evento para o GA4
-            gtag('event', 'click_link', {
-                'event_category': 'Engajamento',
-                'event_label': this.href
-            });
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'click_link', {
+                    'event_category': 'Engajamento',
+                    'event_label': this.href,
+                    'device_type': isMobile ? 'mobile' : 'desktop'
+                });
+            }
 
             console.log('Click no link do website:', this.href);
-        });
+        }, { passive: true });
     });
 });
-
