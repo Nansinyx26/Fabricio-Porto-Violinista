@@ -327,6 +327,7 @@ textarea {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+    isolation: isolate;
 }
 
 .ai-toggle:hover {
