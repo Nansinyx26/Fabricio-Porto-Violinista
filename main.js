@@ -5,8 +5,8 @@
 const partnersData = [
     {
         id: 1,
-        name: "Maria Silva",
-        role: "Pianista e Arranjadora",
+        name: "Rafaeli Marques",
+        role: "Cantora",
         photo: "maria-silva.jpg", // Coloque a URL da foto aqui
         description: "Especialista em música clássica e popular, com mais de 15 anos de experiência em arranjos musicais para violino e piano.",
         link: "https://example.com/maria-silva", // Link para portfolio/site
