@@ -2338,3 +2338,92 @@ body.ai-chat-open {
         transform: none;
     }
 }
+ORREÇÃO DOS TÍTULOS DAS SEÇÕES - ADICIONAR NO FINAL DO styles.css
+   ========================= */
+
+/* Garantir cor dourada para TODOS os títulos de seção */
+.section-title,
+#social-title,
+#partners-title,
+#about-title,
+#repertoire-title,
+#performances-title,
+#contact-title,
+section h2,
+#social-media h2,
+#partners h2 {
+    color: #d4af37 !important;
+    font-family: 'Georgia', serif;
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Garantir que o decorativo também apareça em todos */
+.section-title::after,
+#social-title::after,
+#partners-title::after,
+#about-title::after,
+#repertoire-title::after,
+#performances-title::after,
+#contact-title::after,
+section h2::after,
+#social-media h2::after,
+#partners h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #d4af37, #ffb84c);
+    border-radius: 2px;
+}
+
+/* Especificidade alta para sobrescrever qualquer outro estilo */
+h2.section-title,
+h2#social-title,
+h2#partners-title,
+h2#about-title,
+h2#repertoire-title,
+h2#performances-title,
+h2#contact-title {
+    color: #d4af37 !important;
+}
+
+/* Para garantir que herança não interfira */
+#social-media .section-title,
+#partners .section-title {
+    color: #d4af37 !important;
+}
+
+/* Responsividade para os títulos corrigidos */
+@media (max-width: 768px) {
+    .section-title,
+    #social-title,
+    #partners-title,
+    #about-title,
+    #repertoire-title,
+    #performances-title,
+    #contact-title,
+    section h2 {
+        font-size: clamp(1.8rem, 6vw, 2.2rem);
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title,
+    #social-title,
+    #partners-title,
+    #about-title,
+    #repertoire-title,
+    #performances-title,
+    #contact-title,
+    section h2 {
+        font-size: clamp(1.6rem, 5vw, 2rem);
+    }
+}
