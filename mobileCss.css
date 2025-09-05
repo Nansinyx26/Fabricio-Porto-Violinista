@@ -75,7 +75,8 @@
     section {
         padding: 3rem 1rem; /* Mais padding nas laterais */
     }
-
+    
+    @media (max-width: 768px) {
     /* Menu Hamburguer - CORRIGIDO */
     .hamburger {
         display: flex;
@@ -116,29 +117,29 @@
         transform: rotate(-45deg) translate(7px, -6px);
     }
 
-    .nav-links {
-        position: fixed;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 80px);
-        background: rgba(26, 26, 26, 0.98);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        padding-top: 3rem;
-        gap: 0;
-        transform: translateX(-100%);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease; /* Adicione transição para visibility */
-        visibility: hidden; /* Oculta o menu completamente */
-        pointer-events: none; /* Impede interações de mouse/toque quando oculto */
-        z-index: 1002;
-    }
+   .nav-links {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: rgba(26, 26, 26, 0.98);
+    backdrop-filter: blur(20px);
+    display: flex;               /* ✅ Adicionado display flex sempre */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 3rem;
+    gap: 0;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1002;
+}
 
     .nav-links.active {
         transform: translateX(0);
-        display: flex; /* Garante que o layout flex seja aplicado quando ativo */
         pointer-events: auto; /* Permite interações de mouse/toque quando visível */
         visibility: visible; /* Garante que esteja visível quando ativo */
     }
