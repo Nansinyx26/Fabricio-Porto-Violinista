@@ -1,603 +1,355 @@
-/* ==========================================================================
-   styles_mobile.css - Estilos Otimizados para Dispositivos Móveis
-   Este arquivo é carregado condicionalmente apenas em telas menores.
-   ========================================================================== */
+// ==========================================================================
+// script_mobile.js - Lógicas JavaScript Otimizadas para Dispositivos Móveis
+// Este script é carregado condicionalmente apenas em telas menores.
+// ==========================================================================
 
-/* 1. Layout Simples e Vertical */
-/* Aplicações gerais para telas menores que 768px */
-@media (max-width: 768px) {
-    /* Garante que o corpo não tenha overflow horizontal */
-    body {
-        overflow-x: hidden;
+// =========================
+// CONFIGURAÇÕES ESPECÍFICAS PARA MOBILE
+// =========================
+const MOBILE_CONFIG = {
+    MOBILE_BREAKPOINT: 768, // Deve ser o mesmo do CSS
+    NAVBAR_HEIGHT: 80, // Altura da navbar em pixels (para cálculo de scroll)
+    TYPING_SPEED_MOBILE: { // Velocidades ajustadas para o efeito de digitação em mobile
+        TYPING: 50,
+        DELETING: 25,
+        PAUSE: 1000
+    }
+};
+
+// Variáveis globais para controle de estado (específicas deste script)
+let currentScrollY = 0; // Para armazenar a posição do scroll ao bloquear o body
+
+// Cache de elementos DOM (específico para este script para evitar conflitos e otimizar)
+const mobileDomCache = {
+    navbar: null,
+    hamburger: null,
+    navLinks: null,
+    aiChat: null,
+    aiToggle: null,
+    aiClose: null,
+    aiInput: null,
+    aiSend: null,
+    aiMessages: null,
+    quickBtns: null,
+    typingTextElement: null,
+    backToTopBtn: null
+};
+
+// =========================
+// INICIALIZAÇÃO ESPECÍFICA PARA MOBILE
+// =========================
+document.addEventListener('DOMContentLoaded', function() {
+    // Verifica se a largura da tela corresponde ao breakpoint mobile
+    const isMobileView = window.innerWidth <= MOBILE_CONFIG.MOBILE_BREAKPOINT;
+
+    // Este script só deve ser executado se a condição mobile for verdadeira
+    // (embora já seja carregado condicionalmente pelo index.html)
+    if (!isMobileView) {
+        console.log('script_mobile.js: Não é um dispositivo móvel, desativando.');
+        return;
     }
 
-    /* Seção Hero */
-    .hero {
-        flex-direction: column; /* Conteúdo em coluna */
-        text-align: center;
-        padding: 2rem 1rem;
-        min-height: 90vh; /* Ajuste para telas menores */
-        justify-content: center;
+    initMobileDomCache();
+    setupMobileNavigation();
+    setupMobileAIAssistant();
+    setupMobileScrollHandlers();
+    adjustTypingEffectForMobile();
+    setupMobileEventListeners();
+
+    console.log('✅ script_mobile.js carregado e inicializado para mobile.');
+});
+
+// =========================
+// CACHE DE ELEMENTOS DOM PARA MOBILE
+// =========================
+function initMobileDomCache() {
+    mobileDomCache.navbar = document.getElementById('navbar');
+    mobileDomCache.hamburger = document.getElementById('hamburger');
+    mobileDomCache.navLinks = document.getElementById('navLinks');
+    mobileDomCache.aiChat = document.getElementById('aiChat');
+    mobileDomCache.aiToggle = document.getElementById('aiToggle');
+    mobileDomCache.aiClose = document.getElementById('aiClose');
+    mobileDomCache.aiInput = document.getElementById('aiInput');
+    mobileDomCache.aiSend = document.getElementById('aiSend');
+    mobileDomCache.aiMessages = document.getElementById('aiMessages');
+    mobileDomCache.quickBtns = document.querySelectorAll('.quick-btn');
+    mobileDomCache.typingTextElement = document.getElementById('typingText');
+    mobileDomCache.backToTopBtn = document.getElementById('backToTop');
+}
+
+// =========================
+// NAVEGAÇÃO MOBILE (HAMBURGUER)
+// =========================
+// =========================
+// NAVEGAÇÃO MOBILE (HAMBURGUER)
+// =========================
+function setupMobileNavigation() {
+    const { hamburger, navLinks } = mobileDomCache;
+
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', toggleMobileMenu);
+
+        // Fecha o menu ao clicar em um link de navegação
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                closeMobileMenu();
+                
+                // Smooth scroll para links âncora
+                if (this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        const offsetTop = targetElement.offsetTop - MOBILE_CONFIG.NAVBAR_HEIGHT;
+                        setTimeout(() => {
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth'
+                            });
+                        }, 300);
+                    }
+                }
+            });
+        });
+
+        // Fecha o menu ao clicar fora do menu ou do hamburguer
+        document.addEventListener('click', function(event) {
+            if (navLinks.classList.contains('active') &&
+                !hamburger.contains(event.target) &&
+                !navLinks.contains(event.target)) {
+                closeMobileMenu();
+            }
+        });
+
+        // Fecha o menu com ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && navLinks.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+    }
+}
+
+function toggleMobileMenu() {
+    const { hamburger, navLinks } = mobileDomCache;
+    if (!hamburger || !navLinks) return;
+
+    const isActive = hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active', isActive);
+    toggleBodyScroll(isActive);
+    hamburger.setAttribute('aria-expanded', isActive);
+
+    // Foco no primeiro link quando abre
+    if (isActive) {
+        setTimeout(() => {
+            const firstLink = navLinks.querySelector('a');
+            if (firstLink) firstLink.focus();
+        }, 300);
+    }
+}
+
+function closeMobileMenu() {
+    const { hamburger, navLinks } = mobileDomCache;
+    if (!hamburger || !navLinks) return;
+
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('active');
+    toggleBodyScroll(false);
+    hamburger.setAttribute('aria-expanded', false);
+}
+
+// =========================
+// ASSISTENTE IA MOBILE
+// =========================
+function setupMobileAIAssistant() {
+    const { aiToggle, aiChat, aiClose, aiInput, aiMessages, quickBtns } = mobileDomCache;
+
+    if (!aiToggle || !aiChat) return;
+
+    aiToggle.addEventListener('click', toggleAIChat);
+    if (aiClose) aiClose.addEventListener('click', closeAIChat);
+
+    // Otimização para mobile - redimensionamento de teclado
+    if (aiInput) {
+        aiInput.addEventListener('focus', function() {
+            // Pequeno delay para o teclado aparecer antes de rolar
+            setTimeout(() => {
+                if (aiMessages) aiMessages.scrollTop = aiMessages.scrollHeight;
+            }, 300);
+        });
     }
 
-    .hero-content {
-        order: 2; /* Coloca o texto abaixo da imagem/logo */
-        max-width: 100%;
+    // Quick buttons (reutiliza funções do script.js)
+    quickBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const question = this.dataset.question;
+            // Acessa a base de conhecimento e funções do script.js via window
+            if (window.aiKnowledgeBase && window.addUserMessage && window.showTypingIndicator && window.addBotMessage && !window.isTyping) {
+                const knowledge = window.aiKnowledgeBase[question];
+                window.addUserMessage(knowledge.question);
+                window.showTypingIndicator();
+
+                setTimeout(() => {
+                    window.hideTypingIndicator();
+                    window.addBotMessage(knowledge.answer);
+                }, MOBILE_CONFIG.TYPING_SPEED_MOBILE.PAUSE); // Usa pausa mobile para resposta
+            }
+        });
+    });
+
+    // Envio de mensagem (reutiliza funções do script.js)
+    const aiSend = mobileDomCache.aiSend;
+    if (aiSend && aiInput) {
+        aiSend.addEventListener('click', function() {
+            sendMessageAI(aiInput.value.trim());
+        });
+        aiInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessageAI(aiInput.value.trim());
+            }
+        });
     }
+}
 
-    .fp-musical-note {
-        position: static; /* Remove posicionamento fixo */
-        transform: none;
-        margin-bottom: 2rem;
-        order: 1; /* Coloca a imagem/logo acima do texto */
+function toggleAIChat() {
+    const { aiChat, aiInput } = mobileDomCache;
+    if (!aiChat) return;
+
+    const isActive = aiChat.classList.toggle('active');
+    aiChat.setAttribute('aria-hidden', !isActive);
+    toggleBodyScroll(isActive); // Bloqueia/desbloqueia o scroll do body
+
+    if (isActive && aiInput) {
+        setTimeout(() => aiInput.focus(), 300);
     }
+}
 
-    .fp-logo-container {
-        width: min(250px, 60vw); /* Tamanho responsivo para o logo */
-        height: min(250px, 60vw);
-        margin: 0 auto;
+function closeAIChat() {
+    const { aiChat } = mobileDomCache;
+    if (!aiChat) return;
+
+    aiChat.classList.remove('active');
+    aiChat.setAttribute('aria-hidden', true);
+    toggleBodyScroll(false); // Desbloqueia o scroll
+}
+
+function sendMessageAI(message) {
+    const { aiInput } = mobileDomCache;
+    if (!message || window.isTyping) return;
+
+    if (window.addUserMessage && window.showTypingIndicator && window.hideTypingIndicator && window.generateAIResponse && window.addBotMessage) {
+        window.addUserMessage(message);
+        aiInput.value = '';
+
+        window.showTypingIndicator();
+
+        setTimeout(() => {
+            window.hideTypingIndicator();
+            const response = window.generateAIResponse(message);
+            window.addBotMessage(response);
+        }, MOBILE_CONFIG.TYPING_SPEED_MOBILE.PAUSE); // Usa pausa mobile para resposta
     }
+}
 
-    /* Seção Sobre o Artista */
-    .about-content {
-        grid-template-columns: 1fr; /* Coluna única */
-        text-align: center;
-        gap: 2rem;
+// =========================
+// BLOQUEIO DE SCROLL DO BODY
+// =========================
+function toggleBodyScroll(shouldBlock) {
+    if (shouldBlock) {
+        currentScrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${currentScrollY}px`;
+        document.body.style.width = '100%';
+        document.body.classList.add('ai-chat-open'); // Adiciona classe para correção de iOS
+    } else {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.classList.remove('ai-chat-open');
+        window.scrollTo(0, currentScrollY);
     }
+}
 
-    .about-image {
-        order: -1; /* Coloca a imagem acima do texto na seção "Sobre" */
+// =========================
+// AJUSTE DO EFEITO DE DIGITAÇÃO
+// =========================
+function adjustTypingEffectForMobile() {
+    // Se o objeto CONFIG global existe e tem as propriedades de velocidade
+    if (window.CONFIG && window.CONFIG.TYPING_SPEED) {
+        window.CONFIG.TYPING_SPEED.TYPING = MOBILE_CONFIG.TYPING_SPEED_MOBILE.TYPING;
+        window.CONFIG.TYPING_SPEED.DELETING = MOBILE_CONFIG.TYPING_SPEED_MOBILE.DELETING;
+        window.CONFIG.TYPING_SPEED.PAUSE = MOBILE_CONFIG.TYPING_SPEED_MOBILE.PAUSE;
+        // Não é necessário reiniciar o typeWriter aqui, pois ele lerá as novas configurações
+        // na próxima iteração, assumindo que ele usa window.CONFIG.
     }
+}
 
-    /* Seções de Grid (Repertório, Apresentações, Parceiros) */
-    .repertoire-grid,
-    .performance-types,
-    .partners-grid {
-        grid-template-columns: 1fr; /* Coluna única para grids */
-        gap: 1.5rem;
-    }
+// =========================
+// SCROLL HANDLERS MOBILE
+// =========================
+function setupMobileScrollHandlers() {
+    const { navbar, backToTopBtn } = mobileDomCache;
 
-    /* Botões de Chamada para Ação (CTA) */
-    .cta-buttons {
-        flex-direction: column; /* Botões de CTA em coluna */
-        align-items: center;
-        gap: 0.8rem;
-    }
+    const handleScroll = () => {
+        const scrolled = window.scrollY;
 
-    .btn {
-        width: 100%; /* Botões de largura total */
-        max-width: 280px; /* Limite para não ficarem muito grandes */
-        justify-content: center;
-        padding: 0.9rem 1.5rem; /* Ajuste de padding */
-    }
-
-    /* Espaçamento generoso entre seções */
-    section {
-        padding: 3rem 1rem; /* Mais padding nas laterais */
-    }
-
-    /* Menu Hamburguer - CORRIGIDO */
-    .hamburger {
-        display: flex;
-        flex-direction: column;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 8px;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        position: relative;
-        z-index: 1001;
-    }
-
-    .hamburger:hover {
-        background: rgba(212, 175, 55, 0.1);
-    }
-
-    .hamburger span {
-        display: block;
-        width: 25px;
-        height: 3px;
-        background: #d4af37;
-        margin: 3px 0;
-        transition: all 0.3s ease;
-        border-radius: 2px;
-    }
-
-    .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .hamburger.active span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -6px);
-    }
-
-    .nav-links {
-        position: fixed;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 80px);
-        background: rgba(26, 26, 26, 0.98);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        padding-top: 3rem;
-        gap: 0;
-        transform: translateX(-100%);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease; /* Adicione transição para visibility */
-        visibility: hidden; /* Oculta o menu completamente */
-        pointer-events: none; /* Impede interações de mouse/toque quando oculto */
-        z-index: 1002;
-    }
-
-    .nav-links.active {
-        transform: translateX(0);
-        display: flex; /* Garante que o layout flex seja aplicado quando ativo */
-        pointer-events: auto; /* Permite interações de mouse/toque quando visível */
-        visibility: visible; /* Garante que esteja visível quando ativo */
-    }
-
-    .nav-links li {
-        width: 100%;
-        max-width: 300px;
-        margin: 0.5rem 0;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: slideInMobile 0.5s ease forwards;
-    }
-
-    .nav-links.active li {
-        animation-delay: calc(var(--delay, 0) * 0.1s);
-    }
-
-    .nav-links.active li:nth-child(1) { --delay: 1; }
-    .nav-links.active li:nth-child(2) { --delay: 2; }
-    .nav-links.active li:nth-child(3) { --delay: 3; }
-    .nav-links.active li:nth-child(4) { --delay: 4; }
-    .nav-links.active li:nth-child(5) { --delay: 5; }
-    .nav-links.active li:nth-child(6) { --delay: 6; }
-    .nav-links.active li:nth-child(7) { --delay: 7; }
-
-    @keyframes slideInMobile {
-        to {
-            opacity: 1;
-            transform: translateY(0);
+        // Atualiza navbar
+        if (navbar) {
+            navbar.classList.toggle('scrolled', scrolled > 50); // Menor threshold para mobile
         }
-    }
 
-    .nav-links a {
-        display: block;
-        width: 100%;
-        text-align: center;
-        font-size: 1.2rem;
-        padding: 1.2rem 2rem;
-        margin: 0;
-        border-radius: 12px;
-        background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(255, 184, 76, 0.05));
-        border: 1px solid rgba(212, 175, 55, 0.2);
-        transition: all 0.3s ease;
-        color: #ffffff;
-        text-decoration: none;
-    }
-
-    .nav-links a:hover,
-    .nav-links a:focus {
-        background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(255, 184, 76, 0.1));
-        border-color: rgba(212, 175, 55, 0.4);
-        transform: scale(1.02);
-        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
-        color: #d4af37;
-    }
-
-    .nav-links a i {
-        margin-right: 0.8rem;
-        font-size: 1.1rem;
-        color: #d4af37;
-    }
-
-    /* Seção de Redes Sociais */
-    .social-links {
-        gap: 1rem;
-    }
-    
-    .social-link {
-        padding: 1.2rem;
-        gap: 1rem;
-        flex-direction: row;
-        text-align: left;
-    }
-    
-    .social-icon {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .social-icon i {
-        font-size: 20px;
-    }
-
-    /* Seção de Contato */
-    .contact-card {
-        margin: 0 1rem; /* Ajusta margem para telas menores */
-    }
-
-    /* 2. Tipografia Legível */
-    body {
-        font-size: 16px; /* Mínimo de 16px para o corpo */
-    }
-
-    h1 {
-        font-size: clamp(2.2rem, 8vw, 4rem); /* Ajuste para títulos */
-    }
-
-    h2 {
-        font-size: clamp(1.8rem, 6vw, 2.2rem);
-    }
-
-    p, li {
-        font-size: clamp(1rem, 2.8vw, 1.1rem); /* Ajuste para parágrafos e listas */
-    }
-
-    /* 3. Imagens e Mídia Otimizadas */
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    /* 4. Navegação e Interatividade */
-    /* Chat ou assistente virtual */
-    .ai-assistant {
-        bottom: 15px;
-        right: 15px;
-    }
-
-    .ai-chat {
-        right: -15px; /* Ajusta para a borda da tela */
-        width: calc(100vw - 30px); /* Largura máxima limitada */
-        max-width: 350px; /* Limite superior */
-        height: min(450px, calc(100vh - 120px)); /* Altura adaptativa */
-        max-height: 70vh;
-    }
-
-    .ai-toggle {
-        width: 55px; /* Botão menor */
-        height: 55px;
-    }
-
-    .ai-toggle i {
-        font-size: 22px;
-    }
-
-    .ai-messages {
-        max-height: calc(70vh - 180px); /* Ajusta altura da área de mensagens */
-        -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
-        overscroll-behavior: contain; /* Evita scroll do body ao chegar no fim do chat */
-    }
-
-    .ai-input input {
-        font-size: 16px !important; /* Garante tamanho mínimo para input */
-    }
-
-    /* Botão "Voltar ao topo" */
-    .back-to-top {
-        bottom: 85px; /* Acima do botão do chat */
-        right: 15px;
-        width: 45px;
-        height: 45px;
-    }
-
-    /* Notas musicais flutuantes desativadas para performance */
-    .musical-note {
-        display: none;
-    }
-}
-
-/* Ajustes para telas muito pequenas (ex: iPhone SE, Galaxy S) */
-@media (max-width: 360px) {
-    .hero {
-        min-height: 80vh; /* Reduz ainda mais a altura do hero */
-    }
-
-    .fp-logo-container {
-        width: min(200px, 55vw);
-        height: min(200px, 55vw);
-    }
-
-    .btn {
-        max-width: 250px;
-    }
-
-    .ai-chat {
-        width: calc(100vw - 20px);
-        right: -10px;
-        height: min(380px, calc(100vh - 100px));
-        max-height: 75vh;
-    }
-
-    .ai-messages {
-        max-height: calc(75vh - 160px);
-    }
-
-    .social-link {
-        padding: 1rem;
-        gap: 0.8rem;
-        border-radius: 12px;
-    }
-    
-    .social-icon {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .social-icon i {
-        font-size: 18px;
-    }
-
-    .partner-card {
-        padding: 1.2rem;
-        margin: 0;
-    }
-    
-    .partner-description {
-        -webkit-line-clamp: 4; /* Permite mais linhas em telas menores */
-    }
-}
-
-/* Correção para viewport units no iOS (garante que --vh seja usado corretamente) */
-@supports (-webkit-touch-callout: none) {
-    .ai-chat {
-        height: calc(var(--vh, 1vh) * 45);
-        max-height: calc(var(--vh, 1vh) * 70);
-    }
-    @media (max-width: 768px) {
-        .ai-messages {
-            max-height: calc(var(--vh, 1vh) * 35);
+        // Atualiza botão "Voltar ao topo"
+        if (backToTopBtn) {
+            backToTopBtn.classList.toggle('visible', scrolled > 300); // Menor threshold para mobile
         }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     }
 }
 
-/* CORREÇÃO: Prevenção de bounce scroll no iOS */
-body.ai-chat-open,
-body.menu-open {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
+// =========================
+// EVENT LISTENERS GERAIS PARA MOBILE
+// =========================
+function setupMobileEventListeners() {
+    // Otimização de performance com Visibility API (reforço, pois já está no script.js)
+    document.addEventListener('visibilitychange', function() {
+        const isHidden = document.hidden;
+        // Apenas elementos que ainda podem ter animação em mobile (ex: pulse-ring)
+        const animatedElements = document.querySelectorAll('.pulse-ring'); 
 
-/* Melhorias para navegação por teclado em mobile */
-.keyboard-navigation .social-link:focus,
-.keyboard-navigation .partner-link:focus {
-    outline: 3px solid #d4af37;
-    outline-offset: 3px;
-}
+        if (isHidden) {
+            animatedElements.forEach(element => element.style.animationPlayState = 'paused');
+        } else {
+            animatedElements.forEach(element => element.style.animationPlayState = 'running');
+        }
+    });
 
-/* FOCUS STYLES MELHORADOS */
-.hamburger:focus {
-    outline: 3px solid #d4af37;
-    outline-offset: 3px;
-    background: rgba(212, 175, 55, 0.1);
-}
+    // Orientação para mobile (reforço, pois já está no script.js)
+    window.addEventListener('orientationchange', function() {
+        // Atualiza a variável --vh para corrigir o viewport height em mobile
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
 
-/* High contrast mode para mobile */
-@media (prefers-contrast: high) and (max-width: 768px) {
-    .social-link,
-    .partner-card {
-        border: 2px solid #d4af37;
-    }
-    
-    .social-link:hover,
-    .social-link:focus,
-    .partner-card:hover,
-    .partner-card:focus-within {
-        border-color: #ffb84c;
-        background: rgba(212, 175, 55, 0.1);
-    }
-}
+    // Feedback tátil para botões em mobile (já no script.js, mas pode ser reforçado aqui se necessário)
+    document.querySelectorAll('.contact-btn, .btn, .quick-btn, .ai-toggle, .ai-close, .ai-input button').forEach(button => {
+        button.addEventListener('touchstart', function() {
+            this.classList.add('touch-active');
+        }, { passive: true });
 
-/* Reduced motion para mobile */
-@media (prefers-reduced-motion: reduce) and (max-width: 768px) {
-    .social-link,
-    .partner-card,
-    .partner-photo,
-    .partner-link i,
-    .loading-spinner,
-    .nav-links,
-    .hamburger span,
-    .nav-links a {
-        animation: none;
-        transition: none;
-    }
-    
-    .social-link:hover,
-    .social-link:focus,
-    .partner-card:hover,
-    .partner-card:focus-within {
-        transform: none;
-    }
-    
-    .nav-links li {
-        animation: none;
-        opacity: 1;
-        transform: none;
-    }
-}
-
-/* RESPONSIVIDADE PARA ORIENTAÇÃO */
-@media screen and (orientation: landscape) and (max-height: 500px) {
-    .nav-links {
-        padding-top: 1rem;
-    }
-    
-    .nav-links li {
-        margin: 0.3rem 0;
-    }
-    
-    .nav-links a {
-        padding: 0.8rem 1.5rem;
-        font-size: 1.1rem;
-    }
-}
-
-/* ==========================================================================
-   CORREÇÃO DOS TÍTULOS DAS SEÇÕES - ADICIONAR NO FINAL DO mobileCss.css
-   ========================================================================== */
-
-/* Garantir cor dourada para TODOS os títulos em dispositivos móveis */
-@media (max-width: 768px) {
-    .section-title,
-    #social-title,
-    #partners-title,
-    #about-title,
-    #repertoire-title,
-    #performances-title,
-    #contact-title,
-    section h2,
-    #social-media h2,
-    #partners h2 {
-        color: #d4af37 !important;
-        font-family: 'Georgia', serif;
-        font-size: clamp(1.8rem, 6vw, 2.2rem);
-        text-align: center;
-        margin-bottom: 2rem;
-        position: relative;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-
-    /* Garantir que o decorativo também apareça em todos os títulos em mobile */
-    .section-title::after,
-    #social-title::after,
-    #partners-title::after,
-    #about-title::after,
-    #repertoire-title::after,
-    #performances-title::after,
-    #contact-title::after,
-    section h2::after,
-    #social-media h2::after,
-    #partners h2::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #d4af37, #ffb84c);
-        border-radius: 2px;
-    }
-
-    /* Especificidade alta para sobrescrever qualquer outro estilo em mobile */
-    h2.section-title,
-    h2#social-title,
-    h2#partners-title,
-    h2#about-title,
-    h2#repertoire-title,
-    h2#performances-title,
-    h2#contact-title {
-        color: #d4af37 !important;
-    }
-
-    /* Para garantir que herança não interfira em mobile */
-    #social-media .section-title,
-    #partners .section-title {
-        color: #d4af37 !important;
-    }
-}
-
-/* Ajustes para telas muito pequenas */
-@media (max-width: 480px) {
-    .section-title,
-    #social-title,
-    #partners-title,
-    #about-title,
-    #repertoire-title,
-    #performances-title,
-    #contact-title,
-    section h2 {
-        font-size: clamp(1.6rem, 5vw, 2rem);
-        margin-bottom: 1.8rem;
-    }
-
-    /* Decorativo menor para telas pequenas */
-    .section-title::after,
-    #social-title::after,
-    #partners-title::after,
-    #about-title::after,
-    #repertoire-title::after,
-    #performances-title::after,
-    #contact-title::after,
-    section h2::after,
-    #social-media h2::after,
-    #partners h2::after {
-        width: 50px;
-        height: 2px;
-        bottom: -6px;
-    }
-}
-
-/* Ajustes para telas extra pequenas */
-@media (max-width: 360px) {
-    .section-title,
-    #social-title,
-    #partners-title,
-    #about-title,
-    #repertoire-title,
-    #performances-title,
-    #contact-title,
-    section h2 {
-        font-size: clamp(1.4rem, 4.5vw, 1.8rem);
-        margin-bottom: 1.5rem;
-    }
-
-    /* Decorativo ainda menor para telas extra pequenas */
-    .section-title::after,
-    #social-title::after,
-    #partners-title::after,
-    #about-title::after,
-    #repertoire-title::after,
-    #performances-title::after,
-    #contact-title::after,
-    section h2::after,
-    #social-media h2::after,
-    #partners h2::after {
-        width: 40px;
-        height: 2px;
-        bottom: -5px;
-    }
-}
-
-/* High contrast mode para títulos em mobile */
-@media (prefers-contrast: high) and (max-width: 768px) {
-    .section-title,
-    #social-title,
-    #partners-title,
-    #about-title,
-    #repertoire-title,
-    #performances-title,
-    #contact-title,
-    section h2 {
-        color: #ffff00 !important;
-        text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
-    }
-}
-
-/* Reduced motion para títulos em mobile */
-@media (prefers-reduced-motion: reduce) and (max-width: 768px) {
-    .section-title,
-    #social-title,
-    #partners-title,
-    #about-title,
-    #repertoire-title,
-    #performances-title,
-    #contact-title,
-    section h2 {
-        text-shadow: none;
-        transition: none;
-    }
+        button.addEventListener('touchend', function() {
+            setTimeout(() => {
+                this.classList.remove('touch-active');
+            }, 150);
+        }, { passive: true });
+    });
 }
