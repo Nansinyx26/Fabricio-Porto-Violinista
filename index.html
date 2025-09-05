@@ -156,13 +156,13 @@
                 // Carrega CSS específico para mobile
                 const mobileCss = document.createElement('link');
                 mobileCss.rel = 'stylesheet';
-                mobileCss.href = 'styles_mobile.css';
+                mobileCss.href = 'mobileCss.css';
                 mobileCss.setAttribute('data-mobile-asset', 'true'); // Marca para fácil remoção
                 document.head.appendChild(mobileCss);
 
                 // Carrega JS específico para mobile
                 const mobileJs = document.createElement('script');
-                mobileJs.src = 'script_mobile.js';
+                mobileJs.src = 'mobileJs.js';
                 mobileJs.setAttribute('data-mobile-asset', 'true'); // Marca para fácil remoção
                 // Adiciona ao body para não bloquear o render da página
                 document.body.appendChild(mobileJs); 
@@ -194,9 +194,12 @@
     <meta name="rating" content="general">
     <meta name="distribution" content="global">
     <meta name="revisit-after" content="7 days">
-</head>
+    
+    
+   
 
 <body>
+
     <!-- Background elements -->
     <div class="bg-pattern" aria-hidden="true"></div>
     <div class="wood-texture" aria-hidden="true"></div>
@@ -218,6 +221,7 @@
 
     <!-- Navigation -->
 <nav id="navbar" role="navigation" aria-label="Menu principal">
+    
     <div class="nav-container">
         <a href="https://nansinyx26.github.io/Fabricio-Porto-Violinista/" class="logo">Fabricio - Violinista</a>
         <ul class="nav-links" id="navLinks" role="menubar">
@@ -264,13 +268,15 @@
                 </a>
             </li>
         </ul>
-        <button class="hamburger" id="hamburger" aria-label="Menu de navegação" aria-expanded="false">
+       <button class="hamburger" id="hamburger" aria-label="Menu de navegação" aria-expanded="false">
+         
             <span></span>
             <span></span>
             <span></span>
         </button>
     </div>
 </nav>
+
 
     <!-- AI Assistant Chat Widget -->
     <aside id="aiAssistant" class="ai-assistant" aria-label="Assistente virtual">
@@ -681,8 +687,8 @@
     </style>
 
     <!-- Scripts base (carregados sempre) -->
-    <script src="script.js"></script>
-    <script src="main.js"></script>
+    <script src="script.js" defer></script>
+    <script src="main.js"defer></script>
 
     <!-- Additional SEO and Analytics Scripts -->
 
