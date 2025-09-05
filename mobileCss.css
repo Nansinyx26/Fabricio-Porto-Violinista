@@ -52,7 +52,7 @@
     /* Seções de Grid (Repertório, Apresentações, Parceiros) */
     .repertoire-grid,
     .performance-types,
-    .partners-grid {
+    #partnersGrid {
         grid-template-columns: 1fr; /* Coluna única para grids */
         gap: 1.5rem;
     }
