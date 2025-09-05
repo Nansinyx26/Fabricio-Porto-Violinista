@@ -301,9 +301,10 @@ body.menu-open {
 }
 
 * RESPONSIVIDADE PARA ORIENTAÇÃO */
-@media screen and (orientation: landscape) and (max-height: 500px) {
+@media screen and (orientation: landscape) and (max-width: 768px) 
     .nav-links {
         padding-top: 1rem;
+            display: none; /* escondido por padrão */
     }
     
     .nav-links li {
@@ -314,6 +315,8 @@ body.menu-open {
         padding: 0.8rem 1.5rem;
         font-size: 1.1rem;
     }
+      .nav-links.active {
+    display: flex; /* mostra quando ativo */
 }
 
 
