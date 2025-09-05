@@ -277,6 +277,13 @@ textarea {
     z-index: 1001;
 }
 
+/* PREVENÇÃO DE SCROLL QUANDO MENU ESTÁ ABERTO */
+body.menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
 .hamburger span {
     width: 25px;
     height: 3px;
@@ -285,6 +292,31 @@ textarea {
     transition: 0.3s;
     border-radius: 2px;
 }
+
+/* FOCUS STYLES MELHORADOS */
+.hamburger:focus {
+    outline: 3px solid #d4af37;
+    outline-offset: 3px;
+    background: rgba(212, 175, 55, 0.1);
+}
+
+* RESPONSIVIDADE PARA ORIENTAÇÃO */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    .nav-links {
+        padding-top: 1rem;
+    }
+    
+    .nav-links li {
+        margin: 0.3rem 0;
+    }
+    
+    .nav-links a {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
+    }
+}
+
+
 
 .hamburger.active span:nth-child(1) {
     transform: rotate(-45deg) translate(-5px, 6px);
