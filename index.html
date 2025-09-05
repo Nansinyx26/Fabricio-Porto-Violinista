@@ -156,13 +156,13 @@
                 // Carrega CSS específico para mobile
                 const mobileCss = document.createElement('link');
                 mobileCss.rel = 'stylesheet';
-                mobileCss.href = 'mobileCss.css'; // ALTERADO: de 'styles_mobile.css' para 'mobileCss.css'
+                mobileCss.href = 'styles_mobile.css';
                 mobileCss.setAttribute('data-mobile-asset', 'true'); // Marca para fácil remoção
                 document.head.appendChild(mobileCss);
 
                 // Carrega JS específico para mobile
                 const mobileJs = document.createElement('script');
-                mobileJs.src = 'mobileJs.js'; // ALTERADO: de 'script_mobile.js' para 'mobileJs.js'
+                mobileJs.src = 'script_mobile.js';
                 mobileJs.setAttribute('data-mobile-asset', 'true'); // Marca para fácil remoção
                 // Adiciona ao body para não bloquear o render da página
                 document.body.appendChild(mobileJs); 
