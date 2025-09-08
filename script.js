@@ -124,7 +124,7 @@ function initDOMCache() {
 const aiKnowledgeBase = {
     precos: {
         question: "Quais são os preços dos serviços?",
-        answer: "Os valores variam de acordo com o tipo de evento e duração. Para casamentos: R$ 300-500 (cerimônia), R$ 400-700 (cerimônia + coquetel). Para outros eventos, entre R$ 250-600. Entre em contato para um orçamento personalizado!"
+        answer: "Os valores variam de acordo com o tipo de evento e duração. Para casamentos: R$ 1200 (cerimônia), R$ 2000 (cerimônia + coquetel). Para outros eventos, em contato para um orçamento personalizado!"
     },
     repertorio: {
         question: "Qual é o repertório disponível?",
