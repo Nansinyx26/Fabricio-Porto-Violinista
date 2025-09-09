@@ -221,51 +221,73 @@ textarea {
 .logo:hover {
     color: #ffb84c;
 }
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 2rem;
-}
+/* CORREÇÃO PRINCIPAL: Nav-links centralizados e alinhados para DESKTOP */
+@media (min-width: 769px) {
+    .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2.5rem;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        position: static;
+        transform: none;
+        background: none;
+        height: auto;
+        flex-direction: row;
+        backdrop-filter: none;
+    }
 
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 2rem;
-    justify-content: center; /* Centraliza os itens na horizontal */
-    align-items: center;     /* Centraliza verticalmente (se tiver altura definida) */
-}
-.nav-links a {
-    color: #ffffff !important;   /* preto fixo */
-    text-decoration: none !important; /* remove o sublinhado */
-}
+    .nav-links li {
+        margin: 0;
+        padding: 0;
+        width: auto;
+    }
 
-.nav-links a:visited {
-    color: #ffb84c !important;   /* mantém preto mesmo após visitar */
-}
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        font-weight: 500;
+        font-size: 0.95rem;
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        position: relative;
+        white-space: nowrap;
+        width: auto;
+        justify-content: flex-start;
+    }
 
-.nav-links a:hover {
-    color: #ffb84c !important;   /* tom mais escuro no hover (ou outro de sua escolha) */
-}
+    .nav-links a:visited {
+        color: #ffffff !important;
+    }
 
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #d4af37, #ffb84c);
-    transition: width 0.3s ease;
-}
+    .nav-links a:hover {
+        color: #d4af37 !important;
+        background: rgba(212, 175, 55, 0.1);
+        transform: translateY(-2px);
+    }
 
-.nav-links a:hover::after {
-    width: 100%;
-}
+    .nav-links a:focus {
+        outline: 2px solid #d4af37;
+        outline-offset: 2px;
+    }
 
-.nav-links a:hover {
-    color: #d4af37;
-}
+    .nav-links a i {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
 
+    .nav-links a:hover i {
+        opacity: 1;
+    }
+}
 
 /* Hamburger Menu */
 
@@ -300,12 +322,14 @@ body.menu-open {
     background: rgba(212, 175, 55, 0.1);
 }
 
-* RESPONSIVIDADE PARA ORIENTAÇÃO */
-@media screen and (orientation: landscape) and (max-width: 768px) 
+/* RESPONSIVIDADE PARA ORIENTAÇÃO */
+@media screen and (orientation: landscape) and (max-width: 768px) {
     .nav-links {
         padding-top: 1rem;
-            display: none; /* escondido por padrão */
+        display: none; /* escondido por padrão */
     }
+}
+
     
     .nav-links li {
         margin: 0.3rem 0;
