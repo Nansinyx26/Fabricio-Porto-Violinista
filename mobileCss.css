@@ -2,6 +2,7 @@
    styles_mobile.css - Estilos Otimizados para Dispositivos Móveis
    Este arquivo é carregado condicionalmente apenas em telas menores.
    ========================================================================== */
+   
 
 /* 1. Layout Simples e Vertical */
 /* Aplicações gerais para telas menores que 768px */
@@ -10,7 +11,7 @@
     body {
         overflow-x: hidden;
     }
-
+}
     /* Seção Hero */
     .hero {
         flex-direction: column; /* Conteúdo em coluna */
@@ -634,5 +635,742 @@ body.menu-open {
     section h2 {
         text-shadow: none;
         transition: none;
+    }
+}
+
+
+   /* ==========================================================================
+   CORREÇÃO DA LOGO FP - RESPONSIVA PARA MOBILE
+   Adicione este código ao final do seu mobileCss.css
+   ========================================================================== */
+
+/* Logo responsiva para diferentes tamanhos de tela */
+@media (max-width: 768px) {
+    .fp-musical-note {
+        position: static;
+        transform: none;
+        margin-bottom: 1.5rem;
+        order: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .fp-logo-container {
+        width: clamp(120px, 35vw, 200px);  /* Tamanho muito menor para mobile */
+        height: clamp(120px, 35vw, 200px);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .fp-logo {
+        width: 90%;
+        height: 90%;
+        object-fit: contain;
+        max-width: 180px;  /* Limite máximo para não ficar muito grande */
+        max-height: 180px;
+    }
+
+    /* Ondas sonoras menores em mobile */
+    .pulse-ring {
+        width: 100%;
+        height: 100%;
+        border-width: 1px;  /* Bordas mais finas */
+        opacity: 0.6;       /* Menos opaco */
+    }
+
+    /* Ajustes para a seção hero */
+    .hero {
+        gap: 1rem;
+        padding: 1.5rem 1rem;
+    }
+
+    .hero-content {
+        margin-top: 1rem;
+    }
+}
+
+/* Para telas muito pequenas (iPhone SE, Galaxy S, etc) */
+@media (max-width: 480px) {
+    .fp-logo-container {
+        width: clamp(100px, 30vw, 150px);  /* Ainda menor */
+        height: clamp(100px, 30vw, 150px);
+    }
+
+    .fp-logo {
+        max-width: 140px;
+        max-height: 140px;
+    }
+
+    .fp-musical-note {
+        margin-bottom: 1rem;
+    }
+
+    /* Reduz o espaçamento vertical da hero */
+    .hero {
+        min-height: 85vh;
+        padding: 1rem 0.8rem;
+    }
+}
+
+/* Para telas extra pequenas */
+@media (max-width: 360px) {
+    .fp-logo-container {
+        width: clamp(80px, 25vw, 120px);   /* Muito pequeno */
+        height: clamp(80px, 25vw, 120px);
+    }
+
+    .fp-logo {
+        max-width: 110px;
+        max-height: 110px;
+    }
+
+    /* Desabilita as ondas sonoras em telas muito pequenas para melhor performance */
+    .pulse-ring {
+        display: none;
+    }
+
+    .hero {
+        min-height: 80vh;
+        gap: 0.8rem;
+    }
+}
+
+/* Orientação landscape em mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .fp-logo-container {
+        width: clamp(80px, 20vh, 140px);   /* Usa vh em landscape */
+        height: clamp(80px, 20vh, 140px);
+    }
+
+    .hero {
+        min-height: 100vh;
+        flex-direction: row;  /* Volta para row em landscape */
+        align-items: center;
+    }
+
+    .fp-musical-note {
+        order: 2;
+        margin-bottom: 0;
+        margin-left: 1rem;
+    }
+
+    .hero-content {
+        order: 1;
+        text-align: left;
+        margin-top: 0;
+    }
+}
+
+/* Para dispositivos com altura muito pequena */
+@media (max-height: 500px) {
+    .fp-logo-container {
+        width: clamp(70px, 15vh, 100px);
+        height: clamp(70px, 15vh, 100px);
+    }
+
+    .hero {
+        min-height: 90vh;
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Fallback caso a imagem não carregue */
+.fp-logo[src=""],
+.fp-logo:not([src]),
+.fp-logo[alt]:empty {
+    display: none;
+}
+
+.fp-logo-container:has(.fp-logo[src=""]),
+.fp-logo-container:has(.fp-logo:not([src])) {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(255, 184, 76, 0.1));
+    border-radius: 50%;
+    border: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.fp-logo-container:has(.fp-logo[src=""])::before,
+.fp-logo-container:has(.fp-logo:not([src]))::before {
+    content: "FP";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(2rem, 8vw, 4rem);
+    font-weight: bold;
+    color: #d4af37;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Otimizações de performance para mobile - mantendo animações */
+@media (max-width: 768px) {
+    .fp-logo {
+        will-change: transform;  /* Mantém otimização GPU para transições suaves */
+    }
+    
+    .pulse-ring {
+        animation-duration: 2.5s;  /* Mantém velocidade original */
+        will-change: transform, opacity;  /* Otimiza GPU para animações */
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) and (max-width: 768px) {
+    .fp-logo-container {
+        border: 2px solid #d4af37;
+        background: rgba(0, 0, 0, 0.8);
+    }
+    
+    .pulse-ring {
+        border-color: #ffff00;
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) and (max-width: 768px) {
+    .pulse-ring {
+        animation: none;
+        display: none;
+    }
+    
+    .fp-logo {
+        transition: none;
+    }
+}
+
+/* Correção específica para diferentes densidades de tela */
+@media (-webkit-min-device-pixel-ratio: 2) and (max-width: 768px) {
+    .fp-logo {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Ajuste para notch em dispositivos com tela cheia */
+@supports (padding: max(0px)) {
+    @media (max-width: 768px) {
+        .hero {
+            padding-top: max(1.5rem, env(safe-area-inset-top));
+            padding-left: max(1rem, env(safe-area-inset-left));
+            padding-right: max(1rem, env(safe-area-inset-right));
+        }
+    }
+}
+/* ==========================================================================
+   CORREÇÃO COMPLETA DA LOGO FP - RESPONSIVA PARA MOBILE
+   Solução definitiva para logo saindo da tela
+   ========================================================================== */
+
+/* Primeiro, vamos garantir que a hero section tenha espaço adequado */
+@media (max-width: 768px) {
+    /* Hero section - ajuste fundamental */
+    .hero {
+        min-height: 100vh;
+        padding: 90px 1rem 2rem 1rem;  /* 90px para navbar + espaço extra */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    /* Container da logo - posicionamento seguro */
+    .fp-musical-note {
+        position: relative;
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        margin: 0 auto;
+        order: 1;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .fp-logo-container {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    /* Logo - tamanho controlado */
+    .fp-logo {
+        width: 120px;
+        height: 120px;
+        max-width: 120px;
+        max-height: 120px;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Ondas sonoras - mantidas e ajustadas */
+    .pulse-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        border: 2px solid rgba(212, 175, 55, 0.4);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+        animation: soundwave 2.5s infinite;
+        z-index: 0;
+    }
+
+    .pulse-ring:nth-child(2) {
+        animation-delay: 0.8s;
+    }
+
+    .pulse-ring:nth-child(3) {
+        animation-delay: 1.6s;
+    }
+
+    /* Conteúdo hero */
+    .hero-content {
+        order: 2;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    /* Títulos ajustados */
+    .hero h1 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        margin-bottom: 1rem;
+    }
+
+    .typing-text {
+        font-size: clamp(1rem, 3vw, 1.3rem);
+        margin-bottom: 1rem;
+    }
+
+    .description {
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* Telas pequenas - iPhone, Galaxy S */
+@media (max-width: 480px) {
+    .hero {
+        padding: 85px 1rem 1.5rem 1rem;
+        gap: 1rem;
+    }
+
+    .fp-musical-note {
+        max-width: 160px;
+    }
+
+    .fp-logo-container {
+        width: 120px;
+        height: 120px;
+    }
+
+    .fp-logo {
+        width: 100px;
+        height: 100px;
+        max-width: 100px;
+        max-height: 100px;
+    }
+}
+
+/* Telas muito pequenas - iPhone SE */
+@media (max-width: 360px) {
+    .hero {
+        padding: 80px 0.8rem 1rem 0.8rem;
+        gap: 0.8rem;
+    }
+
+    .fp-musical-note {
+        max-width: 120px;
+    }
+
+    .fp-logo-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .fp-logo {
+        width: 85px;
+        height: 85px;
+        max-width: 85px;
+        max-height: 85px;
+    }
+
+    .pulse-ring {
+        border-width: 1px;
+        opacity: 0.6;
+    }
+}
+
+/* Orientação landscape em mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        flex-direction: row;
+        padding: 85px 1rem 1rem 1rem;
+        text-align: left;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .fp-musical-note {
+        order: 2;
+        max-width: 140px;
+        margin: 0;
+    }
+
+    .fp-logo-container {
+        width: 120px;
+        height: 120px;
+    }
+
+    .fp-logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .hero-content {
+        order: 1;
+        text-align: left;
+        max-width: 60%;
+    }
+}
+
+/* Para dispositivos com altura muito pequena */
+@media (max-height: 600px) {
+    .hero {
+        padding: 70px 1rem 1rem 1rem;
+    }
+
+    .fp-logo-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .fp-logo {
+        width: 85px;
+        height: 85px;
+    }
+}
+
+/* Correção específica para navbar fixa */
+@media (max-width: 768px) {
+    #navbar {
+        height: 70px;  /* Altura fixa da navbar */
+        z-index: 1000;
+    }
+
+    .nav-container {
+        height: 70px;
+        align-items: center;
+    }
+}
+
+/* Fallback caso a imagem não carregue */
+.fp-logo[src=""],
+.fp-logo:not([src]) {
+    display: none;
+}
+
+.fp-logo-container:has(.fp-logo[src=""]):before,
+.fp-logo-container:has(.fp-logo:not([src])):before {
+    content: "FP";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #d4af37;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+/* Animação das ondas sonoras - FIXA para não interferir */
+@keyframes soundwaveMobile {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5) !important;
+        opacity: 0.8;
+    }
+    70% {
+        transform: translate(-50%, -50%) scale(1.5) !important;
+        opacity: 0.2;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.8) !important;
+        opacity: 0;
+    }
+}
+
+/* CORREÇÃO CRÍTICA - Sobrescreve estilos do desktop */
+@media (max-width: 768px) {
+    /* Remove qualquer estilo conflitante */
+    .fp-logo,
+    .fp-logo-container,
+    .fp-musical-note {
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+
+    /* Garante que as ondas não afetem o layout */
+    .pulse-ring {
+        will-change: opacity !important;
+        contain: layout style paint !important;
+    }
+
+    /* Remove hover effects que podem causar mudanças */
+    .fp-logo:hover,
+    .fp-logo-container:hover,
+    .fp-musical-note:hover {
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* Otimizações de performance */
+@media (max-width: 768px) {
+    .fp-logo {
+        will-change: transform;
+    }
+    
+    .pulse-ring {
+        will-change: transform, opacity;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) and (max-width: 768px) {
+    .fp-logo-container {
+        border: 2px solid #d4af37;
+        background: rgba(0, 0, 0, 0.8);
+    }
+    
+    .pulse-ring {
+        border-color: #ffff00;
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) and (max-width: 768px) {
+    .pulse-ring {
+        animation: none;
+        opacity: 0.3;
+    }
+    
+    .fp-logo {
+        transition: none;
+    }
+}
+
+/* ==========================================================================
+   CORREÇÃO LOGO FP - TAMANHO REDUZIDO PARA MOBILE
+   Adicione este código ao seu mobileCss.css (substitui as regras existentes)
+   ========================================================================== */
+
+/* Logo muito menor para dispositivos móveis */
+@media (max-width: 768px) {
+    .fp-musical-note {
+        position: static;
+        transform: none;
+        margin-bottom: 1rem;
+        order: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .fp-logo-container {
+        width: 80px;  /* Tamanho bem pequeno */
+        height: 80px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .fp-logo {
+        width: 70px;   /* Logo ainda menor */
+        height: 70px;
+        max-width: 70px;
+        max-height: 70px;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Ondas sonoras menores e mais sutis */
+    .pulse-ring {
+        width: 100%;
+        height: 100%;
+        border: 1px solid rgba(212, 175, 55, 0.3);  /* Mais sutil */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+        animation: soundwave 3s infinite;  /* Mais lento */
+        z-index: 0;
+    }
+
+    .pulse-ring:nth-child(2) {
+        animation-delay: 1s;
+    }
+
+    .pulse-ring:nth-child(3) {
+        animation-delay: 2s;
+    }
+
+    /* Ajustes da seção hero */
+    .hero {
+        padding: 80px 1rem 2rem 1rem;
+        gap: 1rem;
+    }
+
+    .hero-content {
+        order: 2;
+        margin-top: 0.5rem;
+    }
+}
+
+/* Para telas pequenas (iPhone, Galaxy S) - AINDA MENOR */
+@media (max-width: 480px) {
+    .fp-logo-container {
+        width: 60px;   /* Muito pequeno */
+        height: 60px;
+    }
+
+    .fp-logo {
+        width: 50px;   /* Logo bem pequena */
+        height: 50px;
+        max-width: 50px;
+        max-height: 50px;
+    }
+
+    .fp-musical-note {
+        margin-bottom: 0.8rem;
+    }
+
+    .hero {
+        gap: 0.8rem;
+        padding: 75px 1rem 1.5rem 1rem;
+    }
+}
+
+/* Para telas muito pequenas (iPhone SE) - MÍNIMO */
+@media (max-width: 360px) {
+    .fp-logo-container {
+        width: 45px;   /* Tamanho mínimo */
+        height: 45px;
+    }
+
+    .fp-logo {
+        width: 40px;   /* Logo mínima */
+        height: 40px;
+        max-width: 40px;
+        max-height: 40px;
+    }
+
+    /* Desabilita ondas para economizar espaço */
+    .pulse-ring {
+        display: none;
+    }
+
+    .hero {
+        gap: 0.6rem;
+        padding: 70px 0.8rem 1rem 0.8rem;
+    }
+
+    .fp-musical-note {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Para dispositivos em landscape - mantém pequeno */
+@media (max-width: 768px) and (orientation: landscape) {
+    .fp-logo-container {
+        width: 50px;
+        height: 50px;
+    }
+
+    .fp-logo {
+        width: 45px;
+        height: 45px;
+    }
+
+    .hero {
+        flex-direction: row;
+        text-align: left;
+        justify-content: space-between;
+        align-items: center;
+        padding: 70px 1rem;
+    }
+
+    .fp-musical-note {
+        order: 2;
+        margin: 0;
+    }
+
+    .hero-content {
+        order: 1;
+        max-width: 65%;
+    }
+}
+
+/* Fallback caso a imagem não carregue */
+.fp-logo[src=""],
+.fp-logo:not([src]) {
+    display: none;
+}
+
+.fp-logo-container:has(.fp-logo[src=""]):before,
+.fp-logo-container:has(.fp-logo:not([src])):before {
+    content: "FP";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;  /* Texto menor também */
+    font-weight: bold;
+    color: #d4af37;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+/* Otimizações de performance */
+@media (max-width: 768px) {
+    .fp-logo {
+        will-change: transform;
+    }
+    
+    .pulse-ring {
+        will-change: transform, opacity;
+    }
+    
+    /* Remove transformações desnecessárias */
+    .fp-logo:hover,
+    .fp-logo-container:hover,
+    .fp-musical-note:hover {
+        transform: none !important;
     }
 }
