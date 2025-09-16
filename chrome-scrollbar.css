@@ -1,0 +1,171 @@
+/* =========================
+   BARRA DE ROLAGEM ESPECÍFICA PARA GOOGLE CHROME
+   ========================= */
+
+/* Detectar especificamente o Chrome e adicionar scrollbar horizontal */
+@supports (-webkit-appearance: none) {
+    /* Esta regra só funciona em navegadores WebKit (Chrome, Safari, Edge Chromium) */
+    
+    /* Scrollbar horizontal para a navegação no Chrome */
+    .nav-links {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(212, 175, 55, 0.5) transparent;
+    }
+    
+    /* Desktop: Scrollbar horizontal apenas se necessário */
+    @media (min-width: 769px) {
+        .nav-links {
+            overflow-x: auto;
+            overflow-y: visible;
+            white-space: nowrap;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            padding-right: 20px; /* Espaço extra para scroll */
+        }
+        
+        .nav-links li {
+            flex-shrink: 0; /* Previne compressão dos itens */
+            min-width: max-content; /* Garante que o texto não quebre */
+        }
+    }
+    
+    /* Customizar scrollbar do WebKit (Chrome) */
+    .nav-links::-webkit-scrollbar {
+        height: 8px; /* Altura da scrollbar horizontal */
+        width: 8px; /* Largura para scrollbar vertical (caso necessário) */
+    }
+    
+    .nav-links::-webkit-scrollbar-track {
+        background: rgba(26, 26, 26, 0.3);
+        border-radius: 4px;
+    }
+    
+    .nav-links::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #d4af37, #ffb84c);
+        border-radius: 4px;
+        border: 1px solid rgba(26, 26, 26, 0.2);
+    }
+    
+    .nav-links::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #ffb84c, #d4af37);
+        box-shadow: 0 2px 4px rgba(212, 175, 55, 0.3);
+    }
+    
+    .nav-links::-webkit-scrollbar-corner {
+        background: rgba(26, 26, 26, 0.3);
+    }
+}
+
+/* Alternativa adicional: Detectar Chrome especificamente via CSS hack */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    /* Esta regra é específica para navegadores WebKit */
+    
+    .nav-container {
+        position: relative;
+    }
+    
+    /* Desktop Chrome: Garantir que todos os itens sejam visíveis */
+    @media (min-width: 769px) {
+        .nav-links {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            
+            /* Melhorar a experiência de scroll */
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x proximity;
+        }
+        
+        .nav-links li {
+            scroll-snap-align: start;
+        }
+        
+        /* Indicador visual de scroll (opcional) */
+        .nav-links::after {
+            content: '→';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(212, 175, 55, 0.7);
+            font-size: 14px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links:hover::after {
+            opacity: 1;
+        }
+        
+        /* Esconder indicador quando não há overflow */
+        .nav-links:not([scrollWidth]) ::after {
+            display: none;
+        }
+    }
+}
+
+/* Fallback para navegadores não-WebKit */
+@supports not (-webkit-appearance: none) {
+    .nav-links {
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #d4af37 transparent;
+    }
+}
+
+/* =========================
+   JAVASCRIPT HELPER PARA DETECÇÃO DO CHROME
+   ========================= */
+
+/* Adicione esta classe via JavaScript se for Chrome */
+.chrome-browser .nav-links {
+    overflow-x: auto !important;
+    scroll-behavior: smooth;
+}
+
+.chrome-browser .nav-links::-webkit-scrollbar {
+    height: 6px;
+}
+
+.chrome-browser .nav-links::-webkit-scrollbar-track {
+    background: rgba(26, 26, 26, 0.5);
+    border-radius: 3px;
+}
+
+.chrome-browser .nav-links::-webkit-scrollbar-thumb {
+    background: #d4af37;
+    border-radius: 3px;
+    transition: background 0.3s ease;
+}
+
+.chrome-browser .nav-links::-webkit-scrollbar-thumb:hover {
+    background: #ffb84c;
+}
+
+/* =========================
+   RESPONSIVIDADE DA SCROLLBAR
+   ========================= */
+
+/* Em telas menores, scrollbar mais fina */
+@media (max-width: 1200px) and (-webkit-min-device-pixel-ratio: 0) {
+    .nav-links::-webkit-scrollbar {
+        height: 4px;
+    }
+}
+
+/* Em telas muito pequenas, esconder scrollbar mas manter funcionalidade */
+@media (max-width: 480px) and (-webkit-min-device-pixel-ratio: 0) {
+    .nav-links {
+        -ms-overflow-style: none;  /* IE e Edge */
+        scrollbar-width: none;     /* Firefox */
+    }
+    
+    .nav-links::-webkit-scrollbar {
+        display: none; /* Chrome, Safari e Opera */
+    }
+}
