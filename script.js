@@ -460,7 +460,7 @@ function generateAIResponse(userMessage) {
         return "Olá! Seja bem-vindo(a)! Sou o assistente do Fabricio Porto. Posso ajudar com informações sobre apresentações, repertório, preços e disponibilidade. Como posso ajudar você?";
     }
 
-    if (message.includes('obrigad') || message.includes('valeu')) {
+    if (message.includes('obrigado') || message.includes('valeu')) {
         return "Por nada! Foi um prazer ajudar. Se tiver mais dúvidas ou quiser agendar uma apresentação, entre em contato diretamente com o Fabricio!";
     }
 
@@ -804,5 +804,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { passive: true });
     });
 });
+// =========================
+// DETECÇÃO ESPECÍFICA DO CHROME E SCROLLBAR
+// =========================
 
+// Detectar se é Chrome
+function isChrome() {
+    return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+}
 
+// Aplicar classe específica para Chrome
+if (isChrome()) {
+    document.documentElement.classList.add('chrome-browser');
+    
+    // Função para verificar se precisa de scroll na navegação
+    function checkNavScroll() {
+        const navLinks = document.querySelector('.nav-links');
+        if (navLinks && window.innerWidth > 768) {
+            const isOverflowing = navLinks.scrollWidth > navLinks.clientWidth;
+            navLinks.classList.toggle('has-overflow', isOverflowing);
+        }
+    }
+    
+    // Verificar no load e resize
+    window.addEventListener('load', checkNavScroll);
+    window.addEventListener('resize', checkNavScroll);
+}
