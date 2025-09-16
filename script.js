@@ -199,11 +199,13 @@ function initializeComponents() {
 
 function initializeTypingEffect() {
     const typingTexts = [
-       "Violinista Especializado ",
-        "Qualidade musical para o seu evento de forma personalizada e tocante",
+        "Violinista Especializado ",
+        "Ad libitum Musician",
         "Artista Apaixonado",
         "Professor Dedicado",
-        "Músico Profissional"
+        "Músico Profissional",
+        "Assessor Musical "
+
     ];
 
     let textIndex = 0;
@@ -802,4 +804,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { passive: true });
     });
 });
+
 
