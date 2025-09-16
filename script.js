@@ -199,7 +199,8 @@ function initializeComponents() {
 
 function initializeTypingEffect() {
     const typingTexts = [
-        "Violinista ",
+       "Violinista Especializado ",
+        "Qualidade musical para o seu evento de forma personalizada e tocante",
         "Artista Apaixonado",
         "Professor Dedicado",
         "Músico Profissional"
@@ -801,3 +802,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { passive: true });
     });
 });
+
