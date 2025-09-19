@@ -830,3 +830,347 @@ if (isChrome()) {
     window.addEventListener('load', checkNavScroll);
     window.addEventListener('resize', checkNavScroll);
 }
+// ===== JAVASCRIPT PARA MARCA D'ÁGUA NANDEV =====
+// Adicione este código ao final do seu arquivo script.js
+
+class NandevWatermark {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createWatermark();
+        this.setupEventListeners();
+        this.createGeometricParticles();
+        console.log('🔥 NanDev Watermark Initialized');
+    }
+
+    createWatermark() {
+        // Verificar se já existe
+        if (document.querySelector('.nandev-watermark')) return;
+
+        const watermark = document.createElement('a');
+        watermark.href = 'https://www.linkedin.com/in/renan-de-oliveira-farias-66a9b412b/';
+        watermark.target = '_blank';
+        watermark.rel = 'noopener noreferrer';
+        watermark.className = 'nandev-watermark';
+        
+        watermark.innerHTML = `
+            <div class="holographic-overlay"></div>
+            <div class="geometric-particles" id="particles"></div>
+            
+            <div class="cube-container">
+                <div class="wireframe-cube">
+                    <div class="cube-face front">
+                        <div class="wireframe-lines">
+                            <div class="inner-line horizontal-line line-1"></div>
+                            <div class="inner-line horizontal-line line-2"></div>
+                            <div class="inner-line horizontal-line line-3"></div>
+                        </div>
+                    </div>
+                    <div class="cube-face back">
+                        <div class="wireframe-lines">
+                            <div class="inner-line vertical-line v-line-1"></div>
+                            <div class="inner-line vertical-line v-line-2"></div>
+                            <div class="inner-line vertical-line v-line-3"></div>
+                        </div>
+                    </div>
+                    <div class="cube-face right">
+                        <div class="wireframe-lines">
+                            <div class="inner-line horizontal-line line-1"></div>
+                            <div class="inner-line horizontal-line line-3"></div>
+                        </div>
+                    </div>
+                    <div class="cube-face left">
+                        <div class="wireframe-lines">
+                            <div class="inner-line vertical-line v-line-1"></div>
+                            <div class="inner-line vertical-line v-line-3"></div>
+                        </div>
+                    </div>
+                    <div class="cube-face top">
+                        <div class="wireframe-lines">
+                            <div class="inner-line horizontal-line line-2"></div>
+                        </div>
+                    </div>
+                    <div class="cube-face bottom">
+                        <div class="wireframe-lines">
+                            <div class="inner-line vertical-line v-line-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <span class="watermark-text">
+                Desenvolvido por <span class="watermark-highlight">Nan</span>dev
+            </span>
+            <span class="code-symbol">&lt;/&gt;</span>
+        `;
+
+        document.body.appendChild(watermark);
+    }
+
+    setupEventListeners() {
+        // Event listener para clique
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.nandev-watermark')) {
+                e.preventDefault();
+                this.activateMatrix(e.target.closest('.nandev-watermark'));
+                // Ainda permitir navegação após efeito
+                setTimeout(() => {
+                    window.open('https://www.linkedin.com/in/renan-de-oliveira-farias-66a9b412b/', '_blank');
+                }, 2000);
+            }
+        });
+
+        // Efeito de mouse 3D
+        document.addEventListener('mousemove', (e) => {
+            const watermark = document.querySelector('.nandev-watermark');
+            if (!watermark) return;
+
+            const cube = watermark.querySelector('.wireframe-cube');
+            if (!cube) return;
+            
+            const rect = watermark.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const deltaX = (e.clientX - centerX) / 100;
+            const deltaY = (e.clientY - centerY) / 100;
+            
+            // Usar GSAP se disponível, senão CSS puro
+            if (typeof gsap !== 'undefined') {
+                gsap.to(cube, {
+                    rotationX: deltaY * 5,
+                    rotationY: deltaX * 5,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+            } else {
+                cube.style.transform = `rotateX(${deltaY * 5}deg) rotateY(${deltaX * 5}deg)`;
+            }
+        });
+
+        // Controle de teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && e.ctrlKey) {
+                e.preventDefault();
+                const watermark = document.querySelector('.nandev-watermark');
+                if (watermark) {
+                    this.activateMatrix(watermark);
+                }
+            }
+        });
+    }
+
+    createGeometricParticles() {
+        const container = document.getElementById('particles');
+        if (!container) return;
+        
+        // Limpar partículas existentes
+        container.innerHTML = '';
+        
+        const particleCount = 6;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.animationDelay = (i * 0.5) + 's';
+            particle.style.background = `hsl(${180 + i * 20}, 100%, 60%)`;
+            container.appendChild(particle);
+        }
+    }
+
+    activateMatrix(element) {
+        const cube = element.querySelector('.wireframe-cube');
+        const faces = element.querySelectorAll('.cube-face');
+        const particles = element.querySelectorAll('.particle');
+        const text = element.querySelector('.watermark-text');
+        
+        if (!cube || !faces || !text) return;
+
+        // Usar GSAP se disponível, senão fallback CSS
+        if (typeof gsap !== 'undefined') {
+            // Animação com GSAP
+            gsap.set(cube, { animation: 'none' });
+            gsap.to(cube, {
+                rotationX: 720,
+                rotationY: 720,
+                rotationZ: 360,
+                duration: 1.5,
+                ease: 'power2.inOut'
+            });
+
+            gsap.to(text, {
+                scale: 1.05,
+                textShadow: '0 0 10px rgba(0, 255, 136, 0.8)',
+                duration: 0.3
+            });
+
+            // Reset após animação
+            gsap.to(cube, {
+                rotationX: 0,
+                rotationY: 0,
+                rotationZ: 0,
+                duration: 0.5,
+                delay: 1.5,
+                ease: 'power2.out',
+                onComplete: () => {
+                    cube.style.animation = 'cubeRotate 8s ease-in-out infinite';
+                }
+            });
+
+            gsap.to(text, {
+                scale: 1,
+                textShadow: 'none',
+                duration: 0.3,
+                delay: 1.8
+            });
+
+        } else {
+            // Fallback CSS puro
+            cube.style.animation = 'cubeRotate 1s ease-in-out 2';
+            text.style.transform = 'scale(1.05)';
+            text.style.textShadow = '0 0 10px rgba(0, 255, 136, 0.8)';
+            text.style.transition = 'all 0.3s ease';
+            
+            setTimeout(() => {
+                cube.style.animation = 'cubeRotate 8s ease-in-out infinite';
+                text.style.transform = 'scale(1)';
+                text.style.textShadow = 'none';
+            }, 2000);
+        }
+        
+        // Intensificar faces do cubo
+        faces.forEach((face, index) => {
+            const colors = [
+                '0,255,136',    // primary
+                '0,153,255',    // secondary  
+                '255,0,136',    // accent
+                '0,255,136',    // left
+                '255,107,53',   // top
+                '196,76,255'    // bottom
+            ];
+            
+            const originalShadow = face.style.boxShadow;
+            face.style.boxShadow = `inset 0 0 20px rgba(${colors[index]}, 0.8)`;
+            face.style.borderWidth = '2px';
+            
+            setTimeout(() => {
+                face.style.boxShadow = originalShadow;
+                face.style.borderWidth = '1px';
+            }, 1500);
+        });
+        
+        // Acelerar partículas
+        particles.forEach(particle => {
+            const originalAnimation = particle.style.animation;
+            particle.style.animation = 'particleOrbit 2s linear infinite';
+            
+            setTimeout(() => {
+                particle.style.animation = originalAnimation || 'particleOrbit 6s linear infinite';
+            }, 2000);
+        });
+        
+        // Criar mini explosão 3D
+        this.createMini3DExplosion(element);
+    }
+
+    createMini3DExplosion(container) {
+        const explosionCount = 8;
+        const cubeContainer = container.querySelector('.cube-container');
+        if (!cubeContainer) return;
+        
+        for (let i = 0; i < explosionCount; i++) {
+            const fragment = document.createElement('div');
+            fragment.style.position = 'absolute';
+            fragment.style.width = '2px';
+            fragment.style.height = '2px';
+            fragment.style.background = `hsl(${i * 45}, 100%, 60%)`;
+            fragment.style.borderRadius = '50%';
+            fragment.style.left = '50%';
+            fragment.style.top = '50%';
+            fragment.style.zIndex = '20';
+            fragment.style.boxShadow = '0 0 5px currentColor';
+            
+            const angle = (i / explosionCount) * Math.PI * 2;
+            const distance = 15;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+            
+            cubeContainer.appendChild(fragment);
+            
+            // Usar GSAP se disponível
+            if (typeof gsap !== 'undefined') {
+                gsap.fromTo(fragment, 
+                    {
+                        scale: 0,
+                        opacity: 1,
+                        x: -1,
+                        y: -1
+                    },
+                    {
+                        scale: 1,
+                        opacity: 0,
+                        x: x * 1.5,
+                        y: y * 1.5,
+                        duration: 1,
+                        ease: 'power2.out',
+                        onComplete: () => fragment.remove()
+                    }
+                );
+            } else {
+                // Fallback com CSS animations
+                fragment.animate([
+                    {
+                        transform: 'translate(-50%, -50%) scale(0)',
+                        opacity: 1
+                    },
+                    {
+                        transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(1)`,
+                        opacity: 0.7
+                    },
+                    {
+                        transform: `translate(-50%, -50%) translate(${x * 1.5}px, ${y * 1.5}px) scale(0)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: 1000,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+                
+                setTimeout(() => fragment.remove(), 1000);
+            }
+        }
+    }
+
+    // Recriar partículas periodicamente
+    recreateParticles() {
+        setInterval(() => {
+            this.createGeometricParticles();
+        }, 15000);
+    }
+}
+
+// Integração com o sistema existente
+document.addEventListener('DOMContentLoaded', () => {
+    // Aguardar um pouco para garantir que tudo carregou
+    setTimeout(() => {
+        const nandevWatermark = new NandevWatermark();
+        nandevWatermark.recreateParticles();
+    }, 1000);
+});
+
+// Fallback caso DOMContentLoaded já tenha disparado
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            const nandevWatermark = new NandevWatermark();
+            nandevWatermark.recreateParticles();
+        }, 1000);
+    });
+} else {
+    setTimeout(() => {
+        const nandevWatermark = new NandevWatermark();
+        nandevWatermark.recreateParticles();
+    }, 1000);
+}
