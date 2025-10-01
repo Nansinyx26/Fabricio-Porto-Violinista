@@ -833,6 +833,113 @@
         </div>
     </section>
 
+     <!-- Formulario Section -->
+       <section id="contact-form" class="section-observer" aria-labelledby="contact-form-title">
+    <div class="contact-form-container">
+        <div class="section-header">
+            <i class="fas fa-paper-plane" aria-hidden="true"></i>
+            <h2 id="contact-form-title" class="section-title">Envie sua Mensagem</h2>
+            <p class="subtitle">Preencha o formulário abaixo e entraremos em contato o mais breve possível</p>
+        </div>
+
+        <form class="contact-form" id="contactForm" action="#" method="POST">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fullName">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        Nome Completo
+                    </label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        name="fullName" 
+                        placeholder="Seu nome"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="company">
+                        <i class="fas fa-building" aria-hidden="true"></i>
+                        Empresa
+                    </label>
+                    <input 
+                        type="text" 
+                        id="company" 
+                        name="company" 
+                        placeholder="Nome da empresa"
+                    >
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope" aria-hidden="true"></i>
+                        Email
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="seu@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">
+                        <i class="fas fa-phone" aria-hidden="true"></i>
+                        Telefone
+                    </label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="(XX) XXXXX-XXXX"
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="product">
+                    <i class="fas fa-tag" aria-hidden="true"></i>
+                    Produto de Interesse
+                </label>
+                <select id="product" name="product" required>
+                    <option value="" disabled selected>Selecione um produto</option>
+                    <option value="casamento">Casamento</option>
+                    <option value="debutante">Festa de Debutantes</option>
+                    <option value="aniversario">Aniversário</option>
+                    <option value="recepcao">Recepção</option>
+                    <option value="jantar">Jantar de Gala</option>
+                    <option value="funeral">Funeral Religioso</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">
+                    <i class="fas fa-comment-dots" aria-hidden="true"></i>
+                    Mensagem
+                </label>
+                <textarea 
+                    id="message" 
+                    name="message" 
+                    rows="5" 
+                    placeholder="Descreva sua necessidade..."
+                    required
+                ></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                Enviar Mensagem
+            </button>
+        </form>
+    </div>
+</section>
+
     <footer role="contentinfo">
         <p>&copy; 2025 Fabricio Porto - Violinista. Todos os direitos reservados.</p>
         <p>Criando momentos únicos através da música clássica.</p>
@@ -982,6 +1089,8 @@
     <!-- Scripts base (carregados sempre) -->
     <script src="script.js" defer></script>
     <script src="main.js" defer></script>
+    <script src="contact-form-email.js"></script>
+    
 
 </body>
 </html>
