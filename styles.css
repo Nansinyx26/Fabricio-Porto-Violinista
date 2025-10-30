@@ -992,75 +992,504 @@
             background: linear-gradient(45deg, transparent 30%, rgba(212, 175, 55, 0.1) 50%, transparent 70%);
             pointer-events: none;
         }
-        /* =========================
-   SEÇÃO REPERTÓRIO - CORRIGIDA
+      /* =========================
+   SEÇÃO REPERTÓRIO
    ========================= */
-        
-        .repertoire-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .repertoire-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 15px;
-            padding: clamp(1.2rem, 2.5vw, 1.5rem);
-            text-align: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        
-        .repertoire-card:hover {
-            transform: translateY(-5px);
-            border-color: #d4af37;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-        }
-        
-        .card-icon {
-            width: clamp(45px, 10vw, 55px);
-            height: clamp(45px, 10vw, 55px);
-            background: linear-gradient(135deg, #d4af37, #ffb84c);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.2rem;
-        }
-        
-        .card-icon i {
-            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
-            color: #1a1a1a;
-        }
-        
-        .repertoire-card h3 {
-            color: #d4af37;
-            margin-bottom: 1.2rem;
-            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
-        }
-        
-        .repertoire-card ul {
-            list-style: none;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .repertoire-card li {
-            padding: 0.4rem 0;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            transition: color 0.3s ease;
-            font-size: clamp(0.8rem, 2vw, 0.9rem);
-        }
-        
-        .repertoire-card li:last-child {
-            border-bottom: none;
-        }
-        
-        .repertoire-card li:hover {
-            color: #d4af37;
-        }
+
+#repertoire {
+    padding: clamp(3rem, 6vw, 5rem) 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Barra de Pesquisa */
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+    padding: 0 1rem;
+}
+
+.search-box {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 3.5rem 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 50px;
+    color: #fff;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.search-input:focus {
+    border-color: #d4af37;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1), 0 4px 20px rgba(212, 175, 55, 0.2);
+}
+
+.search-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #d4af37, #ffb84c);
+    border: none;
+    border-radius: 50%;
+    color: #1a1a1a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.search-button:hover {
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.search-button:active {
+    transform: translateY(-50%) scale(0.98);
+}
+
+/* Autocomplete */
+.autocomplete-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: rgba(26, 26, 26, 0.98);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.autocomplete-list.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+.autocomplete-item {
+    padding: 1rem 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item i {
+    color: #d4af37;
+    font-size: 0.9rem;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active {
+    background: rgba(212, 175, 55, 0.1);
+    color: #d4af37;
+}
+
+.autocomplete-item mark {
+    background: rgba(212, 175, 55, 0.3);
+    color: #ffb84c;
+    padding: 0 0.2rem;
+    border-radius: 3px;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Grid de Músicas */
+.music-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.music-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.music-card:hover {
+    transform: translateY(-8px);
+    border-color: #d4af37;
+    box-shadow: 0 12px 35px rgba(212, 175, 55, 0.2);
+}
+
+.music-thumbnail {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.music-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.music-card:hover .music-thumbnail img {
+    transform: scale(1.05);
+}
+
+.play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.music-card:hover .play-overlay {
+    opacity: 1;
+}
+
+.play-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(212, 175, 55, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+    font-size: 1.5rem;
+    transform: scale(0.9);
+    transition: all 0.3s ease;
+}
+
+.music-card:hover .play-icon {
+    transform: scale(1);
+    background: #d4af37;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.music-info {
+    padding: 1.2rem;
+}
+
+.music-title {
+    color: #d4af37;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Mensagem de Nenhum Resultado */
+.no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.no-results i {
+    font-size: 4rem;
+    color: rgba(212, 175, 55, 0.3);
+    margin-bottom: 1rem;
+}
+
+.no-results p {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* Modal do Vídeo */
+.video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.video-modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.video-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease;
+}
+
+.video-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    background: rgba(26, 26, 26, 0.95);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    animation: scaleIn 0.4s ease;
+    z-index: 1;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.video-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    background: rgba(212, 175, 55, 0.9);
+    border: none;
+    border-radius: 50%;
+    color: #1a1a1a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.video-close-btn:hover {
+    background: #d4af37;
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.5);
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    background: #000;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.video-info {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.video-info h3 {
+    color: #d4af37;
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .music-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .search-input {
+        font-size: 16px; /* Previne zoom no iOS */
+        padding: 0.9rem 3rem 0.9rem 1.2rem;
+    }
+
+    .search-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .video-modal-content {
+        max-width: 95%;
+        border-radius: 15px;
+    }
+
+    .video-close-btn {
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+
+    .video-info h3 {
+        font-size: 1.1rem;
+    }
+
+    .autocomplete-list {
+        max-height: 250px;
+    }
+
+    .autocomplete-item {
+        padding: 0.8rem 1rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .music-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    .search-container {
+        padding: 0 0.5rem;
+    }
+
+    .video-info {
+        padding: 1rem;
+    }
+
+    .video-info h3 {
+        font-size: 1rem;
+    }
+}
+
+/* Scrollbar customizada para autocomplete */
+.autocomplete-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.autocomplete-list::-webkit-scrollbar-track {
+    background: rgba(26, 26, 26, 0.5);
+    border-radius: 10px;
+}
+
+.autocomplete-list::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.5);
+    border-radius: 10px;
+}
+
+.autocomplete-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 175, 55, 0.7);
+}
+
+/* Prevenção de scroll quando modal aberto */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .music-card {
+        border: 2px solid #d4af37;
+    }
+
+    .search-input {
+        border: 2px solid #d4af37;
+    }
+
+    .autocomplete-list {
+        border: 2px solid #d4af37;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .music-card,
+    .video-modal,
+    .video-modal-content,
+    .autocomplete-list,
+    .play-icon {
+        animation: none;
+        transition: none;
+    }
+
+    .music-card:hover {
+        transform: none;
+    }
+}
         /* =========================
    SEÇÃO APRESENTAÇÕES - CORRIGIDA
    ========================= */
