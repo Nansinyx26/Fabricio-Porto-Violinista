@@ -370,21 +370,63 @@
             </div>
         </section>
 
-        <!-- Repertório Section -->
-        <section id="repertoire" class="section-observer" aria-labelledby="repertoire-title">
-            <h2 id="repertoire-title" class="section-title">Repertório Musical</h2>
-            <div class="repertoire-grid" role="list">
-                <article class="repertoire-card" role="listitem">
-                    <div class="card-icon" aria-hidden="true">
-                        <i class="bi bi-music-note-list"></i>
-                    </div>
-                    <h3>Do erudito ao popular</h3>
-                    <ul>
-                        <li>Pachelbel - Canon</li>
-                    </ul>
-                </article>
+       <!-- Repertório Section -->
+<section id="repertoire" class="section-observer" aria-labelledby="repertoire-title">
+    <h2 id="repertoire-title" class="section-title">Repertório Musical</h2>
+    
+    <!-- Barra de Pesquisa -->
+    <div class="search-container">
+        <div class="search-box">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="Pesquisar música..."
+                autocomplete="off"
+                aria-label="Pesquisar no repertório"
+            >
+            <button class="search-button" aria-label="Buscar">
+                <i class="fas fa-search"></i>
+            </button>
+            <div id="autocompleteList" class="autocomplete-list" role="listbox"></div>
+        </div>
+    </div>
+
+    <!-- Grid de Músicas -->
+    <div class="music-grid" id="musicGrid" role="list">
+        <!-- Os cards serão inseridos dinamicamente pelo JavaScript -->
+    </div>
+
+    <!-- Mensagem de "Nenhum resultado" -->
+    <div class="no-results" id="noResults" style="display: none;">
+        <i class="fas fa-music-slash"></i>
+        <p>Nenhuma música encontrada</p>
+    </div>
+
+    <!-- Player de Vídeo Modal -->
+    <div id="videoModal" class="video-modal" aria-hidden="true">
+        <div class="video-modal-overlay"></div>
+        <div class="video-modal-content">
+            <button class="video-close-btn" id="closeVideo" aria-label="Fechar vídeo">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="video-wrapper">
+                <iframe 
+                    id="videoPlayer" 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen
+                    title="Player de vídeo do YouTube"
+                ></iframe>
             </div>
-        </section>
+            <div class="video-info">
+                <h3 id="videoTitle"></h3>
+            </div>
+        </div>
+    </div>
+</section>
 
         <!-- Performances Section -->
         <section id="performances" class="section-observer" aria-labelledby="performances-title">
@@ -811,6 +853,7 @@
     <script src="script.js" defer></script>
     <script src="main.js" defer></script>
     <script src="contact-form-email.js"></script>
+    <script src="video-Repertorio.js"></script>
     
 
 </body>
