@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# Sitemap location - CORRIGIR ESTA LINHA
+Sitemap: https://nansinyx26.github.io/Fabricio-Porto-Violinista/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: facebookexternalhit
+Allow: /
+
+Allow: /styles.css
+Allow: /script.js
+Allow: /main.js
+Allow: *.css
+Allow: *.js
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.png
+Allow: *.gif
+Allow: *.webp
+Allow: *.svg
