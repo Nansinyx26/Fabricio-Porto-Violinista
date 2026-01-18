@@ -48,7 +48,7 @@
             hamburger.classList.toggle('active');
             hamburger.setAttribute('aria-expanded', isActive);
 
-            // Prevenir scroll do body quando menu aberto
+            // Adicionar/remover classe do body para o overlay
             if (isActive) {
                 document.body.classList.add('menu-open');
             } else {
@@ -66,7 +66,7 @@
             });
         });
 
-        // Fechar menu ao clicar fora
+        // Fechar menu ao clicar no overlay (fora do menu)
         document.addEventListener('click', function (e) {
             if (navLinks.classList.contains('active') &&
                 !navLinks.contains(e.target) &&
