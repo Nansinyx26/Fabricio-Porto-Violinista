@@ -143,27 +143,27 @@ section {
         height: calc(100vh - 80px);
         background: rgba(26, 26, 26, 0.98);
         backdrop-filter: blur(20px);
-        display: none;
-        /* ✅ CORREÇÃO: Esconder completamente quando inativo */
+        -webkit-backdrop-filter: blur(20px);
+        display: flex !important;
+        /* ✅ NOVA SOLUÇÃO: Sempre flex, controlar com transform */
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
         padding-top: 3rem;
         gap: 0;
         transform: translateX(-100%);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
-        opacity: 0;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        visibility: hidden;
         pointer-events: none;
-        z-index: 1002;
+        z-index: 1000;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .nav-links.active {
-        display: flex;
-        /* ✅ CORREÇÃO: Mostrar com flex quando ativo */
         transform: translateX(0);
-        opacity: 1;
+        visibility: visible;
         pointer-events: auto;
-        /* Permite interações de mouse/toque quando visível */
     }
 
     .nav-links li {
