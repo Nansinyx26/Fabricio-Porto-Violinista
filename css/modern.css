@@ -1,0 +1,1029 @@
+/* =========================
+   DESIGN PROFISSIONAL 2025
+   Parallax, Glassmorphism, Cores Vibrantes
+   ========================= */
+
+/* Google Fonts - Fonte moderna */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/* Variáveis CSS - Cores Douradas SUPER VIBRANTES */
+:root {
+    /* Dourado ultra vibrante - tons mais brilhantes */
+    --gold-primary: #FFEA00;
+    --gold-light: #FFFF00;
+    --gold-bright: #FFF700;
+    --gold-dark: #FFD000;
+    --gold-rich: #FFE000;
+
+    /* Gradientes SUPER vibrantes */
+    --gradient-gold: linear-gradient(135deg, #FFEA00 0%, #FFFF4D 25%, #FFF700 50%, #FFE000 75%, #FFEA00 100%);
+    --gradient-gold-text: linear-gradient(90deg, #FFEA00, #FFFF66, #FFF700, #FFEA00);
+    --gradient-gold-shimmer: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%);
+    --gradient-dark: linear-gradient(180deg, #0a0a0a 0%, #111111 50%, #0a0a0a 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+
+    /* Glassmorphism refinado */
+    --glass-bg: rgba(18, 18, 18, 0.75);
+    --glass-bg-light: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 234, 0, 0.25);
+    --glass-blur: blur(25px);
+    --glass-blur-strong: blur(40px);
+
+    /* Sombras com brilho intenso */
+    --shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.6);
+    --shadow-gold: 0 0 60px rgba(255, 234, 0, 0.6);
+    --shadow-glow: 0 0 100px rgba(255, 255, 0, 0.7);
+
+    /* Transições suaves */
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ========================= */
+/* TIPOGRAFIA MODERNA */
+/* ========================= */
+
+body {
+    font-family: 'Outfit', 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+    background: var(--gradient-dark) !important;
+    letter-spacing: 0.02em;
+}
+
+/* ========================= */
+/* PARALLAX - SEÇÕES */
+/* ========================= */
+
+.hero {
+    background-attachment: fixed !important;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
+/* Background Parallax Layer */
+.bg-pattern {
+    background:
+        radial-gradient(ellipse at 20% 30%, rgba(255, 234, 0, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(255, 255, 100, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(255, 240, 50, 0.03) 0%, transparent 70%) !important;
+    animation: parallaxBg 30s ease-in-out infinite alternate;
+}
+
+@keyframes parallaxBg {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        transform: translateY(-30px) scale(1.02);
+    }
+}
+
+/* Parallax Scroll Effect */
+section {
+    background-attachment: fixed;
+    transform-style: preserve-3d;
+}
+
+/* ========================= */
+/* TÍTULOS - CORES VIBRANTES COM SHIMMER */
+/* ========================= */
+
+.hero h1 {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: clamp(2.8rem, 8vw, 5rem) !important;
+    text-align: center !important;
+    background: linear-gradient(90deg, #FFEA00, #FFFF66, #FFF700, #FFEA00);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+    line-height: 1.1 !important;
+    animation: shimmerText 3s linear infinite;
+    filter: drop-shadow(0 4px 30px rgba(255, 234, 0, 0.6));
+}
+
+@keyframes shimmerText {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.hero-content {
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+}
+
+/* Conteúdo Hero - Lado Esquerdo */
+.hero-content {
+    flex: 1 !important;
+    max-width: 650px !important;
+    z-index: 2 !important;
+    text-align: left !important;
+    display: block !important;
+}
+
+.hero h1 {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: clamp(2.5rem, 6vw, 4.5rem) !important;
+    text-align: left !important;
+    /* Gradiente com animação shimmer - versão anterior */
+    background: linear-gradient(90deg, #FFEA00, #FFFF66, #FFF700, #FFEA00);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+    line-height: 1.1 !important;
+    animation: shimmerText 3s linear infinite;
+    filter: drop-shadow(0 4px 30px rgba(255, 234, 0, 0.6));
+    margin-bottom: 1rem !important;
+}
+
+@keyframes shimmerText {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.typing-text {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem) !important;
+    color: var(--gold-light) !important;
+    text-align: left !important;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.description {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: clamp(1rem, 2vw, 1.15rem) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    line-height: 1.8 !important;
+    text-align: left !important;
+}
+
+.cta-buttons {
+    justify-content: flex-start !important;
+}
+
+.section-title {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: clamp(2rem, 5vw, 3.2rem) !important;
+    text-align: center !important;
+    display: inline-block !important;
+    width: auto !important;
+    /* Amarelo vibrante igual ao botão */
+    background: linear-gradient(135deg, #FFEA00 0%, #FFFF4D 25%, #FFF700 50%, #FFE000 75%, #FFEA00 100%) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    animation: shimmerText 3s linear infinite !important;
+    /* Sombra amarela vibrante */
+    filter: drop-shadow(0 2px 10px rgba(255, 234, 0, 0.4)) !important;
+    position: relative;
+    padding-bottom: 20px;
+    margin-bottom: 3rem !important;
+    /* Parallax e Glassmorphism */
+    transform-style: preserve-3d !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Container para centralizar o título */
+section h2.section-title {
+    display: block !important;
+    text-align: center !important;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--gradient-gold);
+    border-radius: 4px;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+    animation: lineGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes lineGlow {
+    0% {
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        width: 70px;
+    }
+
+    100% {
+        box-shadow: 0 0 35px rgba(255, 215, 0, 0.8);
+        width: 90px;
+    }
+}
+
+/* ========================= */
+/* GLASSMORPHISM PROFISSIONAL */
+/* ========================= */
+
+#navbar {
+    background: rgba(10, 10, 10, 0.8) !important;
+    backdrop-filter: var(--glass-blur-strong) !important;
+    -webkit-backdrop-filter: var(--glass-blur-strong) !important;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.15) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+#navbar.scrolled {
+    background: rgba(5, 5, 5, 0.95) !important;
+    box-shadow: var(--shadow-md), 0 1px 0 rgba(255, 215, 0, 0.2) !important;
+}
+
+.logo {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1.5rem !important;
+    color: var(--gold-primary) !important;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.logo:hover {
+    color: var(--gold-light) !important;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+}
+
+@media (min-width: 769px) {
+    .nav-links a {
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: 500 !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        transition: all var(--transition-smooth) !important;
+    }
+
+    .nav-links a:hover {
+        color: var(--gold-primary) !important;
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        background: rgba(255, 215, 0, 0.1) !important;
+    }
+}
+
+/* ========================= */
+/* FP LOGO - LADO DIREITO SEM CORTE */
+/* ========================= */
+
+.fp-musical-note {
+    position: relative !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    flex-shrink: 0;
+    z-index: 10;
+    overflow: visible !important;
+}
+
+.fp-logo-container {
+    width: 320px !important;
+    height: 320px !important;
+    position: relative !important;
+    overflow: visible !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.fp-logo {
+    width: 90% !important;
+    height: 90% !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.5));
+    animation: logoFloat 6s ease-in-out infinite;
+    position: relative;
+    z-index: 5;
+}
+
+@keyframes logoFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-12px) rotate(2deg);
+    }
+
+    50% {
+        transform: translateY(-6px) rotate(0deg);
+    }
+
+    75% {
+        transform: translateY(-18px) rotate(-2deg);
+    }
+}
+
+.glow-effect {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 150% !important;
+    height: 150% !important;
+    background: radial-gradient(circle at center, rgba(255, 215, 0, 0.4) 0%, transparent 50%) !important;
+    animation: glowPulse 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+.pulse-ring {
+    border: 2px solid rgba(255, 215, 0, 0.5) !important;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+    pointer-events: none;
+}
+
+/* ========================= */
+/* BOTÕES PREMIUM */
+/* ========================= */
+
+.btn {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    padding: 1rem 2.2rem !important;
+    border-radius: 50px !important;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-smooth) !important;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-gold-shimmer);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: var(--gradient-gold) !important;
+    color: #000 !important;
+    box-shadow: var(--shadow-sm), 0 0 25px rgba(255, 215, 0, 0.3) !important;
+    border: none !important;
+}
+
+.btn-primary:hover {
+    box-shadow: var(--shadow-gold), 0 8px 30px rgba(255, 215, 0, 0.5) !important;
+    transform: translateY(-5px) scale(1.03) !important;
+}
+
+.btn-secondary {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    border: 2px solid var(--gold-primary) !important;
+    color: var(--gold-primary) !important;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 215, 0, 0.15) !important;
+    box-shadow: var(--shadow-gold) !important;
+    transform: translateY(-5px) scale(1.03) !important;
+    color: var(--gold-light) !important;
+}
+
+/* ========================= */
+/* CARDS GLASSMORPHISM */
+/* ========================= */
+
+.performance-card,
+.partner-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid rgba(255, 215, 0, 0.15) !important;
+    border-radius: 24px !important;
+    transition: all var(--transition-smooth) !important;
+    overflow: hidden;
+    position: relative;
+}
+
+.performance-card::before,
+.partner-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-gold);
+    transform: scaleX(0);
+    transition: transform var(--transition-smooth);
+}
+
+.performance-card:hover::before,
+.partner-card:hover::before {
+    transform: scaleX(1);
+}
+
+.performance-card:hover,
+.partner-card:hover {
+    transform: translateY(-15px) !important;
+    box-shadow: var(--shadow-lg), var(--shadow-gold) !important;
+    border-color: rgba(255, 215, 0, 0.4) !important;
+    background: rgba(25, 25, 25, 0.9) !important;
+}
+
+/* Estilos de título movidos para a seção "Títulos com animação de brilho de ouro" */
+
+.performance-icon {
+    background: var(--gradient-gold) !important;
+    box-shadow: var(--shadow-sm), 0 0 30px rgba(255, 215, 0, 0.4) !important;
+}
+
+.performance-card:hover .performance-icon {
+    transform: scale(1.2) rotate(8deg) !important;
+    box-shadow: var(--shadow-md), var(--shadow-glow) !important;
+}
+
+/* ========================= */
+/* ABOUT SECTION */
+/* ========================= */
+
+.about-content {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    border-radius: 32px;
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.about-text p {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+.about-text strong {
+    color: var(--gold-primary) !important;
+}
+
+/* ========================= */
+/* CONTACT CARD */
+/* ========================= */
+
+.contact-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur-strong) !important;
+    -webkit-backdrop-filter: var(--glass-blur-strong) !important;
+    border: 1px solid rgba(255, 215, 0, 0.2) !important;
+    border-radius: 32px !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+/* ========================= */
+/* TÍTULOS COM BRILHO DE OURO + PARALLAX + GLASSMORPHISM */
+/* ========================= */
+
+/* Efeito de reflexo e brilho adicional */
+@keyframes goldReflection {
+
+    0%,
+    100% {
+        text-shadow:
+            0 0 30px rgba(255, 234, 0, 0.6),
+            0 0 60px rgba(255, 215, 0, 0.4),
+            0 0 90px rgba(255, 200, 0, 0.2);
+    }
+
+    50% {
+        text-shadow:
+            0 0 50px rgba(255, 255, 100, 0.8),
+            0 0 100px rgba(255, 234, 0, 0.6),
+            0 0 150px rgba(255, 215, 0, 0.3);
+    }
+}
+
+/* Artist Name - Título principal com efeito completo */
+.artist-name {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: clamp(2rem, 5vw, 3rem) !important;
+    background: linear-gradient(90deg, #FFEA00, #FFFF66, #FFF700, #FFD700, #FFEA00) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    animation: shimmerText 3s linear infinite, goldReflection 4s ease-in-out infinite !important;
+    filter: drop-shadow(0 4px 30px rgba(255, 234, 0, 0.6)) !important;
+    /* Parallax 3D */
+    transform-style: preserve-3d !important;
+    perspective: 1000px !important;
+    transition: transform 0.3s ease !important;
+    /* Glassmorphism subtle overlay */
+    position: relative !important;
+}
+
+.artist-name::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -5px !important;
+    left: -10px !important;
+    right: -10px !important;
+    bottom: -5px !important;
+    background: rgba(255, 234, 0, 0.05) !important;
+    backdrop-filter: blur(3px) !important;
+    -webkit-backdrop-filter: blur(3px) !important;
+    border-radius: 10px !important;
+    z-index: -1 !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+.artist-name:hover::before {
+    opacity: 1 !important;
+}
+
+.artist-name:hover {
+    transform: translateZ(20px) rotateX(2deg) !important;
+}
+
+/* Títulos dos cards de performance - Shimmer + Glassmorphism */
+.performance-card h3 {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    background: linear-gradient(90deg, #FFEA00, #FFFF66, #FFF700, #FFD700, #FFEA00) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    animation: shimmerText 3s linear infinite !important;
+    filter: drop-shadow(0 2px 15px rgba(255, 234, 0, 0.5)) !important;
+    transform-style: preserve-3d !important;
+    transition: transform 0.4s ease, filter 0.4s ease !important;
+}
+
+.performance-card:hover h3 {
+    transform: translateZ(15px) scale(1.05) !important;
+    filter: drop-shadow(0 4px 25px rgba(255, 234, 0, 0.8)) !important;
+}
+
+/* Nomes dos parceiros - Shimmer + Parallax */
+.partner-name {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    background: linear-gradient(90deg, #FFEA00, #FFFF66, #FFF700, #FFD700, #FFEA00) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    animation: shimmerText 3s linear infinite !important;
+    filter: drop-shadow(0 2px 15px rgba(255, 234, 0, 0.5)) !important;
+    transform-style: preserve-3d !important;
+    transition: transform 0.4s ease !important;
+}
+
+.partner-card:hover .partner-name {
+    transform: translateZ(10px) translateY(-3px) !important;
+    filter: drop-shadow(0 4px 20px rgba(255, 234, 0, 0.7)) !important;
+}
+
+/* Nomes das redes sociais - Shimmer + Glassmorphism */
+.social-name {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    background: linear-gradient(90deg, #FFEA00, #FFFF66, #FFF700, #FFD700, #FFEA00) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    animation: shimmerText 3s linear infinite !important;
+    filter: drop-shadow(0 2px 15px rgba(255, 234, 0, 0.5)) !important;
+    transition: all 0.3s ease !important;
+}
+
+.social-link:hover .social-name {
+    filter: drop-shadow(0 4px 25px rgba(255, 234, 0, 0.9)) !important;
+    animation: shimmerText 1.5s linear infinite !important;
+}
+
+.contact-btn {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    border-radius: 50px !important;
+    transition: all var(--transition-smooth) !important;
+}
+
+.contact-btn:hover {
+    transform: translateY(-5px) scale(1.05) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+/* ========================= */
+/* FORMULÁRIO GLASSMORPHISM */
+/* ========================= */
+
+.contact-form-container {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur-strong) !important;
+    -webkit-backdrop-filter: var(--glass-blur-strong) !important;
+    border: 1px solid rgba(255, 215, 0, 0.15) !important;
+    border-radius: 32px !important;
+    padding: 3rem !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    font-family: 'Outfit', sans-serif !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 2px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    color: #fff !important;
+    transition: all var(--transition-smooth) !important;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--gold-primary) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.2) !important;
+}
+
+.form-group label {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 500 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.submit-btn {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 1.1rem !important;
+    background: var(--gradient-gold) !important;
+    color: #000 !important;
+    border-radius: 50px !important;
+    padding: 1rem 3rem !important;
+    border: none !important;
+}
+
+.submit-btn:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: var(--shadow-gold) !important;
+}
+
+/* ========================= */
+/* SOCIAL LINKS */
+/* ========================= */
+
+.social-link {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid rgba(255, 215, 0, 0.15) !important;
+    border-radius: 20px !important;
+}
+
+.social-link:hover {
+    transform: translateY(-10px) scale(1.03) !important;
+}
+
+/* .social-name estilos movidos para seção de títulos com shimmer */
+
+/* ========================= */
+/* FOOTER & MARCA D'ÁGUA */
+/* ========================= */
+
+footer {
+    background: linear-gradient(180deg, transparent, rgba(5, 5, 5, 0.95)) !important;
+    border-top: 1px solid rgba(255, 215, 0, 0.15) !important;
+    padding: 3rem 2rem !important;
+    text-align: center;
+    position: relative;
+    z-index: 100;
+}
+
+footer p {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+/* MARCA D'ÁGUA - GARANTIR VISIBILIDADE */
+.nandev-watermark {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 9999 !important;
+    position: relative !important;
+    margin-top: 1.5rem !important;
+}
+
+/* ========================= */
+/* NOTAS MUSICAIS PARALLAX */
+/* ========================= */
+
+.musical-note {
+    font-size: 28px !important;
+    color: rgba(255, 215, 0, 0.25) !important;
+    text-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+    animation: noteParallax 25s infinite ease-in-out !important;
+}
+
+@keyframes noteParallax {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 0.15;
+    }
+
+    25% {
+        transform: translate(-40px, -20vh) rotate(120deg) scale(1.3);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: translate(40px, -35vh) rotate(240deg) scale(0.9);
+        opacity: 0.7;
+    }
+
+    75% {
+        transform: translate(-25px, -45vh) rotate(300deg) scale(1.1);
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: translate(0, -55vh) rotate(360deg) scale(1);
+        opacity: 0;
+    }
+}
+
+/* ========================= */
+/* SCROLLBAR PREMIUM */
+/* ========================= */
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-gold);
+    border-radius: 10px;
+    border: 3px solid #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-light);
+}
+
+/* ========================= */
+/* SELEÇÃO DE TEXTO */
+/* ========================= */
+
+::selection {
+    background: rgba(255, 215, 0, 0.4);
+    color: #fff;
+}
+
+/* ========================= */
+/* ANIMAÇÃO SEÇÕES VISÍVEIS */
+/* ========================= */
+
+section.visible {
+    animation: sectionParallax 0.8s ease-out forwards !important;
+}
+
+@keyframes sectionParallax {
+    0% {
+        opacity: 0;
+        transform: translateY(80px) scale(0.98);
+        filter: blur(8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+/* ========================= */
+/* BACK TO TOP */
+/* ========================= */
+
+.back-to-top {
+    background: var(--gradient-gold) !important;
+    border-radius: 50% !important;
+    width: 50px !important;
+    height: 50px !important;
+    box-shadow: var(--shadow-md), 0 0 25px rgba(255, 215, 0, 0.4) !important;
+}
+
+.back-to-top:hover {
+    transform: translateY(-10px) scale(1.1) !important;
+    box-shadow: var(--shadow-glow) !important;
+}
+
+/* ========================= */
+/* MUSIC CARDS */
+/* ========================= */
+
+.music-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid rgba(255, 215, 0, 0.12) !important;
+    border-radius: 20px !important;
+}
+
+.music-card:hover {
+    transform: translateY(-10px) scale(1.02) !important;
+    box-shadow: var(--shadow-lg), var(--shadow-gold) !important;
+    border-color: rgba(255, 215, 0, 0.4) !important;
+}
+
+/* ========================= */
+/* SEARCH BOX */
+/* ========================= */
+
+.search-input {
+    font-family: 'Outfit', sans-serif !important;
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    border: 2px solid rgba(255, 215, 0, 0.2) !important;
+    border-radius: 50px !important;
+    color: #fff !important;
+}
+
+.search-input:focus {
+    border-color: var(--gold-primary) !important;
+    box-shadow: var(--shadow-gold) !important;
+}
+
+.search-button {
+    background: var(--gradient-gold) !important;
+}
+
+/* ========================= */
+/* RESPONSIVIDADE */
+/* ========================= */
+
+@media (max-width: 768px) {
+
+    /* Hero empilha verticalmente em mobile */
+    .hero {
+        flex-direction: column !important;
+        text-align: center !important;
+        padding: 100px 1.5rem 2rem !important;
+        gap: 2rem !important;
+    }
+
+    .hero-content {
+        text-align: center !important;
+        max-width: 100% !important;
+    }
+
+    .hero h1 {
+        font-size: clamp(2rem, 10vw, 3rem) !important;
+        text-align: center !important;
+    }
+
+    .typing-text,
+    .description {
+        text-align: center !important;
+    }
+
+    .cta-buttons {
+        justify-content: center !important;
+    }
+
+    .fp-musical-note {
+        order: -1;
+    }
+
+    .fp-logo-container {
+        width: 200px !important;
+        height: 200px !important;
+    }
+
+    .section-title {
+        font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
+    }
+
+    .btn {
+        padding: 0.9rem 1.8rem !important;
+        font-size: 0.95rem !important;
+    }
+
+    .contact-form-container {
+        padding: 1.5rem !important;
+        border-radius: 24px !important;
+    }
+
+    .performance-card,
+    .partner-card {
+        border-radius: 20px !important;
+    }
+}
+
+/* ========================= */
+/* EFEITO PARTÍCULAS */
+/* ========================= */
+
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(2px 2px at 30px 40px, rgba(255, 215, 0, 0.4), transparent),
+        radial-gradient(3px 3px at 80px 100px, rgba(255, 235, 100, 0.3), transparent),
+        radial-gradient(2px 2px at 150px 60px, rgba(255, 215, 0, 0.5), transparent),
+        radial-gradient(3px 3px at 200px 120px, rgba(255, 200, 50, 0.3), transparent);
+    background-size: 250px 150px;
+    animation: particlesParallax 40s linear infinite;
+    pointer-events: none;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+@keyframes particlesParallax {
+    0% {
+        transform: translateY(0) translateX(0);
+    }
+
+    100% {
+        transform: translateY(-150px) translateX(50px);
+    }
+}
+
+/* ========================= */
+/* OVERRIDE FINAL - TÍTULOS AMARELO VIBRANTE */
+/* Mesma cor do botão Apresentações */
+/* ========================= */
+
+h2.section-title,
+.section-title,
+section h2.section-title,
+#about .section-title,
+#repertoire .section-title,
+#performances .section-title,
+#social-media .section-title,
+#partners .section-title,
+#contact .section-title,
+#contact-form .section-title,
+.hero h1,
+#main-title,
+h1#main-title {
+    color: #FFEA00 !important;
+    background: linear-gradient(135deg, #FFEA00 0%, #FFFF4D 25%, #FFF700 50%, #FFE000 75%, #FFEA00 100%) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    animation: shimmerText 3s linear infinite !important;
+    filter: drop-shadow(0 2px 10px rgba(255, 234, 0, 0.4)) !important;
+    text-shadow: none !important;
+}
